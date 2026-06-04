@@ -1,0 +1,9 @@
+@import "tailwindcss";
+
+:root {
+  --font-sans: "Inter", "Inter Fallback", sans-serif;
+  --font-serif: "Raleway", "Raleway Fallback", sans-serif;
+}
+
+.font-sans { font-family: var(--font-sans); }
+.font-serif { font-family: var(--font-serif); }
