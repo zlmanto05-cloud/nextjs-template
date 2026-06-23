@@ -250,17 +250,21 @@ export default function Home() {
             <p className="text-white/60 text-xs font-bold uppercase tracking-widest mb-6">
               Limpieza profesional de sneakers · Villahermosa, Tabasco
             </p>
-            <h1 className="font-display text-5xl sm:text-6xl lg:text-7xl text-white leading-none mb-4">
+            <h1 className="font-display text-6xl md:text-8xl lg:text-9xl text-white leading-none mb-4">
               TUS TENIS FAVORITOS,<br />
               COMO RECIÉN SALIDOS<br />
               DE LA CAJA
             </h1>
             {/* Blue accent line */}
             <div className="w-14 h-1.5 bg-[#3b55f5] mb-6" />
-            <p className="text-white/70 text-lg leading-relaxed mb-10 max-w-xl">
-              Limpieza especializada por material. Desde{" "}
-              <span className="bg-[#3b55f5] text-white px-1.5 py-0.5 font-bold">$190 MXN</span>{" "}
-              con entrega en 48 horas.
+            <p className="text-white/80 text-lg leading-relaxed mb-2">
+              Resultados en{" "}
+              <span className="bg-[#3b55f5] text-white px-1.5 py-0.5 font-bold">48 horas garantizadas</span>
+            </p>
+            <p className="text-white/80 text-lg leading-relaxed mb-10">
+              Desde{" "}
+              <span className="bg-[#3b55f5] text-white px-1.5 py-0.5 font-bold">$190 MXN</span>
+              {" "}· Dos sucursales en Villahermosa
             </p>
           </div>
         </div>
@@ -290,7 +294,7 @@ export default function Home() {
       </section>
 
       {/* ── 2. BRANDS ────────────────────────────────────────── */}
-      <section className="bg-white py-16 sm:py-20 border-b border-gray-100">
+      <section className="bg-white py-10 border-b border-gray-100">
         <div className="max-w-7xl mx-auto px-4 sm:px-6">
           <p className="text-gray-400 text-xs uppercase tracking-widest text-center mb-10">
             Limpiamos el calzado que entrena contigo, día tras día
@@ -306,7 +310,7 @@ export default function Home() {
       </section>
 
       {/* ── 3. TESTIMONIOS ───────────────────────────────────── */}
-      <section id="testimonios" className="bg-[#f0f2f5] py-20 sm:py-28">
+      <section id="testimonios" className="bg-[#f0f2f5] py-24">
         <div className="max-w-7xl mx-auto px-4 sm:px-6">
           <RevealSection className="text-center mb-14">
             <p className="text-[#3b55f5] text-xs font-bold uppercase tracking-widest mb-3">Resultados Reales</p>
@@ -319,23 +323,25 @@ export default function Home() {
             {testimonials.map((t, i) => (
               <RevealSection key={i} className="bg-white shadow-sm">
                 {/* Before/After images */}
-                <div className="grid grid-cols-2 relative">
-                  <div className="relative aspect-square bg-gray-200 overflow-hidden">
-                    <div className="absolute inset-0 flex items-center justify-center">
+                <div className="grid grid-cols-2 h-48">
+                  <div className="relative h-48 bg-gray-200 overflow-hidden">
+                    <div className="absolute inset-0 flex flex-col items-center justify-center gap-2 bg-gray-200">
                       <svg className="w-10 h-10 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
                       </svg>
+                      <span className="text-gray-400 text-xs">Antes</span>
                     </div>
                     <Image src={t.before} alt="Antes" fill className="object-cover" />
                     <div className="absolute top-2 left-2 bg-red-500 text-white text-xs font-bold px-2 py-0.5 uppercase">
                       Antes
                     </div>
                   </div>
-                  <div className="relative aspect-square bg-gray-100 overflow-hidden">
-                    <div className="absolute inset-0 flex items-center justify-center">
+                  <div className="relative h-48 bg-gray-100 overflow-hidden">
+                    <div className="absolute inset-0 flex flex-col items-center justify-center gap-2 bg-gray-100">
                       <svg className="w-10 h-10 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
                       </svg>
+                      <span className="text-gray-400 text-xs">Después</span>
                     </div>
                     <Image src={t.after} alt="Después" fill className="object-cover" />
                     <div className="absolute top-2 right-2 bg-green-500 text-white text-xs font-bold px-2 py-0.5 uppercase">
@@ -371,7 +377,7 @@ export default function Home() {
       </section>
 
       {/* ── 4. SERVICIOS ─────────────────────────────────────── */}
-      <section id="servicios" className="bg-white py-20 sm:py-28">
+      <section id="servicios" className="bg-white py-24">
         <div className="max-w-7xl mx-auto px-4 sm:px-6">
           <RevealSection className="text-center mb-14">
             <p className="text-gray-400 text-xs font-bold uppercase tracking-widest mb-3">Nuestros Servicios</p>
@@ -396,7 +402,7 @@ export default function Home() {
           </div>
 
           {/* Desktop: 3 cols | Mobile: active tab only */}
-          <div className="hidden md:grid md:grid-cols-3 gap-8 items-center">
+          <div className="hidden md:grid md:grid-cols-3 gap-6 items-center">
             {plans.map((plan, i) => (
               <PlanCard key={i} plan={plan} elevated={plan.variant === "blue"} />
             ))}
@@ -408,7 +414,7 @@ export default function Home() {
       </section>
 
       {/* ── 5. PROCESO ───────────────────────────────────────── */}
-      <section id="proceso" className="bg-[#f0f2f5] py-20 sm:py-28">
+      <section id="proceso" className="bg-[#f0f2f5] py-24">
         <div className="max-w-7xl mx-auto px-4 sm:px-6">
           <RevealSection className="text-center mb-14">
             <h2 className="font-display text-4xl sm:text-5xl text-gray-900">
@@ -474,7 +480,7 @@ export default function Home() {
       </section>
 
       {/* ── 6. GARANTÍAS ─────────────────────────────────────── */}
-      <section className="bg-white py-20 sm:py-28">
+      <section className="bg-white py-24">
         <div className="max-w-7xl mx-auto px-4 sm:px-6">
           <RevealSection className="mb-14 pl-1">
             <p className="text-gray-400 text-xs font-bold uppercase tracking-widest mb-3">Por Qué Elegirnos</p>
@@ -526,9 +532,9 @@ export default function Home() {
       </section>
 
       {/* ── 7. MEMBRESÍA ─────────────────────────────────────── */}
-      <section id="membresia" className="bg-[#f0f2f5] py-20 sm:py-28">
+      <section id="membresia" className="bg-[#f0f2f5] py-24">
         <div className="max-w-7xl mx-auto px-4 sm:px-6">
-          <div className="bg-[#0d1526] p-8 sm:p-12">
+          <div className="bg-[#0d1526] p-10">
             {/* Header */}
             <div className="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-6 mb-10">
               <div>
@@ -553,7 +559,7 @@ export default function Home() {
               {memberships.map((m, i) => (
                 <div
                   key={i}
-                  className={`relative p-7 border ${
+                  className={`relative p-6 border ${
                     m.popular
                       ? "bg-[#3b55f5] border-[#3b55f5]"
                       : m.gold
@@ -595,14 +601,14 @@ export default function Home() {
       </section>
 
       {/* ── 8. CTA BANNER ────────────────────────────────────── */}
-      <section id="cta" className="relative py-36 sm:py-44 overflow-hidden">
+      <section id="cta" className="relative py-32 min-h-[500px] flex items-center overflow-hidden">
         <div className="absolute inset-0">
           <Image src="/img/cta-banner.webp" alt="CTA background" fill className="object-cover" />
           <div className="absolute inset-0 bg-[rgba(10,15,30,0.72)]" />
         </div>
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 text-center">
           <RevealSection>
-            <h2 className="font-display text-5xl sm:text-7xl text-white mb-6">
+            <h2 className="font-display text-6xl md:text-8xl text-white mb-6">
               ¿LISTO PARA LA TRANSFORMACIÓN?
             </h2>
             <p className="text-white/65 text-lg mb-10 max-w-xl mx-auto leading-relaxed">
@@ -628,7 +634,7 @@ export default function Home() {
       </section>
 
       {/* ── 9. FAQ ───────────────────────────────────────────── */}
-      <section id="faq" className="bg-white py-20 sm:py-28">
+      <section id="faq" className="bg-white py-24">
         <div className="max-w-3xl mx-auto px-4 sm:px-6">
           <RevealSection className="text-center mb-14">
             <p className="text-[#3b55f5] text-xs font-bold uppercase tracking-widest mb-3">Preguntas Frecuentes</p>
@@ -669,7 +675,7 @@ export default function Home() {
       </section>
 
       {/* ── 10. SUCURSALES ───────────────────────────────────── */}
-      <section id="sucursales" className="bg-[#f0f2f5] py-20 sm:py-28">
+      <section id="sucursales" className="bg-[#f0f2f5] py-24">
         <div className="max-w-7xl mx-auto px-4 sm:px-6">
           <RevealSection className="mb-12">
             <p className="text-gray-400 text-xs font-bold uppercase tracking-widest mb-3">Puntos de Recepción</p>
@@ -688,7 +694,7 @@ export default function Home() {
                 href="https://maps.google.com/?q=Av.+Paseo+Usumacinta+esquina+Av.+Los+Rios+Plaza+KB+Villahermosa+Tabasco"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="block relative aspect-video bg-gray-100 overflow-hidden group"
+                className="block relative h-56 bg-gray-100 overflow-hidden group"
               >
                 {/* Placeholder shown when image doesn't load */}
                 <div className="absolute inset-0 flex flex-col items-center justify-center gap-2 bg-gray-100">
@@ -739,7 +745,7 @@ export default function Home() {
                 href="https://maps.google.com/?q=Velodrómo+Ciudad+Deportiva+Plaza+Mega+Soriana+Villahermosa+Tabasco"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="block relative aspect-video bg-gray-100 overflow-hidden group"
+                className="block relative h-56 bg-gray-100 overflow-hidden group"
               >
                 {/* Placeholder shown when image doesn't load */}
                 <div className="absolute inset-0 flex flex-col items-center justify-center gap-2 bg-gray-100">
@@ -828,8 +834,10 @@ function PlanCard({ plan, elevated }: { plan: Plan; elevated: boolean }) {
   // elevated is used to determine layout context; kept for potential future use
   void elevated;
 
+  const padding = isBlue ? "p-10" : "p-6";
+
   return (
-    <div className={`relative flex flex-col p-8 ${cardClass}`}>
+    <div className={`relative flex flex-col ${padding} ${cardClass}`}>
       {isBlue && (
         <div className="absolute -top-px left-0 right-0 flex justify-center">
           <span className="bg-[#f5a623] text-black text-xs font-bold uppercase tracking-wider px-4 py-1">
