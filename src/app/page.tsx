@@ -6,11 +6,10 @@ import Link from "next/link";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 
-// ── Constants ────────────────────────────────────────────────────────
+// ── Constants ─────────────────────────────────────────────────────────
 const WA_BASE = "https://wa.me/529931000000";
 function waUrl(text: string) {
-  const msg = encodeURIComponent(text);
-  return `${WA_BASE}?text=${msg}`;
+  return `${WA_BASE}?text=${encodeURIComponent(text)}`;
 }
 
 declare global {
@@ -24,7 +23,7 @@ function track(event: string, params?: Record<string, unknown>) {
   }
 }
 
-// ── Scroll reveal hook ───────────────────────────────────────────────
+// ── Scroll reveal hook ────────────────────────────────────────────────
 function useReveal() {
   const ref = useRef<HTMLDivElement>(null);
   useEffect(() => {
@@ -37,7 +36,7 @@ function useReveal() {
           obs.disconnect();
         }
       },
-      { threshold: 0.12 }
+      { threshold: 0.1 }
     );
     obs.observe(el);
     return () => obs.disconnect();
@@ -45,7 +44,7 @@ function useReveal() {
   return ref;
 }
 
-// ── Sub-components ───────────────────────────────────────────────────
+// ── Shared components ─────────────────────────────────────────────────
 function WhatsAppIcon({ className }: { className?: string }) {
   return (
     <svg viewBox="0 0 24 24" className={className} fill="currentColor" aria-hidden="true">
@@ -55,7 +54,7 @@ function WhatsAppIcon({ className }: { className?: string }) {
   );
 }
 
-function RevealSection({ children, className = "" }: { children: React.ReactNode; className?: string }) {
+function Reveal({ children, className = "" }: { children: React.ReactNode; className?: string }) {
   const ref = useReveal();
   return (
     <div ref={ref} className={`reveal ${className}`}>
@@ -64,7 +63,7 @@ function RevealSection({ children, className = "" }: { children: React.ReactNode
   );
 }
 
-// ── Data ─────────────────────────────────────────────────────────────
+// ── Data ──────────────────────────────────────────────────────────────
 const brands = ["Nike", "Adidas", "Jordan", "On Cloud", "New Balance", "Hugo Boss"];
 
 const testimonials = [
@@ -101,7 +100,6 @@ const memberships = [
     saving: "ahorro $21",
     desc: "1 lavado básico mensual + desodorización",
     popular: false,
-    dark: false,
     gold: false,
   },
   {
@@ -110,7 +108,6 @@ const memberships = [
     saving: "ahorro $101",
     desc: "2 lavados + impermeabilización incluida",
     popular: true,
-    dark: false,
     gold: false,
   },
   {
@@ -119,7 +116,6 @@ const memberships = [
     saving: "ahorro $61",
     desc: "Ultra white + 1 lavado básico adicional",
     popular: false,
-    dark: false,
     gold: false,
   },
   {
@@ -128,7 +124,6 @@ const memberships = [
     saving: "ahorro $129",
     desc: "Premium lujo + gorra + entrega prioritaria",
     popular: false,
-    dark: false,
     gold: true,
   },
 ];
@@ -144,7 +139,7 @@ const faqs = [
   },
   {
     q: "¿Qué pasa si mis tenis se dañan?",
-    a: "Documentamos el estado de cada par con fotografías al momento de la recepción. No nos hacemos responsables por daños preexistentes, materiales desgastados o calzado de imitación, ya que estos pueden reaccionar de forma impredecible a los productos de limpieza. Te recomendamos informarnos sobre el material y la antigüedad del calzado al momento de entregarlo.",
+    a: "Documentamos el estado de cada par con fotografías al momento de la recepción. No nos hacemos responsables por daños preexistentes, materiales desgastados o calzado de imitación. Te recomendamos informarnos sobre el material y la antigüedad del calzado al momento de entregarlo.",
   },
   {
     q: "¿Dónde están ubicados?",
@@ -160,18 +155,17 @@ const faqs = [
   },
 ];
 
-// ── Page ─────────────────────────────────────────────────────────────
+// ── Page ──────────────────────────────────────────────────────────────
 export default function Home() {
   const [activeTab, setActiveTab] = useState(0);
   const [openFaq, setOpenFaq] = useState<number | null>(null);
   const pixelFiredRef = useRef(false);
 
-  // Fire ViewContent at 50% scroll
   useEffect(() => {
     const onScroll = () => {
       if (pixelFiredRef.current) return;
-      const scrolled = window.scrollY / (document.body.scrollHeight - window.innerHeight);
-      if (scrolled >= 0.5) {
+      const pct = window.scrollY / (document.body.scrollHeight - window.innerHeight);
+      if (pct >= 0.5) {
         track("ViewContent");
         pixelFiredRef.current = true;
       }
@@ -184,7 +178,7 @@ export default function Home() {
     {
       name: "Lavado Básico",
       price: "$190 MXN",
-      subtitle: null,
+      subtitle: null as string | null,
       features: [
         "Cepillado en seco",
         "Limpieza exterior con shampoo especializado",
@@ -199,7 +193,7 @@ export default function Home() {
     {
       name: "Limpieza Profunda",
       price: "$220 MXN",
-      subtitle: "On Cloud / Trail / Performance",
+      subtitle: "On Cloud / Trail / Performance" as string | null,
       features: [
         "Cepillado suave con cerdas específicas para mesh técnico y foam",
         "Productos libres de solventes compatibles con EVA, CloudTec y materiales reactivos",
@@ -214,7 +208,7 @@ export default function Home() {
     {
       name: "Limpieza Premium",
       price: "$399 MXN",
-      subtitle: null,
+      subtitle: null as string | null,
       features: [
         "Limpiador específico por material: cuero, gamuza o materiales mixtos",
         "Cepillado con herramientas de cerdas suaves para superficies delicadas",
@@ -231,58 +225,62 @@ export default function Home() {
     <main className="bg-white text-gray-900">
       <Navbar />
 
-      {/* ── 1. HERO ──────────────────────────────────────────── */}
-      <section className="relative h-screen min-h-[640px] flex flex-col justify-center overflow-hidden">
-        {/* Background */}
+      {/* ── 1. HERO ────────────────────────────────────────────── */}
+      <section className="relative h-screen flex flex-col overflow-hidden">
+        {/* BG image */}
         <div className="absolute inset-0">
           <Image
             src="/img/hero-bg.webp"
-            alt="Hero background"
+            alt=""
             fill
-            className="object-cover"
+            className="object-cover object-center"
             priority
           />
-          <div className="absolute inset-0 bg-gradient-to-r from-[#0d1526]/90 via-[#0d1526]/70 to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-r from-[#0d1526]/92 via-[#0d1526]/65 to-transparent" />
         </div>
 
-        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 pt-24 pb-32 w-full">
-          <div className="max-w-2xl">
-            <p className="text-white/60 text-xs font-bold uppercase tracking-widest mb-6">
-              Limpieza profesional de sneakers · Villahermosa, Tabasco
-            </p>
-            <h1 className="font-display text-6xl md:text-8xl lg:text-9xl text-white leading-none mb-4">
-              TUS TENIS FAVORITOS,<br />
-              COMO RECIÉN SALIDOS<br />
-              DE LA CAJA
-            </h1>
-            {/* Blue accent line */}
-            <div className="w-14 h-1.5 bg-[#3b55f5] mb-6" />
-            <p className="text-white/80 text-lg leading-relaxed mb-2">
-              Resultados en{" "}
-              <span className="bg-[#3b55f5] text-white px-1.5 py-0.5 font-bold">48 horas garantizadas</span>
-            </p>
-            <p className="text-white/80 text-lg leading-relaxed mb-10">
-              Desde{" "}
-              <span className="bg-[#3b55f5] text-white px-1.5 py-0.5 font-bold">$190 MXN</span>
-              {" "}· Dos sucursales en Villahermosa
-            </p>
+        {/* Content — vertically centered, left half */}
+        <div className="relative flex-1 flex items-center">
+          <div className="max-w-6xl mx-auto px-6 md:px-10 w-full">
+            <div className="w-full md:max-w-[55%]">
+              <p className="text-white/55 text-xs font-bold uppercase tracking-widest mb-5">
+                Limpieza profesional de sneakers · Villahermosa, Tabasco
+              </p>
+              <h1 className="font-display text-4xl md:text-6xl lg:text-7xl text-white leading-none mb-4">
+                TUS TENIS FAVORITOS,<br />
+                COMO RECIÉN SALIDOS<br />
+                DE LA CAJA
+              </h1>
+              {/* Blue accent line */}
+              <div className="w-12 h-1 bg-[#3b55f5] mb-6" />
+              {/* Two highlight lines */}
+              <p className="text-white/90 text-base md:text-lg leading-relaxed mb-2">
+                Resultados en{" "}
+                <span className="bg-[#3b55f5] text-white px-1.5 py-0.5 font-bold">48 horas garantizadas</span>
+              </p>
+              <p className="text-white/90 text-base md:text-lg leading-relaxed">
+                Desde{" "}
+                <span className="bg-[#3b55f5] text-white px-1.5 py-0.5 font-bold">$190 MXN</span>
+                {" "}· Dos sucursales en Villahermosa
+              </p>
+            </div>
           </div>
         </div>
 
-        {/* Bottom bar */}
-        <div className="absolute bottom-0 left-0 right-0 bg-[#0d1526]/90 backdrop-blur-sm py-5">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 flex flex-col sm:flex-row items-center justify-between gap-4">
-            <div className="flex flex-wrap gap-4 items-center">
+        {/* Bottom bar — sticks to bottom of hero */}
+        <div className="relative bg-[#0d1526]/90 backdrop-blur-sm py-4 md:py-5">
+          <div className="max-w-6xl mx-auto px-6 md:px-10 flex flex-col sm:flex-row items-center justify-between gap-3">
+            <div className="flex flex-wrap gap-3 items-center">
               <a
                 href="#cta"
                 onClick={() => track("ViewContent")}
-                className="inline-flex items-center gap-2 bg-[#3b55f5] text-white font-bold px-8 py-3.5 hover:bg-[#2a44e4] transition-colors text-sm uppercase tracking-wide"
+                className="inline-flex items-center gap-2 bg-[#3b55f5] text-white font-bold px-7 py-3 hover:bg-[#2a44e4] transition-colors text-sm uppercase tracking-wide"
               >
                 Agendar Limpieza Ahora
               </a>
-              <span className="text-white/60 text-sm">✓ Primera limpieza con 20% de descuento</span>
+              <span className="text-white/55 text-sm">✓ Primera limpieza con 20% de descuento</span>
             </div>
-            <div className="flex gap-6 text-white/40 text-xs uppercase tracking-widest">
+            <div className="hidden sm:flex gap-5 text-white/35 text-xs uppercase tracking-widest">
               <span>48h entrega</span>
               <span>·</span>
               <span>2 sucursales</span>
@@ -293,15 +291,18 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ── 2. BRANDS ────────────────────────────────────────── */}
+      {/* ── 2. BRANDS ──────────────────────────────────────────── */}
       <section className="bg-white py-10 border-b border-gray-100">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6">
-          <p className="text-gray-400 text-xs uppercase tracking-widest text-center mb-10">
+        <div className="max-w-6xl mx-auto px-6 md:px-10">
+          <p className="text-gray-400 text-xs uppercase tracking-widest text-center mb-8">
             Limpiamos el calzado que entrena contigo, día tras día
           </p>
-          <div className="flex flex-wrap justify-center items-center gap-10 md:gap-16">
+          <div className="flex flex-wrap justify-center items-center gap-8 md:gap-14">
             {brands.map((brand) => (
-              <span key={brand} className="text-gray-300 font-bold text-lg tracking-wide hover:text-gray-400 transition-colors">
+              <span
+                key={brand}
+                className="text-gray-300 font-bold text-base md:text-lg tracking-wide hover:text-gray-400 transition-colors"
+              >
                 {brand}
               </span>
             ))}
@@ -309,49 +310,47 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ── 3. TESTIMONIOS ───────────────────────────────────── */}
-      <section id="testimonios" className="bg-[#f0f2f5] py-24">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6">
-          <RevealSection className="text-center mb-14">
+      {/* ── 3. TESTIMONIOS ─────────────────────────────────────── */}
+      <section id="testimonios" className="bg-[#f0f2f5] py-20 md:py-28">
+        <div className="max-w-6xl mx-auto px-6 md:px-10">
+          <Reveal className="text-center mb-12">
             <p className="text-[#3b55f5] text-xs font-bold uppercase tracking-widest mb-3">Resultados Reales</p>
-            <h2 className="font-display text-4xl sm:text-5xl text-gray-900">
+            <h2 className="font-display text-4xl md:text-5xl text-gray-900">
               TRANSFORMACIONES QUE HABLAN POR SÍ SOLAS
             </h2>
-          </RevealSection>
+          </Reveal>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {testimonials.map((t, i) => (
-              <RevealSection key={i} className="bg-white shadow-sm">
-                {/* Before/After images */}
-                <div className="grid grid-cols-2 h-48">
-                  <div className="relative h-48 bg-gray-200 overflow-hidden">
-                    <div className="absolute inset-0 flex flex-col items-center justify-center gap-2 bg-gray-200">
-                      <svg className="w-10 h-10 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <Reveal key={i} className="bg-white shadow-sm flex flex-col">
+                {/* Before/After panel — fixed height h-44 */}
+                <div className="grid grid-cols-2 h-44">
+                  <div className="relative h-44 overflow-hidden bg-[#e2e2e2]">
+                    <div className="absolute inset-0 flex flex-col items-center justify-center gap-2">
+                      <svg className="w-9 h-9 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
                       </svg>
-                      <span className="text-gray-400 text-xs">Antes</span>
                     </div>
                     <Image src={t.before} alt="Antes" fill className="object-cover" />
-                    <div className="absolute top-2 left-2 bg-red-500 text-white text-xs font-bold px-2 py-0.5 uppercase">
+                    <span className="absolute top-2 left-2 bg-red-500 text-white text-xs font-bold px-2 py-0.5 uppercase">
                       Antes
-                    </div>
+                    </span>
                   </div>
-                  <div className="relative h-48 bg-gray-100 overflow-hidden">
-                    <div className="absolute inset-0 flex flex-col items-center justify-center gap-2 bg-gray-100">
-                      <svg className="w-10 h-10 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <div className="relative h-44 overflow-hidden bg-[#c8d0d8]">
+                    <div className="absolute inset-0 flex flex-col items-center justify-center gap-2">
+                      <svg className="w-9 h-9 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
                       </svg>
-                      <span className="text-gray-400 text-xs">Después</span>
                     </div>
                     <Image src={t.after} alt="Después" fill className="object-cover" />
-                    <div className="absolute top-2 right-2 bg-green-500 text-white text-xs font-bold px-2 py-0.5 uppercase">
+                    <span className="absolute top-2 right-2 bg-green-500 text-white text-xs font-bold px-2 py-0.5 uppercase">
                       Después
-                    </div>
+                    </span>
                   </div>
                 </div>
-                {/* Card body */}
-                <div className="p-6">
-                  {/* Stars */}
+
+                {/* Body */}
+                <div className="p-7 flex flex-col flex-1">
                   <div className="flex gap-0.5 mb-3">
                     {[...Array(5)].map((_, j) => (
                       <svg key={j} className="w-4 h-4 text-[#f5a623]" fill="currentColor" viewBox="0 0 20 20">
@@ -359,7 +358,7 @@ export default function Home() {
                       </svg>
                     ))}
                   </div>
-                  <p className="text-gray-600 text-sm leading-relaxed mb-5 italic">"{t.text}"</p>
+                  <p className="text-gray-600 text-sm leading-relaxed mb-5 italic flex-1">"{t.text}"</p>
                   <div className="flex items-center gap-3">
                     <div className="w-9 h-9 rounded-full bg-[#3b55f5] flex items-center justify-center text-white font-bold text-sm shrink-0">
                       {t.initial}
@@ -370,61 +369,66 @@ export default function Home() {
                     </div>
                   </div>
                 </div>
-              </RevealSection>
+              </Reveal>
             ))}
           </div>
         </div>
       </section>
 
-      {/* ── 4. SERVICIOS ─────────────────────────────────────── */}
-      <section id="servicios" className="bg-white py-24">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6">
-          <RevealSection className="text-center mb-14">
+      {/* ── 4. SERVICIOS ───────────────────────────────────────── */}
+      <section id="servicios" className="bg-white py-20 md:py-28">
+        <div className="max-w-6xl mx-auto px-6 md:px-10">
+          <Reveal className="text-center mb-12">
             <p className="text-gray-400 text-xs font-bold uppercase tracking-widest mb-3">Nuestros Servicios</p>
-            <h2 className="font-display text-4xl sm:text-5xl text-gray-900">
+            <h2 className="font-display text-4xl md:text-5xl text-gray-900">
               ELIGE EL NIVEL DE CUIDADO QUE TUS TENIS MERECEN
             </h2>
-          </RevealSection>
+          </Reveal>
 
           {/* Mobile tabs */}
-          <div className="flex md:hidden mb-6 border border-gray-200 rounded-lg overflow-hidden">
-            {plans.map((p, i) => (
+          <div className="flex md:hidden mb-6 overflow-hidden border border-gray-200 rounded-lg">
+            {["Básico", "Profundo", "Premium"].map((label, i) => (
               <button
                 key={i}
                 onClick={() => setActiveTab(i)}
-                className={`flex-1 text-xs font-bold py-3 transition-colors ${
-                  activeTab === i ? "bg-[#3b55f5] text-white" : "bg-white text-gray-500 hover:bg-gray-50"
+                className={`flex-1 text-xs font-bold py-3 transition-colors relative ${
+                  activeTab === i ? "text-[#3b55f5]" : "text-gray-400 hover:text-gray-600"
                 }`}
               >
-                {i === 0 ? "Básico" : i === 1 ? "Profundo" : "Premium"}
+                {label}
+                {activeTab === i && (
+                  <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-[#3b55f5]" />
+                )}
               </button>
             ))}
           </div>
 
-          {/* Desktop: 3 cols | Mobile: active tab only */}
-          <div className="hidden md:grid md:grid-cols-3 gap-6 items-center">
+          {/* Desktop 3 cols */}
+          <div className="hidden md:grid grid-cols-3 gap-6 items-center">
             {plans.map((plan, i) => (
-              <PlanCard key={i} plan={plan} elevated={plan.variant === "blue"} />
+              <PlanCard key={i} plan={plan} />
             ))}
           </div>
+
+          {/* Mobile single card */}
           <div className="md:hidden">
-            <PlanCard plan={plans[activeTab]} elevated={plans[activeTab].variant === "blue"} />
+            <PlanCard plan={plans[activeTab]} />
           </div>
         </div>
       </section>
 
-      {/* ── 5. PROCESO ───────────────────────────────────────── */}
-      <section id="proceso" className="bg-[#f0f2f5] py-24">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6">
-          <RevealSection className="text-center mb-14">
-            <h2 className="font-display text-4xl sm:text-5xl text-gray-900">
+      {/* ── 5. PROCESO ─────────────────────────────────────────── */}
+      <section id="proceso" className="bg-[#f0f2f5] py-20 md:py-28">
+        <div className="max-w-6xl mx-auto px-6 md:px-10">
+          <Reveal className="text-center mb-14">
+            <h2 className="font-display text-4xl md:text-5xl text-gray-900">
               TU LIMPIEZA EN 3 PASOS SIMPLES
             </h2>
-          </RevealSection>
+          </Reveal>
 
           <div className="relative grid grid-cols-1 md:grid-cols-3 gap-12 md:gap-0">
-            {/* Connector line (desktop) */}
-            <div className="hidden md:block absolute top-10 left-[calc(16.66%+2.5rem)] right-[calc(16.66%+2.5rem)] h-0.5 bg-[#3b55f5]/50" />
+            {/* Connector line — desktop only */}
+            <div className="hidden md:block absolute top-10 left-[calc(16.66%+2.5rem)] right-[calc(16.66%+2.5rem)] h-0.5 bg-[#3b55f5]/40" />
 
             {[
               {
@@ -459,18 +463,19 @@ export default function Home() {
                 desc: "Recoge tus tenis impecables en 48 horas, empacados como nuevos y listos para lucir.",
               },
             ].map((step, i) => (
-              <RevealSection key={i} className="flex flex-col items-center text-center px-4 md:px-8">
-                <div className="w-20 h-20 rounded-full bg-[#3b55f5] text-white flex items-center justify-center mb-5 relative z-10 shadow-lg shadow-[#3b55f5]/30">
+              <Reveal key={i} className="flex flex-col items-center text-center gap-4 px-4 md:px-10">
+                <div className="w-20 h-20 rounded-full bg-[#3b55f5] text-white flex items-center justify-center shrink-0 relative z-10 shadow-lg shadow-[#3b55f5]/25">
                   {step.icon}
                 </div>
-                <p className="text-[#3b55f5] text-xs font-bold uppercase tracking-widest mb-1">Paso {step.num}</p>
-                <h3 className="font-display text-2xl text-gray-900 mb-3">{step.title}</h3>
-                <p className="text-gray-500 text-sm leading-relaxed">{step.desc}</p>
-              </RevealSection>
+                <div>
+                  <p className="text-[#3b55f5] text-xs font-bold uppercase tracking-widest mb-1">Paso {step.num}</p>
+                  <h3 className="font-display text-2xl text-gray-900 mb-2">{step.title}</h3>
+                  <p className="text-gray-500 text-sm leading-relaxed">{step.desc}</p>
+                </div>
+              </Reveal>
             ))}
           </div>
 
-          {/* Express pill */}
           <div className="mt-12 flex justify-center">
             <div className="inline-flex items-center gap-2 bg-[#3b55f5]/10 text-[#3b55f5] text-sm font-medium px-6 py-3 rounded-full border border-[#3b55f5]/20">
               ⚡ Servicio express disponible en 24 horas — cargo adicional de $100 MXN
@@ -479,21 +484,21 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ── 6. GARANTÍAS ─────────────────────────────────────── */}
-      <section className="bg-white py-24">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6">
-          <RevealSection className="mb-14 pl-1">
+      {/* ── 6. GARANTÍAS ───────────────────────────────────────── */}
+      <section className="bg-white py-20 md:py-28">
+        <div className="max-w-6xl mx-auto px-6 md:px-10">
+          <Reveal className="mb-12">
             <p className="text-gray-400 text-xs font-bold uppercase tracking-widest mb-3">Por Qué Elegirnos</p>
-            <h2 className="font-display text-4xl sm:text-5xl text-gray-900 max-w-lg">
+            <h2 className="font-display text-4xl md:text-5xl text-gray-900 max-w-lg">
               CALIDAD PROFESIONAL GARANTIZADA
             </h2>
-          </RevealSection>
+          </Reveal>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {[
               {
                 icon: (
-                  <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <svg className="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z" />
                   </svg>
                 ),
@@ -502,7 +507,7 @@ export default function Home() {
               },
               {
                 icon: (
-                  <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <svg className="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z" />
                   </svg>
                 ),
@@ -511,7 +516,7 @@ export default function Home() {
               },
               {
                 icon: (
-                  <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <svg className="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
                   </svg>
                 ),
@@ -519,27 +524,30 @@ export default function Home() {
                 desc: "Si no quedas 100% satisfecho con el resultado, repetimos el servicio sin costo adicional. Tu confianza es nuestra prioridad.",
               },
             ].map((card, i) => (
-              <RevealSection key={i} className="bg-[#f0f2f5] p-8 flex flex-col items-center text-center">
-                <div className="w-16 h-16 bg-[#3b55f5]/10 rounded-full flex items-center justify-center text-[#3b55f5] mb-5">
+              <Reveal
+                key={i}
+                className="bg-[#f0f2f5] rounded-2xl p-8 flex flex-col items-center text-center"
+              >
+                <div className="w-14 h-14 bg-[#3b55f5]/10 rounded-full flex items-center justify-center text-[#3b55f5] mb-5">
                   {card.icon}
                 </div>
                 <h3 className="font-display text-xl text-gray-900 mb-3">{card.title}</h3>
                 <p className="text-gray-500 text-sm leading-relaxed">{card.desc}</p>
-              </RevealSection>
+              </Reveal>
             ))}
           </div>
         </div>
       </section>
 
-      {/* ── 7. MEMBRESÍA ─────────────────────────────────────── */}
-      <section id="membresia" className="bg-[#f0f2f5] py-24">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6">
-          <div className="bg-[#0d1526] p-10">
-            {/* Header */}
+      {/* ── 7. MEMBRESÍA ───────────────────────────────────────── */}
+      <section id="membresia" className="bg-[#f0f2f5] py-20 md:py-28">
+        <div className="max-w-6xl mx-auto px-6 md:px-10">
+          <div className="bg-[#0d1526] rounded-2xl p-10">
+            {/* Header row */}
             <div className="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-6 mb-10">
               <div>
                 <p className="text-white/40 text-xs font-bold uppercase tracking-widest mb-3">Membresías</p>
-                <h2 className="font-display text-3xl sm:text-4xl text-white mb-4">
+                <h2 className="font-display text-3xl md:text-4xl text-white mb-4">
                   TUS TENIS SIEMPRE LIMPIOS, SIN PENSARLO
                 </h2>
                 <p className="text-white/50 text-sm leading-relaxed max-w-lg">
@@ -548,14 +556,14 @@ export default function Home() {
               </div>
               <Link
                 href="/membresia"
-                className="shrink-0 inline-flex items-center gap-2 bg-[#3b55f5] text-white text-sm font-bold px-6 py-3 hover:bg-[#2a44e4] transition-colors whitespace-nowrap"
+                className="shrink-0 self-start inline-flex items-center gap-2 bg-[#3b55f5] text-white text-sm font-bold px-6 py-3 hover:bg-[#2a44e4] transition-colors whitespace-nowrap"
               >
                 Ver todos los planes →
               </Link>
             </div>
 
-            {/* Mini cards */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+            {/* 4 mini cards */}
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
               {memberships.map((m, i) => (
                 <div
                   key={i}
@@ -574,16 +582,16 @@ export default function Home() {
                       </span>
                     </div>
                   )}
-                  <div className={m.popular ? "mt-3" : ""}>
-                    <p className={`text-xs font-bold uppercase tracking-widest mb-3 ${m.popular ? "text-white/70" : "text-white/40"}`}>
+                  <div className={m.popular ? "mt-4" : ""}>
+                    <p className={`text-xs font-bold uppercase tracking-widest mb-2 ${m.popular ? "text-white/70" : "text-white/40"}`}>
                       {m.name}
                     </p>
-                    <p className={`font-display text-3xl mb-1 ${m.gold ? "text-[#f5a623]" : "text-white"}`}>
+                    <p className={`font-display text-2xl md:text-3xl mb-1 ${m.gold ? "text-[#f5a623]" : "text-white"}`}>
                       {m.price}
-                      <span className="text-sm font-sans font-normal opacity-60">/mes</span>
+                      <span className="text-xs font-sans font-normal opacity-60">/mes</span>
                     </p>
                     <p className="text-green-400 text-xs mb-3">{m.saving}</p>
-                    <p className={`text-sm leading-relaxed ${m.popular ? "text-white/80" : "text-white/50"}`}>
+                    <p className={`text-xs leading-relaxed ${m.popular ? "text-white/80" : "text-white/50"}`}>
                       {m.desc}
                     </p>
                   </div>
@@ -592,23 +600,23 @@ export default function Home() {
             </div>
 
             {/* WA note */}
-            <div className="mt-6 flex items-center gap-3 text-sm text-white/50">
-              <WhatsAppIcon className="w-5 h-5 text-[#25D366] shrink-0" />
+            <div className="mt-6 flex items-start gap-3 text-sm text-white/50">
+              <WhatsAppIcon className="w-5 h-5 text-[#25D366] shrink-0 mt-0.5" />
               <span>Escríbenos por WhatsApp, elige tu plan y paga con tarjeta. A partir de ahí todo es automático.</span>
             </div>
           </div>
         </div>
       </section>
 
-      {/* ── 8. CTA BANNER ────────────────────────────────────── */}
-      <section id="cta" className="relative py-32 min-h-[500px] flex items-center overflow-hidden">
+      {/* ── 8. CTA BANNER ──────────────────────────────────────── */}
+      <section id="cta" className="relative min-h-[450px] flex items-center overflow-hidden py-32">
         <div className="absolute inset-0">
-          <Image src="/img/cta-banner.webp" alt="CTA background" fill className="object-cover" />
+          <Image src="/img/cta-banner.webp" alt="" fill className="object-cover object-center" />
           <div className="absolute inset-0 bg-[rgba(10,15,30,0.72)]" />
         </div>
-        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 text-center">
-          <RevealSection>
-            <h2 className="font-display text-6xl md:text-8xl text-white mb-6">
+        <div className="relative max-w-6xl mx-auto px-6 md:px-10 w-full text-center">
+          <Reveal>
+            <h2 className="font-display text-5xl md:text-7xl font-black text-white mb-6">
               ¿LISTO PARA LA TRANSFORMACIÓN?
             </h2>
             <p className="text-white/65 text-lg mb-10 max-w-xl mx-auto leading-relaxed">
@@ -629,28 +637,28 @@ export default function Home() {
               <span>✓ Listo en 48 horas</span>
               <span>✓ Garantía total</span>
             </div>
-          </RevealSection>
+          </Reveal>
         </div>
       </section>
 
-      {/* ── 9. FAQ ───────────────────────────────────────────── */}
-      <section id="faq" className="bg-white py-24">
-        <div className="max-w-3xl mx-auto px-4 sm:px-6">
-          <RevealSection className="text-center mb-14">
+      {/* ── 9. FAQ ─────────────────────────────────────────────── */}
+      <section id="faq" className="bg-white py-20 md:py-28">
+        <div className="max-w-3xl mx-auto px-6 md:px-10">
+          <Reveal className="text-center mb-12">
             <p className="text-[#3b55f5] text-xs font-bold uppercase tracking-widest mb-3">Preguntas Frecuentes</p>
-            <h2 className="font-display text-4xl sm:text-5xl text-gray-900">
+            <h2 className="font-display text-4xl md:text-5xl text-gray-900">
               TODO LO QUE NECESITAS SABER
             </h2>
-          </RevealSection>
+          </Reveal>
 
-          <div className="divide-y divide-gray-100">
+          <div className="divide-y divide-gray-200">
             {faqs.map((faq, i) => (
               <div key={i}>
                 <button
                   onClick={() => setOpenFaq(openFaq === i ? null : i)}
-                  className="w-full flex items-center justify-between py-6 text-left gap-4"
+                  className="w-full flex items-center justify-between py-5 text-left gap-4"
                 >
-                  <span className="font-semibold text-gray-900 text-sm sm:text-base">{faq.q}</span>
+                  <span className="font-semibold text-gray-900 text-sm md:text-base">{faq.q}</span>
                   <span
                     className={`shrink-0 w-6 h-6 flex items-center justify-center rounded-full border border-gray-200 text-gray-400 transition-transform duration-300 ${
                       openFaq === i ? "rotate-45" : ""
@@ -662,8 +670,8 @@ export default function Home() {
                   </span>
                 </button>
                 <div
-                  className={`overflow-hidden transition-all duration-300 ${
-                    openFaq === i ? "max-h-64 pb-5" : "max-h-0"
+                  className={`overflow-hidden transition-all duration-300 ease-in-out ${
+                    openFaq === i ? "max-h-80 pb-5" : "max-h-0"
                   }`}
                 >
                   <p className="text-gray-500 text-sm leading-relaxed">{faq.a}</p>
@@ -674,35 +682,34 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ── 10. SUCURSALES ───────────────────────────────────── */}
-      <section id="sucursales" className="bg-[#f0f2f5] py-24">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6">
-          <RevealSection className="mb-12">
+      {/* ── 10. SUCURSALES ─────────────────────────────────────── */}
+      <section id="sucursales" className="bg-[#f0f2f5] py-20 md:py-28">
+        <div className="max-w-6xl mx-auto px-6 md:px-10">
+          <Reveal className="mb-12">
             <p className="text-gray-400 text-xs font-bold uppercase tracking-widest mb-3">Puntos de Recepción</p>
-            <h2 className="font-display text-4xl sm:text-5xl text-gray-900 mb-3">
+            <h2 className="font-display text-4xl md:text-5xl text-gray-900 mb-3">
               ENCUÉNTRANOS EN VILLAHERMOSA
             </h2>
             <p className="text-gray-500 text-sm">
               Deja tus tenis en cualquiera de nuestros puntos y recógelos limpios al día siguiente.
             </p>
-          </RevealSection>
+          </Reveal>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             {/* Sucursal 1 */}
-            <RevealSection className="bg-white overflow-hidden shadow-sm">
+            <Reveal className="bg-white overflow-hidden shadow-sm">
               <a
                 href="https://maps.google.com/?q=Av.+Paseo+Usumacinta+esquina+Av.+Los+Rios+Plaza+KB+Villahermosa+Tabasco"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="block relative h-56 bg-gray-100 overflow-hidden group"
+                className="block relative h-52 bg-gray-200 overflow-hidden group"
               >
-                {/* Placeholder shown when image doesn't load */}
-                <div className="absolute inset-0 flex flex-col items-center justify-center gap-2 bg-gray-100">
-                  <svg className="w-10 h-10 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <div className="absolute inset-0 flex flex-col items-center justify-center gap-3 bg-gray-200">
+                  <svg className="w-10 h-10 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
                   </svg>
-                  <span className="text-gray-400 text-xs uppercase tracking-widest">Plaza Usumacinta</span>
+                  <span className="text-gray-400 text-xs uppercase tracking-widest font-medium">Plaza Usumacinta</span>
                 </div>
                 <Image src="/img/mapa-usumacinta.webp" alt="Mapa Plaza Usumacinta" fill className="object-cover group-hover:scale-105 transition-transform duration-500" />
                 <div className="absolute inset-0 bg-black/20 group-hover:bg-black/10 transition-colors" />
@@ -710,23 +717,23 @@ export default function Home() {
                   Ver en Maps →
                 </div>
               </a>
-              <div className="p-6">
+              <div className="p-7 md:p-8">
                 <span className="inline-block bg-[#3b55f5] text-white text-xs font-bold uppercase tracking-wider px-3 py-1 mb-4">
                   Sucursal 1
                 </span>
                 <h3 className="font-bold text-xl text-gray-900 mb-1">Tintorería Max</h3>
                 <p className="text-gray-400 text-sm mb-4">Plaza Usumacinta · Villahermosa</p>
-                <p className="text-gray-600 text-sm mb-4 flex items-start gap-2">
+                <div className="flex items-start gap-2 text-gray-600 text-sm mb-5">
                   <svg className="w-4 h-4 text-[#3b55f5] shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
                   </svg>
-                  Av. Paseo Usumacinta esq. Av. Los Ríos, Plaza KB, Villahermosa, Tabasco
-                </p>
-                <div className="border-t border-gray-100 pt-4 space-y-1.5 text-sm text-gray-500 mb-5">
-                  <div className="flex justify-between"><span>Lun–Vie</span><span className="font-medium text-gray-700">7:00 AM – 8:00 PM</span></div>
-                  <div className="flex justify-between"><span>Sábado</span><span className="font-medium text-gray-700">8:00 AM – 6:00 PM</span></div>
-                  <div className="flex justify-between"><span>Domingo</span><span className="font-medium text-gray-700">9:00 AM – 2:00 PM</span></div>
+                  <span>Av. Paseo Usumacinta esq. Av. Los Ríos, Plaza KB, Villahermosa, Tabasco</span>
+                </div>
+                <div className="border-t border-gray-100 pt-4 space-y-2 text-sm mb-5">
+                  <div className="flex justify-between text-gray-500"><span>Lun–Vie</span><span className="font-medium text-gray-700">7:00 AM – 8:00 PM</span></div>
+                  <div className="flex justify-between text-gray-500"><span>Sábado</span><span className="font-medium text-gray-700">8:00 AM – 6:00 PM</span></div>
+                  <div className="flex justify-between text-gray-500"><span>Domingo</span><span className="font-medium text-gray-700">9:00 AM – 2:00 PM</span></div>
                 </div>
                 <a
                   href="https://maps.google.com/?q=Av.+Paseo+Usumacinta+esquina+Av.+Los+Rios+Plaza+KB+Villahermosa+Tabasco"
@@ -737,23 +744,22 @@ export default function Home() {
                   Ver en Google Maps
                 </a>
               </div>
-            </RevealSection>
+            </Reveal>
 
             {/* Sucursal 2 */}
-            <RevealSection className="bg-white overflow-hidden shadow-sm">
+            <Reveal className="bg-white overflow-hidden shadow-sm">
               <a
                 href="https://maps.google.com/?q=Velodrómo+Ciudad+Deportiva+Plaza+Mega+Soriana+Villahermosa+Tabasco"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="block relative h-56 bg-gray-100 overflow-hidden group"
+                className="block relative h-52 bg-gray-200 overflow-hidden group"
               >
-                {/* Placeholder shown when image doesn't load */}
-                <div className="absolute inset-0 flex flex-col items-center justify-center gap-2 bg-gray-100">
-                  <svg className="w-10 h-10 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <div className="absolute inset-0 flex flex-col items-center justify-center gap-3 bg-gray-200">
+                  <svg className="w-10 h-10 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
                   </svg>
-                  <span className="text-gray-400 text-xs uppercase tracking-widest">Ciudad Deportiva</span>
+                  <span className="text-gray-400 text-xs uppercase tracking-widest font-medium">Ciudad Deportiva</span>
                 </div>
                 <Image src="/img/mapa-deportiva.webp" alt="Mapa Mega Plaza Deportiva" fill className="object-cover group-hover:scale-105 transition-transform duration-500" />
                 <div className="absolute inset-0 bg-black/20 group-hover:bg-black/10 transition-colors" />
@@ -761,23 +767,23 @@ export default function Home() {
                   Ver en Maps →
                 </div>
               </a>
-              <div className="p-6">
+              <div className="p-7 md:p-8">
                 <span className="inline-block bg-[#3b55f5] text-white text-xs font-bold uppercase tracking-wider px-3 py-1 mb-4">
                   Sucursal 2
                 </span>
                 <h3 className="font-bold text-xl text-gray-900 mb-1">Mega Plaza Deportiva</h3>
                 <p className="text-gray-400 text-sm mb-4">Ciudad Deportiva · Villahermosa</p>
-                <p className="text-gray-600 text-sm mb-4 flex items-start gap-2">
+                <div className="flex items-start gap-2 text-gray-600 text-sm mb-5">
                   <svg className="w-4 h-4 text-[#3b55f5] shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
                   </svg>
-                  Velódromo Ciudad Deportiva, Plaza Mega Soriana. A un costado de Telcel, entrada al Gym Anytime Fitness
-                </p>
-                <div className="border-t border-gray-100 pt-4 space-y-1.5 text-sm text-gray-500 mb-5">
-                  <div className="flex justify-between"><span>Lun–Vie</span><span className="font-medium text-gray-700">8:00 AM – 8:00 PM</span></div>
-                  <div className="flex justify-between"><span>Sábado</span><span className="font-medium text-gray-700">8:00 AM – 4:00 PM</span></div>
-                  <div className="flex justify-between"><span>Domingo</span><span className="font-medium text-gray-700">Cerrado</span></div>
+                  <span>Velódromo Ciudad Deportiva, Plaza Mega Soriana. A un costado de Telcel, entrada al Gym Anytime Fitness</span>
+                </div>
+                <div className="border-t border-gray-100 pt-4 space-y-2 text-sm mb-5">
+                  <div className="flex justify-between text-gray-500"><span>Lun–Vie</span><span className="font-medium text-gray-700">8:00 AM – 8:00 PM</span></div>
+                  <div className="flex justify-between text-gray-500"><span>Sábado</span><span className="font-medium text-gray-700">8:00 AM – 4:00 PM</span></div>
+                  <div className="flex justify-between text-gray-500"><span>Domingo</span><span className="font-medium text-gray-700">Cerrado</span></div>
                 </div>
                 <a
                   href="https://maps.google.com/?q=Velodrómo+Ciudad+Deportiva+Plaza+Mega+Soriana+Villahermosa+Tabasco"
@@ -788,7 +794,7 @@ export default function Home() {
                   Ver en Google Maps
                 </a>
               </div>
-            </RevealSection>
+            </Reveal>
           </div>
         </div>
       </section>
@@ -798,7 +804,7 @@ export default function Home() {
   );
 }
 
-// ── PlanCard subcomponent ────────────────────────────────────────────
+// ── PlanCard ──────────────────────────────────────────────────────────
 type PlanVariant = "outline" | "blue" | "dark";
 interface Plan {
   name: string;
@@ -810,15 +816,17 @@ interface Plan {
   variant: PlanVariant;
 }
 
-function PlanCard({ plan, elevated }: { plan: Plan; elevated: boolean }) {
+function PlanCard({ plan }: { plan: Plan }) {
   const isBlue = plan.variant === "blue";
   const isDark = plan.variant === "dark";
 
   const cardClass = isBlue
-    ? "bg-[#3b55f5] text-white shadow-2xl shadow-[#3b55f5]/40 scale-[1.06] -mt-4 mb-4 z-10"
+    ? "bg-[#3b55f5] text-white shadow-2xl shadow-[#3b55f5]/35 scale-[1.04] z-10"
     : isDark
-    ? "bg-[#0d1526] text-white"
-    : "bg-white border border-gray-200 text-gray-900";
+    ? "bg-[#0d1526] text-white border border-white/5"
+    : "bg-white text-gray-900 border border-gray-200";
+
+  const padding = isBlue ? "p-8" : "p-7";
 
   const btnClass = isBlue
     ? "bg-white text-[#3b55f5] hover:bg-gray-100 font-bold"
@@ -826,15 +834,9 @@ function PlanCard({ plan, elevated }: { plan: Plan; elevated: boolean }) {
     ? "border-2 border-[#f5a623] text-[#f5a623] hover:bg-[#f5a623]/10 font-bold"
     : "border-2 border-[#3b55f5] text-[#3b55f5] hover:bg-[#3b55f5]/5 font-bold";
 
-  const checkColor = isBlue ? "text-white" : isDark ? "text-[#f5a623]" : "text-[#3b55f5]";
-  const priceColor = isDark ? "text-[#f5a623]" : isBlue ? "text-white" : "text-gray-900";
-  const subtitleColor = isBlue ? "text-white/70" : "text-gray-400";
+  const checkColor = isBlue ? "text-white/80" : isDark ? "text-[#f5a623]" : "text-[#3b55f5]";
+  const priceColor = isDark ? "text-[#f5a623]" : "text-white";
   const featureColor = isBlue ? "text-white/80" : isDark ? "text-white/60" : "text-gray-500";
-
-  // elevated is used to determine layout context; kept for potential future use
-  void elevated;
-
-  const padding = isBlue ? "p-10" : "p-6";
 
   return (
     <div className={`relative flex flex-col ${padding} ${cardClass}`}>
@@ -845,26 +847,28 @@ function PlanCard({ plan, elevated }: { plan: Plan; elevated: boolean }) {
           </span>
         </div>
       )}
-      <div className={isBlue ? "mt-4" : ""}>
-        {/* Icon */}
-        <div className={`w-12 h-12 rounded-full flex items-center justify-center mb-5 ${isBlue ? "bg-white/20" : "bg-[#3b55f5]/10"}`}>
-          <svg className={`w-6 h-6 ${isBlue ? "text-white" : "text-[#3b55f5]"}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+
+      <div className={isBlue ? "mt-4 flex flex-col flex-1" : "flex flex-col flex-1"}>
+        <div className={`w-11 h-11 rounded-full flex items-center justify-center mb-4 ${isBlue ? "bg-white/20" : "bg-[#3b55f5]/10"}`}>
+          <svg className={`w-5 h-5 ${isBlue ? "text-white" : "text-[#3b55f5]"}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01" />
           </svg>
         </div>
 
-        <h3 className={`font-display text-2xl mb-2 ${isBlue ? "text-white" : isDark ? "text-white" : "text-gray-900"}`}>
+        <h3 className={`font-display text-2xl mb-1 ${isBlue ? "text-white" : isDark ? "text-white" : "text-gray-900"}`}>
           {plan.name}
         </h3>
         {plan.subtitle && (
-          <p className={`text-xs mb-4 ${subtitleColor}`}>{plan.subtitle}</p>
+          <p className={`text-xs mb-3 ${isBlue ? "text-white/65" : "text-gray-400"}`}>{plan.subtitle}</p>
         )}
-        <p className={`font-display text-4xl mb-6 ${priceColor}`}>{plan.price}</p>
+        <p className={`font-display text-4xl mb-5 ${isBlue || isDark ? priceColor : "text-gray-900"}`}>
+          {plan.price}
+        </p>
 
-        <ul className="space-y-3 mb-8 flex-1">
+        <ul className="space-y-2.5 mb-7 flex-1">
           {plan.features.map((f, i) => (
-            <li key={i} className={`flex items-start gap-2.5 text-sm ${featureColor}`}>
-              <span className={`shrink-0 mt-0.5 ${checkColor}`}>✓</span>
+            <li key={i} className={`flex items-start gap-2 text-sm ${featureColor}`}>
+              <span className={`shrink-0 mt-0.5 font-bold ${checkColor}`}>✓</span>
               {f}
             </li>
           ))}

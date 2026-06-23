@@ -4,8 +4,7 @@ import { useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
 
-const WA_BASE = "https://wa.me/529931000000";
-const WA_URL = `${WA_BASE}?text=${encodeURIComponent("Hola, me gustaría cotizar la limpieza de mis tenis")}`;
+const WA_URL = `https://wa.me/529931000000?text=${encodeURIComponent("Hola, me gustaría cotizar la limpieza de mis tenis")}`;
 
 const links = [
   { label: "Servicios", href: "#servicios" },
@@ -25,8 +24,8 @@ function WhatsAppIcon({ className }: { className?: string }) {
 }
 
 export default function Navbar() {
-  const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const [open, setOpen] = useState(false);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 10);
@@ -40,7 +39,7 @@ export default function Navbar() {
         scrolled ? "shadow-md" : ""
       }`}
     >
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 flex items-center justify-between h-16">
+      <div className="max-w-6xl mx-auto px-6 md:px-10 flex items-center justify-between h-16">
         {/* Logo */}
         <Link href="/" className="flex items-center shrink-0">
           <Image
@@ -48,12 +47,12 @@ export default function Navbar() {
             alt="Mis Papos"
             width={140}
             height={40}
-            className="h-10 w-auto object-contain"
+            className="h-9 w-auto object-contain"
             priority
           />
         </Link>
 
-        {/* Desktop nav */}
+        {/* Desktop nav links */}
         <nav className="hidden md:flex items-center gap-7">
           {links.map((l) => (
             <a
@@ -66,7 +65,7 @@ export default function Navbar() {
           ))}
         </nav>
 
-        {/* CTA */}
+        {/* Desktop CTA */}
         <a
           href={WA_URL}
           target="_blank"
@@ -77,48 +76,17 @@ export default function Navbar() {
           Contáctanos
         </a>
 
-        {/* Mobile hamburger */}
-        <button
-          onClick={() => setOpen(!open)}
-          aria-label={open ? "Cerrar menú" : "Abrir menú"}
-          className="md:hidden text-gray-700 p-2 -mr-2"
+        {/* Mobile: logo left, WAB button right — no hamburger */}
+        <a
+          href={WA_URL}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="md:hidden inline-flex items-center gap-2 bg-[#25D366] text-white text-xs font-bold px-4 py-2 rounded-full hover:bg-[#1db954] transition-colors"
         >
-          {open ? (
-            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-            </svg>
-          ) : (
-            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
-            </svg>
-          )}
-        </button>
+          <WhatsAppIcon className="w-3.5 h-3.5" />
+          Cotizar
+        </a>
       </div>
-
-      {/* Mobile menu */}
-      {open && (
-        <div className="md:hidden bg-white border-t border-gray-100 px-4 pb-4 pt-2">
-          {links.map((l) => (
-            <a
-              key={l.href}
-              href={l.href}
-              onClick={() => setOpen(false)}
-              className="block text-gray-600 hover:text-[#3b55f5] text-sm font-medium transition-colors py-3 border-b border-gray-100 last:border-0"
-            >
-              {l.label}
-            </a>
-          ))}
-          <a
-            href={WA_URL}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="mt-4 flex items-center justify-center gap-2 bg-[#25D366] text-white text-sm font-bold px-5 py-3 rounded-full hover:bg-[#1db954] transition-colors"
-          >
-            <WhatsAppIcon className="w-4 h-4" />
-            Contáctanos
-          </a>
-        </div>
-      )}
     </header>
   );
 }
