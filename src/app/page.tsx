@@ -232,7 +232,7 @@ export default function Home() {
       <Navbar />
 
       {/* ── 1. HERO ──────────────────────────────────────────── */}
-      <section className="relative min-h-screen flex flex-col justify-center overflow-hidden">
+      <section className="relative h-screen min-h-[640px] flex flex-col justify-center overflow-hidden">
         {/* Background */}
         <div className="absolute inset-0">
           <Image
@@ -247,7 +247,7 @@ export default function Home() {
 
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 pt-24 pb-32 w-full">
           <div className="max-w-2xl">
-            <p className="text-[#3b55f5] bg-[#3b55f5]/10 border border-[#3b55f5]/30 text-xs font-bold uppercase tracking-widest px-4 py-2 inline-block mb-6">
+            <p className="text-white/60 text-xs font-bold uppercase tracking-widest mb-6">
               Limpieza profesional de sneakers · Villahermosa, Tabasco
             </p>
             <h1 className="font-display text-5xl sm:text-6xl lg:text-7xl text-white leading-none mb-4">
@@ -290,12 +290,12 @@ export default function Home() {
       </section>
 
       {/* ── 2. BRANDS ────────────────────────────────────────── */}
-      <section className="bg-white py-12 border-b border-gray-100">
+      <section className="bg-white py-16 sm:py-20 border-b border-gray-100">
         <div className="max-w-7xl mx-auto px-4 sm:px-6">
-          <p className="text-gray-400 text-xs uppercase tracking-widest text-center mb-8">
+          <p className="text-gray-400 text-xs uppercase tracking-widest text-center mb-10">
             Limpiamos el calzado que entrena contigo, día tras día
           </p>
-          <div className="flex flex-wrap justify-center items-center gap-8 md:gap-12">
+          <div className="flex flex-wrap justify-center items-center gap-10 md:gap-16">
             {brands.map((brand) => (
               <span key={brand} className="text-gray-300 font-bold text-lg tracking-wide hover:text-gray-400 transition-colors">
                 {brand}
@@ -315,18 +315,28 @@ export default function Home() {
             </h2>
           </RevealSection>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {testimonials.map((t, i) => (
               <RevealSection key={i} className="bg-white shadow-sm">
                 {/* Before/After images */}
                 <div className="grid grid-cols-2 relative">
-                  <div className="relative aspect-square bg-gray-100 overflow-hidden">
+                  <div className="relative aspect-square bg-gray-200 overflow-hidden">
+                    <div className="absolute inset-0 flex items-center justify-center">
+                      <svg className="w-10 h-10 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                      </svg>
+                    </div>
                     <Image src={t.before} alt="Antes" fill className="object-cover" />
                     <div className="absolute top-2 left-2 bg-red-500 text-white text-xs font-bold px-2 py-0.5 uppercase">
                       Antes
                     </div>
                   </div>
                   <div className="relative aspect-square bg-gray-100 overflow-hidden">
+                    <div className="absolute inset-0 flex items-center justify-center">
+                      <svg className="w-10 h-10 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                      </svg>
+                    </div>
                     <Image src={t.after} alt="Después" fill className="object-cover" />
                     <div className="absolute top-2 right-2 bg-green-500 text-white text-xs font-bold px-2 py-0.5 uppercase">
                       Después
@@ -386,7 +396,7 @@ export default function Home() {
           </div>
 
           {/* Desktop: 3 cols | Mobile: active tab only */}
-          <div className="hidden md:grid md:grid-cols-3 gap-6 items-stretch">
+          <div className="hidden md:grid md:grid-cols-3 gap-8 items-center">
             {plans.map((plan, i) => (
               <PlanCard key={i} plan={plan} elevated={plan.variant === "blue"} />
             ))}
@@ -406,9 +416,9 @@ export default function Home() {
             </h2>
           </RevealSection>
 
-          <div className="relative grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-0">
+          <div className="relative grid grid-cols-1 md:grid-cols-3 gap-12 md:gap-0">
             {/* Connector line (desktop) */}
-            <div className="hidden md:block absolute top-10 left-[calc(16.66%+1.5rem)] right-[calc(16.66%+1.5rem)] h-0.5 bg-[#3b55f5]/30" />
+            <div className="hidden md:block absolute top-10 left-[calc(16.66%+2.5rem)] right-[calc(16.66%+2.5rem)] h-0.5 bg-[#3b55f5]/50" />
 
             {[
               {
@@ -466,14 +476,14 @@ export default function Home() {
       {/* ── 6. GARANTÍAS ─────────────────────────────────────── */}
       <section className="bg-white py-20 sm:py-28">
         <div className="max-w-7xl mx-auto px-4 sm:px-6">
-          <RevealSection className="mb-14">
+          <RevealSection className="mb-14 pl-1">
             <p className="text-gray-400 text-xs font-bold uppercase tracking-widest mb-3">Por Qué Elegirnos</p>
             <h2 className="font-display text-4xl sm:text-5xl text-gray-900 max-w-lg">
               CALIDAD PROFESIONAL GARANTIZADA
             </h2>
           </RevealSection>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {[
               {
                 icon: (
@@ -539,11 +549,11 @@ export default function Home() {
             </div>
 
             {/* Mini cards */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
               {memberships.map((m, i) => (
                 <div
                   key={i}
-                  className={`relative p-6 border ${
+                  className={`relative p-7 border ${
                     m.popular
                       ? "bg-[#3b55f5] border-[#3b55f5]"
                       : m.gold
@@ -585,14 +595,14 @@ export default function Home() {
       </section>
 
       {/* ── 8. CTA BANNER ────────────────────────────────────── */}
-      <section id="cta" className="relative py-28 overflow-hidden">
+      <section id="cta" className="relative py-36 sm:py-44 overflow-hidden">
         <div className="absolute inset-0">
           <Image src="/img/cta-banner.webp" alt="CTA background" fill className="object-cover" />
           <div className="absolute inset-0 bg-[rgba(10,15,30,0.72)]" />
         </div>
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 text-center">
           <RevealSection>
-            <h2 className="font-display text-5xl sm:text-6xl text-white mb-6">
+            <h2 className="font-display text-5xl sm:text-7xl text-white mb-6">
               ¿LISTO PARA LA TRANSFORMACIÓN?
             </h2>
             <p className="text-white/65 text-lg mb-10 max-w-xl mx-auto leading-relaxed">
@@ -632,7 +642,7 @@ export default function Home() {
               <div key={i}>
                 <button
                   onClick={() => setOpenFaq(openFaq === i ? null : i)}
-                  className="w-full flex items-center justify-between py-5 text-left gap-4"
+                  className="w-full flex items-center justify-between py-6 text-left gap-4"
                 >
                   <span className="font-semibold text-gray-900 text-sm sm:text-base">{faq.q}</span>
                   <span
@@ -680,6 +690,14 @@ export default function Home() {
                 rel="noopener noreferrer"
                 className="block relative aspect-video bg-gray-100 overflow-hidden group"
               >
+                {/* Placeholder shown when image doesn't load */}
+                <div className="absolute inset-0 flex flex-col items-center justify-center gap-2 bg-gray-100">
+                  <svg className="w-10 h-10 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                  </svg>
+                  <span className="text-gray-400 text-xs uppercase tracking-widest">Plaza Usumacinta</span>
+                </div>
                 <Image src="/img/mapa-usumacinta.webp" alt="Mapa Plaza Usumacinta" fill className="object-cover group-hover:scale-105 transition-transform duration-500" />
                 <div className="absolute inset-0 bg-black/20 group-hover:bg-black/10 transition-colors" />
                 <div className="absolute bottom-3 right-3 bg-[#3b55f5] text-white text-xs font-bold px-3 py-1.5">
@@ -723,6 +741,14 @@ export default function Home() {
                 rel="noopener noreferrer"
                 className="block relative aspect-video bg-gray-100 overflow-hidden group"
               >
+                {/* Placeholder shown when image doesn't load */}
+                <div className="absolute inset-0 flex flex-col items-center justify-center gap-2 bg-gray-100">
+                  <svg className="w-10 h-10 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                  </svg>
+                  <span className="text-gray-400 text-xs uppercase tracking-widest">Ciudad Deportiva</span>
+                </div>
                 <Image src="/img/mapa-deportiva.webp" alt="Mapa Mega Plaza Deportiva" fill className="object-cover group-hover:scale-105 transition-transform duration-500" />
                 <div className="absolute inset-0 bg-black/20 group-hover:bg-black/10 transition-colors" />
                 <div className="absolute bottom-3 right-3 bg-[#3b55f5] text-white text-xs font-bold px-3 py-1.5">
@@ -783,7 +809,7 @@ function PlanCard({ plan, elevated }: { plan: Plan; elevated: boolean }) {
   const isDark = plan.variant === "dark";
 
   const cardClass = isBlue
-    ? "bg-[#3b55f5] text-white shadow-2xl shadow-[#3b55f5]/40 scale-105 z-10"
+    ? "bg-[#3b55f5] text-white shadow-2xl shadow-[#3b55f5]/40 scale-[1.06] -mt-4 mb-4 z-10"
     : isDark
     ? "bg-[#0d1526] text-white"
     : "bg-white border border-gray-200 text-gray-900";
