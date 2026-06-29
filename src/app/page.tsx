@@ -1,589 +1,512 @@
 "use client";
 
-import { useState } from "react";
-import Navbar from "@/components/Navbar";
-import Footer from "@/components/Footer";
+import { useState, useEffect, useRef } from "react";
+import Link from "next/link";
 
-const WA_URL = `https://wa.me/529931000000?text=${encodeURIComponent("Hola, me gustaría cotizar la limpieza de mis tenis")}`;
+const WA_NUMBER = "52XXXXXXXXXX";
+const WA_BASE = `https://wa.me/${WA_NUMBER}`;
 
-// ── TESTIMONIOS DATA ───────────────────────────────────────────────────
-const testimonios = [
-  {
-    texto: "Traje mis Air Force 1 que parecían basura y me las devolvieron como nuevas. El servicio profundo vale cada peso.",
-    autor: "Carlos M.",
-    rol: "Cliente frecuente",
-    initials: "CM",
-  },
-  {
-    texto: "Mis Jordan 1 Retro tenían manchas que pensé eran permanentes. En 48 horas estaban perfectas. Increíble trabajo.",
-    autor: "Sofía R.",
-    rol: "Clienta desde 2024",
-    initials: "SR",
-  },
-  {
-    texto: "El servicio premium para mis Yeezys fue perfecto. Los entregué destruidos y los recibí restaurados. 100% recomendado.",
-    autor: "Miguel A.",
-    rol: "Miembro Club Mis Papos",
-    initials: "MA",
-  },
-];
+function waLink(text: string, utm: string) {
+  return `${WA_BASE}?text=${encodeURIComponent(text)}&utm_source=web&utm_medium=${utm}&utm_campaign=lanzamiento`;
+}
 
-// ── SERVICIOS DATA ─────────────────────────────────────────────────────
-const servicios = [
-  {
-    nombre: "Básico",
-    precio: "$190",
-    descripcion: "Limpieza exterior completa",
-    features: [
-      "Limpieza exterior completa",
-      "Lavado de agujetas",
-      "Desinfección básica",
-      "Entrega en 48 horas",
-    ],
-    icono: "🧼",
-    tipo: "basico",
-  },
-  {
-    nombre: "Profunda",
-    precio: "$350",
-    descripcion: "Limpieza interior y exterior a fondo",
-    features: [
-      "Todo lo del plan Básico",
-      "Limpieza interior profunda",
-      "Tratamiento de manchas",
-      "Acondicionador de materiales",
-      "Protector anti-manchas",
-    ],
-    icono: "✨",
-    tipo: "profunda",
-  },
-  {
-    nombre: "Premium",
-    precio: "$550",
-    descripcion: "Restauración completa nivel showroom",
-    features: [
-      "Todo lo del plan Profunda",
-      "Restauración de color",
-      "Reparación menor de sole",
-      "Tratamiento UV anti-amarillamiento",
-      "Caja protectora incluida",
-    ],
-    icono: "👑",
-    tipo: "premium",
-  },
-];
+declare global {
+  interface Window {
+    fbq: (...args: unknown[]) => void;
+  }
+}
 
-// ── GARANTIAS DATA ─────────────────────────────────────────────────────
-const garantias = [
-  {
-    icono: "🛡️",
-    titulo: "Garantía de resultado",
-    texto: "Si no quedas 100% satisfecho, repetimos la limpieza sin costo adicional.",
-  },
-  {
-    icono: "⏱️",
-    titulo: "Entrega en 48 horas",
-    texto: "Tus sneakers listos en 48 horas o te hacemos descuento en tu próximo servicio.",
-  },
-  {
-    icono: "🔬",
-    titulo: "Productos certificados",
-    texto: "Usamos productos profesionales que no dañan materiales delicados ni colores.",
-  },
-];
+function trackLead(name: string) {
+  if (typeof window !== "undefined" && window.fbq) {
+    window.fbq("track", "Lead", { content_name: name });
+  }
+}
 
-// ── FAQ DATA ───────────────────────────────────────────────────────────
-const faqs = [
-  {
-    pregunta: "¿Cuánto tiempo tarda el servicio?",
-    respuesta: "El tiempo estándar es 48 horas. Si necesitas urgencia, ofrecemos servicio express en 24 horas con un costo adicional.",
-  },
-  {
-    pregunta: "¿Qué tipos de tenis aceptan?",
-    respuesta: "Aceptamos todo tipo de sneakers: running, basketball, lifestyle, skateboarding y más. Marcas como Nike, Adidas, Jordan, Yeezy, New Balance, Vans, Converse y cualquier otra.",
-  },
-  {
-    pregunta: "¿Es seguro para tenis de edición limitada?",
-    respuesta: "Sí. Nuestros técnicos están capacitados para manejar tenis de colección y edición limitada con productos especializados que preservan colores y materiales delicados.",
-  },
-  {
-    pregunta: "¿Tienen membresía o plan de suscripción?",
-    respuesta: "Sí, el Club Mis Papos ofrece planes mensuales con descuentos de hasta 30% y beneficios exclusivos. Pregunta en cualquier sucursal o contáctanos por WhatsApp.",
-  },
-  {
-    pregunta: "¿Dónde están ubicados?",
-    respuesta: "Tenemos dos sucursales en Villahermosa: Tintorería Max en Plaza Usumacinta, y Mega Plaza Deportiva en Ciudad Deportiva.",
-  },
-  {
-    pregunta: "¿Puedo pagar con tarjeta?",
-    respuesta: "Aceptamos efectivo, tarjeta de débito y crédito en ambas sucursales. También puedes pagar por transferencia.",
-  },
-];
+function useReveal() {
+  const ref = useRef<HTMLDivElement>(null);
+  const [visible, setVisible] = useState(false);
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const obs = new IntersectionObserver(
+      ([entry]) => { if (entry.isIntersecting) { setVisible(true); obs.unobserve(el); } },
+      { threshold: 0.1 }
+    );
+    obs.observe(el);
+    return () => obs.disconnect();
+  }, []);
+  return { ref, visible };
+}
 
-// ── MEMBERSHIP PLANS ───────────────────────────────────────────────────
-const planes = [
-  {
-    nombre: "Básico",
-    precio: "$299",
-    ahorro: "Ahorra $90/mes",
-    desc: "1 limpieza básica al mes",
-    active: false,
-    vip: false,
-  },
-  {
-    nombre: "Club",
-    precio: "$549",
-    ahorro: "Ahorra $200/mes",
-    desc: "2 limpiezas profundas al mes",
-    active: true,
-    vip: false,
-  },
-  {
-    nombre: "Pro",
-    precio: "$890",
-    ahorro: "Ahorra $370/mes",
-    desc: "4 limpiezas + prioridad express",
-    active: false,
-    vip: false,
-  },
-  {
-    nombre: "VIP",
-    precio: "$1,490",
-    ahorro: "Ahorra $700/mes",
-    desc: "Limpiezas ilimitadas + beneficios",
-    active: false,
-    vip: true,
-  },
-];
-
-// ── SUCURSALES DATA ────────────────────────────────────────────────────
-const sucursales = [
-  {
-    badge: "Sucursal 1",
-    nombre: "Tintorería Max",
-    sub: "Plaza Usumacinta",
-    direccion: "Plaza Usumacinta, Villahermosa, Tabasco",
-    horario: "Lun–Vie 7–8 PM · Sáb 8–6 PM · Dom 9–2 PM",
-    maps: "https://maps.google.com/?q=Plaza+Usumacinta+Villahermosa",
-  },
-  {
-    badge: "Sucursal 2",
-    nombre: "Mega Plaza Deportiva",
-    sub: "Ciudad Deportiva",
-    direccion: "Ciudad Deportiva, Villahermosa, Tabasco",
-    horario: "Lun–Vie 8–8 PM · Sáb 8–4 PM · Dom Cerrado",
-    maps: "https://maps.google.com/?q=Ciudad+Deportiva+Villahermosa",
-  },
-];
-
-function WhatsAppIcon({ className }: { className?: string }) {
+function Reveal({ children, className = "" }: { children: React.ReactNode; className?: string }) {
+  const { ref, visible } = useReveal();
   return (
-    <svg viewBox="0 0 24 24" className={className} fill="currentColor" aria-hidden="true">
-      <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z" />
-      <path d="M12 0C5.373 0 0 5.373 0 12c0 2.124.556 4.118 1.528 5.845L0 24l6.337-1.514A11.955 11.955 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.818a9.817 9.817 0 01-5.003-1.367l-.358-.213-3.76.898.944-3.653-.234-.375A9.79 9.79 0 012.182 12C2.182 6.58 6.58 2.182 12 2.182c5.42 0 9.818 4.398 9.818 9.818 0 5.42-4.398 9.818-9.818 9.818z" />
-    </svg>
+    <div
+      ref={ref}
+      className={`transition-all duration-700 ease-out ${visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"} ${className}`}
+    >
+      {children}
+    </div>
   );
 }
 
+const WA_ICON = (
+  <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+    <path d="M12 2C6.48 2 2 6.48 2 12c0 1.85.5 3.58 1.37 5.07L2 22l5.09-1.34A9.94 9.94 0 0012 22c5.52 0 10-4.48 10-10S17.52 2 12 2zm4.93 13.67c-.2.56-1.18 1.1-1.62 1.16-.44.07-.85.1-2.72-.57-2.28-.82-3.75-3.13-3.86-3.27-.11-.14-.9-1.2-.9-2.29 0-1.09.57-1.62.77-1.84.2-.22.44-.27.59-.27h.42c.14 0 .32-.05.5.38.2.47.67 1.63.73 1.75.06.12.1.26.02.41-.08.15-.12.24-.23.37-.11.13-.24.29-.34.39-.11.11-.23.23-.1.45.13.22.58.96 1.25 1.55.86.77 1.58 1.01 1.8 1.12.22.11.35.09.48-.05.13-.14.55-.64.7-.86.15-.22.3-.18.5-.11.2.07 1.28.6 1.5.71.22.11.37.16.42.25.06.09.06.52-.14 1.08z" />
+  </svg>
+);
+
 export default function Home() {
-  const [activeServicio, setActiveServicio] = useState(1);
-  const [openFaq, setOpenFaq] = useState<number | null>(null);
+  const [activeTab, setActiveTab] = useState<"basico" | "profundo" | "premium">("basico");
+  const [openFaq, setOpenFaq] = useState<number>(0);
+  const [scrolled, setScrolled] = useState(false);
+  const [viewContentFired, setViewContentFired] = useState(false);
+
+  useEffect(() => {
+    const onScroll = () => {
+      setScrolled(window.scrollY > 10);
+      if (!viewContentFired) {
+        const pct = (window.scrollY / (document.body.scrollHeight - window.innerHeight)) * 100;
+        if (pct >= 50) {
+          if (typeof window !== "undefined" && window.fbq) window.fbq("track", "ViewContent");
+          setViewContentFired(true);
+        }
+      }
+    };
+    window.addEventListener("scroll", onScroll);
+    return () => window.removeEventListener("scroll", onScroll);
+  }, [viewContentFired]);
+
+  const faqs = [
+    {
+      q: "¿Cuánto tiempo tarda el servicio?",
+      a: "Nuestro servicio estándar tiene entrega en 48 horas hábiles. Si necesitas tus tenis con urgencia, ofrecemos servicio express de 24 horas con un cargo adicional de $100 MXN.",
+    },
+    {
+      q: "¿Limpian todo tipo de materiales?",
+      a: "Sí, somos especialistas en todos los materiales: piel lisa, piel sintética, gamuza, nobuck, mesh, flyknit, primeknit y materiales técnicos. Cada material requiere productos y técnicas específicas que dominamos.",
+    },
+    {
+      q: "¿Qué pasa si mis tenis se dañan?",
+      a: "Documentamos el estado de cada par con fotografías al momento de la recepción. No nos hacemos responsables por daños preexistentes, materiales desgastados o calzado de imitación, ya que estos pueden reaccionar de forma impredecible a los productos de limpieza. Te recomendamos informarnos sobre el material y la antigüedad al momento de entregarlo.",
+    },
+    {
+      q: "¿Dónde están ubicados?",
+      a: "Contamos con dos puntos de recepción en Villahermosa: Tintorería Max Plaza Usumacinta (Av. Paseo Usumacinta esq. Av. Los Ríos, Plaza KB) y Mega Plaza Deportiva (Velódromo Ciudad Deportiva, junto a Telcel, entrada Anytime Fitness). Abiertos de lunes a domingo.",
+    },
+    {
+      q: "¿Pueden quitar manchas difíciles?",
+      a: "Nuestro servicio de Limpieza Profunda incluye tratamiento especializado anti-manchas. Hemos removido exitosamente manchas de lodo, aceite, pintura y bebidas. Evaluamos cada caso individualmente.",
+    },
+    {
+      q: "¿Ofrecen servicio para empresas o tiendas?",
+      a: "Sí, tenemos planes corporativos para tiendas de sneakers, coleccionistas y empresas. Contáctanos para cotización personalizada con descuentos por volumen.",
+    },
+  ];
 
   return (
-    <>
-      <Navbar />
+    <main className="font-sans antialiased bg-white text-[#0d1526]">
 
-      {/* ── HERO ──────────────────────────────────────────────────────── */}
-      <section className="relative w-full h-screen">
+      {/* ── HERO ── */}
+      <section className="relative w-full h-screen min-h-[640px] flex flex-col justify-between overflow-hidden">
         {/* Background */}
         <div
           className="absolute inset-0"
           style={{
             backgroundImage: "url('/img/hero-bg.webp')",
             backgroundSize: "cover",
-            backgroundPosition: "center",
+            backgroundPosition: "center center",
           }}
         />
         {/* Overlay */}
-        <div className="absolute inset-0 bg-gradient-to-r from-black/65 via-black/40 to-black/10" />
+        <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/40 to-black/10" />
 
-        {/* Content */}
-        <div className="absolute inset-0 flex flex-col justify-between">
-          {/* Top content */}
-          <div className="pt-24 pl-8 md:pl-16 max-w-[60%]">
-            <p className="text-xs tracking-widest text-white/50 uppercase mb-4">
-              Limpieza profesional de sneakers · Villahermosa, Tabasco
-            </p>
-            <h1 className="font-display text-6xl md:text-7xl text-white leading-none tracking-wide mb-3">
-              TUS TENIS<br />
-              FAVORITOS,<br />
-              COMO RECIÉN<br />
-              SALIDOS<br />
-              DE LA CAJA
-            </h1>
-            <div className="w-14 h-1 bg-blue-600 mb-4" />
-            <div className="text-sm leading-7">
-              <span className="bg-blue-600 text-white px-1">
-                Limpieza profesional especializada para todo tipo de sneakers.
-              </span>
-              <br />
-              <span className="bg-blue-600 text-white px-1">
-                Trae tus tenis y recógelos impecables en 48 horas.
-              </span>
-            </div>
-          </div>
+        {/* Content top */}
+        <div className="relative z-10 pt-28 pl-8 md:pl-16 max-w-[58%]">
+          <p className="text-[10px] tracking-[3px] text-white/50 uppercase mb-5">
+            Limpieza profesional de sneakers · Villahermosa, Tabasco
+          </p>
+          <h1
+            className="text-[clamp(44px,6.5vw,80px)] leading-[0.95] tracking-wide text-white mb-4"
+            style={{ fontFamily: "'Bebas Neue', sans-serif" }}
+          >
+            TUS TENIS<br />
+            FAVORITOS,<br />
+            COMO RECIÉN<br />
+            SALIDOS<br />
+            DE LA CAJA
+          </h1>
+          <div className="w-14 h-1 bg-blue-600 rounded mb-5" />
+          <p className="text-sm leading-[1.9]">
+            <span className="bg-blue-600 text-white px-1.5 py-0.5">
+              Limpieza profesional especializada para todo tipo de sneakers.
+            </span>
+            <br />
+            <span className="bg-blue-600 text-white px-1.5 py-0.5">
+              Trae tus tenis y recógelos impecables en 48 horas.
+            </span>
+          </p>
+        </div>
 
-          {/* Bottom bar */}
-          <div className="w-full bg-black/85 px-8 md:px-16 py-4 flex items-center gap-6">
-            <a
-              href="#cta"
-              className="bg-blue-600 text-white rounded-lg px-7 py-3 text-sm font-bold uppercase tracking-wide hover:bg-blue-700 transition-colors"
-            >
-              📅 AGENDAR LIMPIEZA AHORA
-            </a>
-            <span className="text-white/60 text-sm">✓ Primera limpieza con 20% de descuento</span>
-          </div>
+        {/* Bottom bar */}
+        <div className="relative z-10 w-full bg-black/85 px-8 md:px-16 py-4 flex items-center gap-5 flex-wrap">
+          <a
+            href="#cta"
+            className="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg px-7 py-3 text-[13px] font-black uppercase tracking-wide transition-colors"
+            onClick={() => { if (typeof window !== "undefined" && window.fbq) window.fbq("track", "ViewContent"); }}
+          >
+            <span>📅</span> AGENDAR LIMPIEZA AHORA
+          </a>
+          <span className="text-white/60 text-sm">
+            <span className="text-[#25D366] font-bold">✓</span> Primera limpieza con 20% de descuento
+          </span>
         </div>
       </section>
 
-      {/* ── BRANDS ────────────────────────────────────────────────────── */}
+      {/* ── BRANDS ── */}
       <section className="bg-white py-10 px-8 md:px-16 border-b border-gray-100">
-        <p className="text-xs font-bold tracking-widest text-gray-300 uppercase text-center mb-6">
-          Limpiamos todas las marcas
+        <p className="text-[9px] font-bold tracking-[3px] text-gray-300 uppercase text-center mb-6">
+          Limpiamos el calzado que entrena contigo, día tras día
         </p>
-        <div className="flex justify-between items-center flex-wrap gap-4 max-w-4xl mx-auto">
-          {["NIKE", "ADIDAS", "JORDAN", "YEEZY", "NEW BALANCE", "VANS", "CONVERSE", "PUMA"].map((b) => (
-            <span key={b} className="text-lg font-black text-gray-300 hover:text-gray-400 transition-colors cursor-default">
+        <div className="flex justify-between items-center flex-wrap gap-4 max-w-5xl mx-auto">
+          {["Nike", "Adidas", "Jordan", "On Cloud", "New Balance", "Hugo Boss"].map((b) => (
+            <span key={b} className="text-[15px] font-black text-gray-300 hover:text-gray-400 transition-colors">
               {b}
             </span>
           ))}
         </div>
       </section>
 
-      {/* ── TESTIMONIOS ───────────────────────────────────────────────── */}
+      {/* ── TESTIMONIOS ── */}
       <section id="testimonios" className="bg-gray-100 py-24 px-8 md:px-16">
-        <p className="text-xs tracking-widest uppercase text-blue-600 font-bold text-center mb-2">
-          Lo que dicen nuestros clientes
-        </p>
-        <h2 className="font-display text-5xl md:text-6xl text-gray-900 text-center mb-16">
-          RESULTADOS QUE HABLAN
-        </h2>
-
+        <Reveal>
+          <p className="text-[10px] font-bold tracking-[3px] text-blue-600 uppercase text-center mb-2">
+            Resultados reales
+          </p>
+          <h2
+            className="text-[clamp(28px,4vw,48px)] text-center text-[#0d1526] mb-16 leading-tight"
+            style={{ fontFamily: "'Bebas Neue', sans-serif" }}
+          >
+            TRANSFORMACIONES QUE HABLAN POR SÍ SOLAS
+          </h2>
+        </Reveal>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
-          {testimonios.map((t) => (
-            <div key={t.autor} className="bg-white rounded-2xl overflow-hidden border border-gray-200">
-              {/* Antes / Después */}
-              <div className="grid grid-cols-2 h-44">
-                <div className="bg-gray-200 relative p-2">
-                  <span className="bg-red-500 text-white text-xs font-black px-2 py-0.5 rounded">
-                    ANTES
-                  </span>
-                </div>
-                <div className="bg-gray-300 relative p-2 flex justify-end">
-                  <span className="bg-green-500 text-white text-xs font-black px-2 py-0.5 rounded">
-                    DESPUÉS
-                  </span>
-                </div>
-              </div>
-              {/* Body */}
-              <div className="p-6">
-                <div className="text-yellow-500 text-base mb-3">★★★★★</div>
-                <p className="text-sm text-gray-700 leading-relaxed mb-4">{t.texto}</p>
-                <div className="flex items-center gap-3">
-                  <div className="w-9 h-9 rounded-full bg-blue-600 flex items-center justify-center text-white text-xs font-black shrink-0">
-                    {t.initials}
-                  </div>
-                  <div>
-                    <p className="text-sm font-bold text-gray-900">{t.autor}</p>
-                    <p className="text-xs text-gray-400">{t.rol}</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      {/* ── SERVICIOS ─────────────────────────────────────────────────── */}
-      <section id="servicios" className="bg-white py-24 px-8 md:px-16">
-        <p className="text-xs font-bold tracking-widest text-gray-400 uppercase mb-2">
-          Nuestros servicios
-        </p>
-        <h2 className="font-display text-5xl text-gray-900 mb-16">
-          ELIGE TU PLAN DE LIMPIEZA
-        </h2>
-
-        {/* Desktop */}
-        <div className="hidden md:grid grid-cols-3 gap-6 items-center max-w-6xl mx-auto">
-          {/* Básico */}
-          <div className="border-2 border-gray-200 rounded-2xl p-8">
-            <div className="text-3xl mb-4">{servicios[0].icono}</div>
-            <p className="text-xs font-black uppercase tracking-widest text-gray-500 mb-1">{servicios[0].nombre}</p>
-            <p className="font-display text-5xl text-blue-600 mb-1">{servicios[0].precio}</p>
-            <p className="text-xs text-gray-400 mb-6">{servicios[0].descripcion}</p>
-            <ul className="space-y-3 mb-8">
-              {servicios[0].features.map((f) => (
-                <li key={f} className="flex items-start gap-2 text-sm text-gray-700">
-                  <span className="text-blue-600 font-bold shrink-0">✓</span> {f}
-                </li>
-              ))}
-            </ul>
-            <a href={WA_URL} target="_blank" rel="noopener noreferrer"
-              className="block w-full text-center border-2 border-blue-600 text-blue-600 rounded-xl py-3 text-sm font-bold hover:bg-blue-50 transition-colors">
-              Seleccionar
-            </a>
-          </div>
-
-          {/* Profunda — destacada */}
-          <div className="bg-blue-600 rounded-2xl p-8 scale-105 z-10 relative">
-            <span className="absolute -top-4 left-1/2 -translate-x-1/2 bg-yellow-400 text-yellow-900 text-xs font-black px-4 py-1 rounded-full whitespace-nowrap">
-              MÁS POPULAR
-            </span>
-            <div className="text-3xl mb-4">{servicios[1].icono}</div>
-            <p className="text-xs font-black uppercase tracking-widest text-blue-200 mb-1">{servicios[1].nombre}</p>
-            <p className="font-display text-5xl text-white mb-1">{servicios[1].precio}</p>
-            <p className="text-xs text-blue-200 mb-6">{servicios[1].descripcion}</p>
-            <ul className="space-y-3 mb-8">
-              {servicios[1].features.map((f) => (
-                <li key={f} className="flex items-start gap-2 text-sm text-white">
-                  <span className="text-blue-200 font-bold shrink-0">✓</span> {f}
-                </li>
-              ))}
-            </ul>
-            <a href={WA_URL} target="_blank" rel="noopener noreferrer"
-              className="block w-full text-center bg-white text-blue-600 rounded-xl py-3 text-sm font-bold hover:bg-blue-50 transition-colors">
-              Seleccionar
-            </a>
-          </div>
-
-          {/* Premium */}
-          <div className="bg-[#0d1526] rounded-2xl p-8">
-            <div className="text-3xl mb-4">{servicios[2].icono}</div>
-            <p className="text-xs font-black uppercase tracking-widest text-white/40 mb-1">{servicios[2].nombre}</p>
-            <p className="font-display text-5xl text-yellow-400 mb-1">{servicios[2].precio}</p>
-            <p className="text-xs text-white/40 mb-6">{servicios[2].descripcion}</p>
-            <ul className="space-y-3 mb-8">
-              {servicios[2].features.map((f) => (
-                <li key={f} className="flex items-start gap-2 text-sm text-white/70">
-                  <span className="text-yellow-400 font-bold shrink-0">✓</span> {f}
-                </li>
-              ))}
-            </ul>
-            <a href={WA_URL} target="_blank" rel="noopener noreferrer"
-              className="block w-full text-center border-2 border-yellow-400 text-yellow-400 rounded-xl py-3 text-sm font-bold hover:bg-yellow-400/10 transition-colors">
-              Seleccionar
-            </a>
-          </div>
-        </div>
-
-        {/* Mobile tabs */}
-        <div className="md:hidden max-w-lg mx-auto">
-          <div className="flex border-b border-gray-200 mb-8">
-            {servicios.map((s, i) => (
-              <button
-                key={s.nombre}
-                onClick={() => setActiveServicio(i)}
-                className={`flex-1 py-3 text-sm font-bold transition-colors relative ${
-                  activeServicio === i ? "text-blue-600" : "text-gray-400"
-                }`}
-              >
-                {s.nombre}
-                {activeServicio === i && (
-                  <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-blue-600" />
-                )}
-              </button>
-            ))}
-          </div>
-
-          {/* Active card */}
-          {activeServicio === 0 && (
-            <div className="border-2 border-gray-200 rounded-2xl p-8">
-              <div className="text-3xl mb-4">{servicios[0].icono}</div>
-              <p className="text-xs font-black uppercase tracking-widest text-gray-500 mb-1">{servicios[0].nombre}</p>
-              <p className="font-display text-5xl text-blue-600 mb-1">{servicios[0].precio}</p>
-              <p className="text-xs text-gray-400 mb-6">{servicios[0].descripcion}</p>
-              <ul className="space-y-3 mb-8">
-                {servicios[0].features.map((f) => (
-                  <li key={f} className="flex items-start gap-2 text-sm text-gray-700">
-                    <span className="text-blue-600 font-bold shrink-0">✓</span> {f}
-                  </li>
-                ))}
-              </ul>
-              <a href={WA_URL} target="_blank" rel="noopener noreferrer"
-                className="block w-full text-center border-2 border-blue-600 text-blue-600 rounded-xl py-3 text-sm font-bold">
-                Seleccionar
-              </a>
-            </div>
-          )}
-          {activeServicio === 1 && (
-            <div className="bg-blue-600 rounded-2xl p-8">
-              <div className="text-3xl mb-4">{servicios[1].icono}</div>
-              <p className="text-xs font-black uppercase tracking-widest text-blue-200 mb-1">{servicios[1].nombre}</p>
-              <p className="font-display text-5xl text-white mb-1">{servicios[1].precio}</p>
-              <p className="text-xs text-blue-200 mb-6">{servicios[1].descripcion}</p>
-              <ul className="space-y-3 mb-8">
-                {servicios[1].features.map((f) => (
-                  <li key={f} className="flex items-start gap-2 text-sm text-white">
-                    <span className="text-blue-200 font-bold shrink-0">✓</span> {f}
-                  </li>
-                ))}
-              </ul>
-              <a href={WA_URL} target="_blank" rel="noopener noreferrer"
-                className="block w-full text-center bg-white text-blue-600 rounded-xl py-3 text-sm font-bold">
-                Seleccionar
-              </a>
-            </div>
-          )}
-          {activeServicio === 2 && (
-            <div className="bg-[#0d1526] rounded-2xl p-8">
-              <div className="text-3xl mb-4">{servicios[2].icono}</div>
-              <p className="text-xs font-black uppercase tracking-widest text-white/40 mb-1">{servicios[2].nombre}</p>
-              <p className="font-display text-5xl text-yellow-400 mb-1">{servicios[2].precio}</p>
-              <p className="text-xs text-white/40 mb-6">{servicios[2].descripcion}</p>
-              <ul className="space-y-3 mb-8">
-                {servicios[2].features.map((f) => (
-                  <li key={f} className="flex items-start gap-2 text-sm text-white/70">
-                    <span className="text-yellow-400 font-bold shrink-0">✓</span> {f}
-                  </li>
-                ))}
-              </ul>
-              <a href={WA_URL} target="_blank" rel="noopener noreferrer"
-                className="block w-full text-center border-2 border-yellow-400 text-yellow-400 rounded-xl py-3 text-sm font-bold">
-                Seleccionar
-              </a>
-            </div>
-          )}
-        </div>
-      </section>
-
-      {/* ── PROCESO ───────────────────────────────────────────────────── */}
-      <section id="proceso" className="bg-gray-100 py-24 px-8 md:px-16">
-        <h2 className="font-display text-5xl text-gray-900 text-center mb-20">
-          ASÍ FUNCIONA
-        </h2>
-
-        <div className="relative grid grid-cols-1 md:grid-cols-3 max-w-4xl mx-auto">
-          {/* Connecting line */}
-          <div className="hidden md:block absolute top-5 left-[16.666%] right-[16.666%] h-0.5 bg-blue-600" />
-
           {[
             {
-              num: "1",
-              icono: "👟",
-              titulo: "Trae tus tenis",
-              desc: "Lleva tus sneakers a cualquiera de nuestras sucursales en Villahermosa.",
+              before: "antes-1.webp", after: "despues-1.webp",
+              text: "Increíble el trabajo con mis Jordan 1. Pensé que ya no tenían salvación después de 2 años de uso intensivo en el gym. Quedaron impecables.",
+              name: "Carlos Méndez", role: "Dueño de 12 pares", initial: "C",
             },
             {
-              num: "2",
-              icono: "🔬",
-              titulo: "Evaluamos y limpiamos",
-              desc: "Nuestros técnicos evalúan el estado y aplican el tratamiento adecuado.",
+              before: "antes-2.webp", after: "despues-2.webp",
+              text: "Mis On Cloud blancos estaban amarillentos de tanto entrenar. El equipo hizo magia, ahora lucen como si los acabara de comprar.",
+              name: "Ana Rodríguez", role: "Runner · 5K semanal", initial: "A",
             },
             {
-              num: "3",
-              icono: "✅",
-              titulo: "Recoge impecables",
-              desc: "En 48 horas tus tenis quedan como nuevos. Te avisamos por WhatsApp.",
+              before: "antes-3.webp", after: "despues-3.webp",
+              text: "Tenía miedo de que arruinaran la gamuza de mis New Balance de trail. El resultado superó mis expectativas. Profesionales de verdad.",
+              name: "Miguel Torres", role: "Miembro gym · Sneakerhead", initial: "M",
             },
-          ].map((paso) => (
-            <div key={paso.num} className="flex flex-col items-center text-center gap-4 px-8">
-              <div className="w-10 h-10 rounded-full bg-blue-600 text-white font-display text-2xl flex items-center justify-center relative z-10">
-                {paso.num}
-              </div>
-              <span className="text-3xl">{paso.icono}</span>
-              <p className="text-xs font-black tracking-widest uppercase text-gray-900">{paso.titulo}</p>
-              <p className="text-sm text-gray-600 leading-relaxed">{paso.desc}</p>
-            </div>
+          ].map((t, i) => (
+            <Reveal key={i}>
+              <article className="bg-white rounded-2xl overflow-hidden border border-gray-200 h-full flex flex-col">
+                <div className="grid grid-cols-2 h-44">
+                  <div
+                    className="relative bg-gray-200 flex flex-col items-start justify-start p-2"
+                    style={{ backgroundImage: `url('/img/${t.before}')`, backgroundSize: "cover", backgroundPosition: "center" }}
+                  >
+                    <span className="bg-red-500 text-white text-[9px] font-black rounded-full px-2 py-0.5">ANTES</span>
+                  </div>
+                  <div
+                    className="relative bg-gray-300 flex flex-col items-end justify-start p-2"
+                    style={{ backgroundImage: `url('/img/${t.after}')`, backgroundSize: "cover", backgroundPosition: "center" }}
+                  >
+                    <span className="bg-green-600 text-white text-[9px] font-black rounded-full px-2 py-0.5">DESPUÉS</span>
+                  </div>
+                </div>
+                <div className="p-6 flex flex-col flex-1">
+                  <div className="text-yellow-500 text-base mb-3">★★★★★</div>
+                  <p className="text-sm text-gray-700 leading-relaxed mb-4 flex-1">&ldquo;{t.text}&rdquo;</p>
+                  <div className="flex items-center gap-3">
+                    <div className="w-8 h-8 rounded-full bg-blue-600 text-white text-xs font-bold flex items-center justify-center flex-shrink-0">
+                      {t.initial}
+                    </div>
+                    <div>
+                      <p className="text-[13px] font-black text-[#0d1526]">{t.name}</p>
+                      <p className="text-[11px] text-gray-400">{t.role}</p>
+                    </div>
+                  </div>
+                </div>
+              </article>
+            </Reveal>
+          ))}
+        </div>
+      </section>
+
+      {/* ── SERVICIOS ── */}
+      <section id="servicios" className="bg-white py-24 px-8 md:px-16">
+        <Reveal>
+          <p className="text-[10px] font-bold tracking-[2px] text-gray-400 uppercase mb-2">Nuestros servicios</p>
+          <h2
+            className="text-[clamp(28px,4vw,48px)] text-[#0d1526] mb-16 leading-tight"
+            style={{ fontFamily: "'Bebas Neue', sans-serif" }}
+          >
+            ELIGE EL NIVEL DE CUIDADO<br className="hidden md:block" /> QUE TUS TENIS MERECEN
+          </h2>
+        </Reveal>
+
+        {/* Mobile tabs */}
+        <div className="flex md:hidden border-b border-gray-200 mb-8">
+          {(["basico", "profundo", "premium"] as const).map((tab, i) => (
+            <button
+              key={tab}
+              onClick={() => setActiveTab(tab)}
+              className={`flex-1 py-3 text-[13px] font-bold border-b-2 transition-colors ${
+                activeTab === tab ? "border-blue-600 text-blue-600" : "border-transparent text-gray-400"
+              }`}
+            >
+              {["Básico", "Profundo", "Premium"][i]}
+            </button>
           ))}
         </div>
 
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 items-center max-w-5xl mx-auto">
+
+          {/* Básico */}
+          <Reveal className={`${activeTab !== "basico" ? "hidden md:block" : ""}`}>
+            <div className="border-2 border-gray-200 rounded-2xl p-8 flex flex-col gap-5">
+              <span className="text-blue-600 text-3xl">🧽</span>
+              <div>
+                <p className="text-[11px] font-black tracking-[1.5px] uppercase text-[#0d1526] mb-1">Lavado Básico</p>
+                <p className="text-[48px] leading-none font-black text-blue-600" style={{ fontFamily: "'Bebas Neue', sans-serif" }}>
+                  $190 <span className="text-[18px] font-bold">MXN</span>
+                </p>
+              </div>
+              <ul className="flex flex-col gap-2.5 flex-1">
+                {[
+                  "Cepillado en seco para remover polvo y suciedad superficial",
+                  "Limpieza profunda del exterior con shampoo especializado",
+                  "Limpieza de suela con cepillo de cerdas medianas",
+                  "Blanqueamiento básico de bordes de suela",
+                  "Limpieza de agujetas incluida",
+                ].map((f) => (
+                  <li key={f} className="flex items-start gap-2 text-[13px] text-gray-700 leading-snug">
+                    <span className="text-blue-600 mt-0.5 flex-shrink-0">✓</span>{f}
+                  </li>
+                ))}
+              </ul>
+              <a
+                href={waLink("Hola, me interesa el Lavado Básico $190 MXN", "plan-basico")}
+                target="_blank" rel="noopener"
+                onClick={() => trackLead("Lavado Basico")}
+                className="block text-center border-2 border-blue-600 text-blue-600 hover:bg-blue-600 hover:text-white rounded-lg py-3 text-[12px] font-black uppercase tracking-wide transition-colors"
+              >
+                Seleccionar
+              </a>
+            </div>
+          </Reveal>
+
+          {/* Profundo */}
+          <Reveal className={`${activeTab !== "profundo" ? "hidden md:block" : ""}`}>
+            <div className="relative bg-blue-600 rounded-2xl p-8 flex flex-col gap-5 md:scale-[1.04] z-10">
+              <span className="absolute -top-4 left-1/2 -translate-x-1/2 bg-yellow-500 text-white text-[10px] font-black rounded-full px-4 py-1 whitespace-nowrap">
+                MÁS POPULAR
+              </span>
+              <span className="text-white text-3xl mt-2">✨</span>
+              <div>
+                <p className="text-[11px] font-black tracking-[1.5px] uppercase text-white/70 mb-0.5">Limpieza Profunda</p>
+                <p className="text-[10px] text-white/50 mb-1">On Cloud / Trail / Performance</p>
+                <p className="text-[48px] leading-none font-black text-white" style={{ fontFamily: "'Bebas Neue', sans-serif" }}>
+                  $220 <span className="text-[18px] font-bold opacity-70">MXN</span>
+                </p>
+              </div>
+              <ul className="flex flex-col gap-2.5 flex-1">
+                {[
+                  "Cepillado suave con cerdas específicas para mesh técnico y foam",
+                  "Productos libres de solventes (compatibles con EVA, CloudTec y materiales reactivos)",
+                  "Limpieza de canales y celdas de foam sin comprometer la estructura",
+                  "Limpieza de suela de alto agarre (trail y performance)",
+                  "Limpieza de agujetas incluida",
+                ].map((f) => (
+                  <li key={f} className="flex items-start gap-2 text-[13px] text-white/85 leading-snug">
+                    <span className="text-white mt-0.5 flex-shrink-0">✓</span>{f}
+                  </li>
+                ))}
+              </ul>
+              <a
+                href={waLink("Hola, me interesa la Limpieza Profunda $220 MXN", "plan-profundo")}
+                target="_blank" rel="noopener"
+                onClick={() => trackLead("Limpieza Profunda")}
+                className="block text-center bg-white text-blue-600 hover:bg-gray-100 rounded-lg py-3 text-[12px] font-black uppercase tracking-wide transition-colors"
+              >
+                Seleccionar Ahora
+              </a>
+            </div>
+          </Reveal>
+
+          {/* Premium */}
+          <Reveal className={`${activeTab !== "premium" ? "hidden md:block" : ""}`}>
+            <div className="bg-[#0d1526] rounded-2xl p-8 flex flex-col gap-5">
+              <span className="text-yellow-500 text-3xl">👑</span>
+              <div>
+                <p className="text-[11px] font-black tracking-[1.5px] uppercase text-white mb-1">Limpieza Premium</p>
+                <p className="text-[48px] leading-none font-black text-yellow-500" style={{ fontFamily: "'Bebas Neue', sans-serif" }}>
+                  $399 <span className="text-[18px] font-bold opacity-70">MXN</span>
+                </p>
+              </div>
+              <ul className="flex flex-col gap-2.5 flex-1">
+                {[
+                  "Limpiador específico por material: cuero, gamuza o materiales mixtos",
+                  "Cepillado con herramientas de cerdas suaves para superficies delicadas",
+                  "Aplicación de acondicionador para cuero y piel",
+                  "Limpieza de suelas y cantos",
+                ].map((f) => (
+                  <li key={f} className="flex items-start gap-2 text-[13px] text-white/75 leading-snug">
+                    <span className="text-yellow-500 mt-0.5 flex-shrink-0">✓</span>{f}
+                  </li>
+                ))}
+              </ul>
+              <a
+                href={waLink("Hola, me interesa la Limpieza Premium $399 MXN", "plan-premium")}
+                target="_blank" rel="noopener"
+                onClick={() => trackLead("Limpieza Premium")}
+                className="block text-center border-2 border-yellow-500 text-yellow-500 hover:bg-yellow-500 hover:text-[#0d1526] rounded-lg py-3 text-[12px] font-black uppercase tracking-wide transition-colors"
+              >
+                Seleccionar
+              </a>
+            </div>
+          </Reveal>
+        </div>
+      </section>
+
+      {/* ── PROCESO ── */}
+      <section id="proceso" className="bg-gray-100 py-24 px-8 md:px-16">
+        <Reveal>
+          <h2
+            className="text-[clamp(28px,4vw,48px)] text-center text-[#0d1526] mb-20 leading-tight"
+            style={{ fontFamily: "'Bebas Neue', sans-serif" }}
+          >
+            TU LIMPIEZA EN 3 PASOS SIMPLES
+          </h2>
+        </Reveal>
+        <div className="relative grid grid-cols-1 md:grid-cols-3 max-w-4xl mx-auto gap-12 md:gap-0">
+          {/* Connector */}
+          <div className="hidden md:block absolute top-5 left-[calc(16.66%+20px)] right-[calc(16.66%+20px)] h-0.5 bg-blue-600 z-0" />
+          {[
+            { n: "1", icon: "📍", title: "TRAE TUS TENIS", desc: <>Déjalos en <strong>Tintorería Max Plaza Usumacinta</strong> o <strong>Mega Plaza Deportiva</strong>. Abierto de lunes a domingo.</> },
+            { n: "2", icon: "🧴", title: "LIMPIAMOS", desc: "Nuestros especialistas trabajan cada par con productos premium y técnicas específicas para cada material." },
+            { n: "3", icon: "🎁", title: "RECOGE", desc: "Recoge tus tenis impecables en 48 horas, empacados como nuevos y listos para lucir." },
+          ].map((s) => (
+            <Reveal key={s.n} className="relative z-10">
+              <div className="flex flex-col items-center text-center gap-4 px-8">
+                <div
+                  className="w-10 h-10 rounded-full bg-blue-600 text-white flex items-center justify-center text-xl leading-none"
+                  style={{ fontFamily: "'Bebas Neue', sans-serif" }}
+                >
+                  {s.n}
+                </div>
+                <span className="text-3xl">{s.icon}</span>
+                <p className="text-[11px] font-black tracking-[2px] uppercase text-[#0d1526]">{s.title}</p>
+                <p className="text-[13px] text-gray-600 leading-relaxed">{s.desc}</p>
+              </div>
+            </Reveal>
+          ))}
+        </div>
         <div className="text-center mt-14">
-          <span className="bg-blue-50 text-blue-600 rounded-full px-6 py-2 text-sm font-bold">
-            ⚡ Servicio Express disponible — listo en 24 horas
+          <span className="bg-blue-50 text-blue-600 rounded-full px-6 py-2.5 text-[13px] font-bold">
+            ⚡ Servicio express disponible en 24 horas — cargo adicional de $100 MXN
           </span>
         </div>
       </section>
 
-      {/* ── GARANTÍAS ─────────────────────────────────────────────────── */}
+      {/* ── GARANTÍAS ── */}
       <section className="bg-white py-24 px-8 md:px-16">
-        <p className="text-xs font-bold tracking-widest text-gray-400 uppercase mb-2">
-          Nuestro compromiso
-        </p>
-        <h2 className="font-display text-5xl text-gray-900 mb-16">
-          CALIDAD PROFESIONAL GARANTIZADA
-        </h2>
-
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
-          {garantias.map((g) => (
-            <div key={g.titulo} className="bg-gray-100 rounded-2xl p-8 text-center flex flex-col items-center gap-4">
-              <span className="text-4xl">{g.icono}</span>
-              <p className="text-xs font-black tracking-widest uppercase text-gray-900">{g.titulo}</p>
-              <p className="text-sm text-gray-600 leading-relaxed">{g.texto}</p>
-            </div>
+        <Reveal>
+          <p className="text-[10px] font-bold tracking-[2px] text-gray-400 uppercase mb-2">Por qué elegirnos</p>
+          <h2
+            className="text-[clamp(28px,4vw,48px)] text-[#0d1526] mb-16 leading-tight"
+            style={{ fontFamily: "'Bebas Neue', sans-serif" }}
+          >
+            CALIDAD PROFESIONAL<br />GARANTIZADA
+          </h2>
+        </Reveal>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-5xl mx-auto">
+          {[
+            { icon: "🧪", title: "PRODUCTOS PREMIUM", desc: "Utilizamos únicamente productos especializados de grado profesional, seguros para todo tipo de materiales: piel, gamuza, mesh, nobuck y sintéticos." },
+            { icon: "🎓", title: "ESPECIALISTAS CERTIFICADOS", desc: "Cada miembro de nuestro equipo está capacitado en técnicas avanzadas de limpieza y restauración de calzado deportivo de lujo." },
+            { icon: "🛡️", title: "GARANTÍA DE SATISFACCIÓN", desc: "Si no quedas 100% satisfecho con el resultado, repetimos el servicio sin costo adicional. Tu confianza es nuestra prioridad." },
+          ].map((g) => (
+            <Reveal key={g.title}>
+              <div className="bg-gray-100 rounded-2xl p-8 text-center flex flex-col items-center gap-4 h-full">
+                <span className="text-4xl">{g.icon}</span>
+                <p className="text-[11px] font-black tracking-[1.5px] uppercase text-[#0d1526]">{g.title}</p>
+                <p className="text-[13px] text-gray-600 leading-relaxed">{g.desc}</p>
+              </div>
+            </Reveal>
           ))}
         </div>
       </section>
 
-      {/* ── MEMBRESÍA ─────────────────────────────────────────────────── */}
+      {/* ── MEMBRESÍA ── */}
       <section id="membresia" className="bg-gray-100 py-24 px-8 md:px-16">
-        <div className="bg-[#0d1526] rounded-2xl p-10 max-w-6xl mx-auto">
-          {/* Header */}
-          <div className="flex justify-between items-start gap-6 mb-10 flex-wrap">
-            <div>
-              <p className="text-xs font-bold tracking-widest text-white/30 uppercase mb-2">Club Mis Papos</p>
-              <h2 className="font-display text-4xl text-white mb-2">MEMBRESÍAS EXCLUSIVAS</h2>
-              <p className="text-white/40 text-sm">Limpieza recurrente con descuentos y beneficios especiales.</p>
-            </div>
-            <a
-              href={WA_URL}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="bg-blue-600 text-white rounded-xl px-6 py-3 text-sm font-bold hover:bg-blue-700 transition-colors whitespace-nowrap"
-            >
-              Ver todos los planes →
-            </a>
-          </div>
-
-          {/* 4 mini cards */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
-            {planes.map((p) => (
-              <div
-                key={p.nombre}
-                className={`rounded-xl p-5 relative ${
-                  p.active
-                    ? "bg-blue-600"
-                    : p.vip
-                    ? "bg-white/5 border border-yellow-500/30"
-                    : "bg-white/5 border border-white/10"
-                }`}
-              >
-                {p.active && (
-                  <span className="absolute -top-3 left-1/2 -translate-x-1/2 bg-yellow-400 text-yellow-900 text-[10px] font-black px-3 py-0.5 rounded-full whitespace-nowrap">
-                    MÁS POPULAR
-                  </span>
-                )}
-                <p className={`text-xs uppercase tracking-widest font-bold mb-1 ${p.active ? "text-blue-200" : "text-white/40"}`}>
-                  {p.nombre}
+        <Reveal>
+          <div className="bg-[#0d1526] rounded-2xl p-10 max-w-6xl mx-auto">
+            <div className="flex justify-between items-start gap-6 mb-10 flex-wrap">
+              <div>
+                <p className="text-[9px] font-bold tracking-[2px] text-white/30 uppercase mb-3">Membresías</p>
+                <h2
+                  className="text-[clamp(22px,3vw,36px)] text-white leading-tight mb-3"
+                  style={{ fontFamily: "'Bebas Neue', sans-serif" }}
+                >
+                  TUS TENIS SIEMPRE LIMPIOS,<br />SIN PENSARLO
+                </h2>
+                <p className="text-[13px] text-white/40 leading-relaxed max-w-md">
+                  Déjalos en nuestros puntos de recolección y recógelos limpios al día siguiente. Sin filas, sin agendar, sin complicaciones.
                 </p>
-                <p className={`font-display text-2xl mb-1 ${p.active ? "text-white" : p.vip ? "text-yellow-400" : "text-white"}`}>
-                  {p.precio}
-                </p>
-                <p className="text-xs text-green-400 mb-2">{p.ahorro}</p>
-                <p className={`text-xs leading-relaxed ${p.active ? "text-blue-200" : "text-white/40"}`}>{p.desc}</p>
               </div>
-            ))}
-          </div>
+              <Link
+                href="/membresia"
+                className="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg px-5 py-3 text-[13px] font-bold transition-colors self-center whitespace-nowrap"
+              >
+                Ver todos los planes →
+              </Link>
+            </div>
 
-          {/* WA note */}
-          <div className="flex items-center gap-2 bg-white/5 rounded-lg p-3 text-white/40 text-xs">
-            <WhatsAppIcon className="w-4 h-4 shrink-0 text-[#25D366]" />
-            Consulta disponibilidad y activa tu membresía por WhatsApp — sin contratos, cancela cuando quieras.
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+              {[
+                { name: "Básico", price: "$229", period: "/mes", saving: "Ahorras $21", desc: "1 lavado básico mensual + desodorización.", cls: "bg-white/5 border border-white/10", nameCls: "text-white/45", priceCls: "text-white", savingCls: "text-green-400" },
+                { name: "Active", price: "$369", period: "/mes", saving: "Ahorras $101", desc: "2 lavados + impermeabilización incluida.", cls: "bg-blue-600 relative", nameCls: "text-white/70", priceCls: "text-white", savingCls: "text-green-300", popular: true },
+                { name: "White", price: "$449", period: "/mes", saving: "Ahorras $61", desc: "Ultra white + 1 lavado básico adicional.", cls: "bg-white/5 border border-white/10", nameCls: "text-white/45", priceCls: "text-white", savingCls: "text-green-400" },
+                { name: "VIP", price: "$680", period: "/mes", saving: "Ahorras $129", desc: "Premium lujo + gorra + entrega prioritaria.", cls: "bg-white/5 border border-yellow-500/30", nameCls: "text-yellow-500", priceCls: "text-yellow-500", savingCls: "text-green-400" },
+              ].map((p) => (
+                <div key={p.name} className={`${p.cls} rounded-xl p-5`}>
+                  {p.popular && (
+                    <span className="absolute -top-3 left-1/2 -translate-x-1/2 bg-yellow-500 text-white text-[9px] font-black rounded-full px-3 py-0.5 whitespace-nowrap">
+                      MÁS VENDIDO
+                    </span>
+                  )}
+                  <p className={`text-[9px] font-bold tracking-[2px] uppercase mb-2 ${p.nameCls}`}>{p.name}</p>
+                  <p className={`text-2xl font-black leading-none mb-1 ${p.priceCls}`} style={{ fontFamily: "'Bebas Neue', sans-serif" }}>
+                    {p.price}<span className="text-[12px] opacity-50">{p.period}</span>
+                  </p>
+                  <p className={`text-[10px] font-bold mb-2 ${p.savingCls}`}>{p.saving}</p>
+                  <p className="text-[11px] text-white/40 leading-snug">{p.desc}</p>
+                </div>
+              ))}
+            </div>
+
+            <div className="flex items-center gap-2 bg-white/5 rounded-lg p-3">
+              <span className="text-[#25D366] flex-shrink-0">{WA_ICON}</span>
+              <p className="text-[12px] text-white/35">
+                Escríbenos por WhatsApp, elige tu plan y paga con tarjeta. A partir de ahí todo es automático.
+              </p>
+            </div>
           </div>
-        </div>
+        </Reveal>
       </section>
 
-      {/* ── CTA BANNER ────────────────────────────────────────────────── */}
-      <section id="cta" className="relative min-h-[480px] flex items-center justify-center text-center">
+      {/* ── CTA BANNER ── */}
+      <section id="cta" className="relative min-h-[480px] flex items-center justify-center text-center overflow-hidden">
         <div
           className="absolute inset-0"
           style={{
@@ -593,115 +516,149 @@ export default function Home() {
           }}
         />
         <div className="absolute inset-0 bg-[rgba(10,15,30,0.72)]" />
-        <div className="relative z-10 px-8 py-20 max-w-2xl mx-auto">
-          <h2 className="font-display text-6xl md:text-8xl text-white leading-none mb-6">
-            TUS TENIS<br />TE ESPERAN
-          </h2>
-          <p className="text-white/70 text-base mb-10 leading-relaxed">
-            No dejes que el tiempo empeore el estado de tus sneakers.<br />
-            Agenda hoy mismo y obtén 20% de descuento en tu primera limpieza.
-          </p>
-          <a
-            href={WA_URL}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex items-center gap-3 bg-[#25D366] text-white rounded-xl px-10 py-5 text-base font-black tracking-wide hover:bg-[#1db954] transition-colors mb-8"
-          >
-            <WhatsAppIcon className="w-5 h-5" />
-            AGENDAR POR WHATSAPP
-          </a>
-          <div className="flex justify-center gap-8 flex-wrap text-white/60 text-sm">
-            <span>✓ Respuesta en minutos</span>
-            <span>✓ Sin compromiso</span>
-            <span>✓ 20% descuento primera vez</span>
-          </div>
+        <div className="relative z-10 px-8 py-24 max-w-2xl mx-auto">
+          <Reveal>
+            <h2
+              className="text-[clamp(40px,6vw,72px)] text-white leading-[0.95] tracking-wide mb-6"
+              style={{ fontFamily: "'Bebas Neue', sans-serif" }}
+            >
+              ¿LISTO PARA LA<br />TRANSFORMACIÓN?
+            </h2>
+            <p className="text-white/70 text-[15px] leading-relaxed mb-10 max-w-lg mx-auto">
+              Únete a más de 500 clientes satisfechos que confían en Mis Papos para mantener sus sneakers impecables en Villahermosa.
+            </p>
+            <a
+              href={waLink("Hola, quiero agendar mi limpieza de tenis", "cta-banner")}
+              target="_blank" rel="noopener"
+              onClick={() => trackLead("CTA Banner")}
+              className="inline-flex items-center gap-3 bg-[#25D366] hover:bg-[#1ebe5d] text-white rounded-xl px-10 py-5 text-[15px] font-black tracking-wide transition-colors mb-8"
+            >
+              {WA_ICON} AGENDAR MI LIMPIEZA
+            </a>
+            <div className="flex justify-center gap-8 flex-wrap">
+              {["Servicio en local", "Listo en 48 horas", "Garantía total"].map((c) => (
+                <span key={c} className="text-white/60 text-[13px] flex items-center gap-1.5">
+                  <span className="text-[#25D366]">✓</span>{c}
+                </span>
+              ))}
+            </div>
+          </Reveal>
         </div>
       </section>
 
-      {/* ── FAQ ───────────────────────────────────────────────────────── */}
+      {/* ── FAQ ── */}
       <section className="bg-white py-24 px-8 md:px-16">
-        <p className="text-xs font-bold tracking-widest text-blue-600 uppercase text-center mb-2">
-          Preguntas frecuentes
-        </p>
-        <h2 className="font-display text-5xl text-gray-900 text-center mb-16">
-          TODO LO QUE NECESITAS SABER
-        </h2>
-
-        <div className="max-w-3xl mx-auto divide-y divide-gray-200">
+        <Reveal>
+          <p className="text-[10px] font-bold tracking-[3px] text-blue-600 uppercase text-center mb-2">Preguntas frecuentes</p>
+          <h2
+            className="text-[clamp(28px,4vw,48px)] text-center text-[#0d1526] mb-16 leading-tight"
+            style={{ fontFamily: "'Bebas Neue', sans-serif" }}
+          >
+            TODO LO QUE NECESITAS SABER
+          </h2>
+        </Reveal>
+        <div className="max-w-3xl mx-auto">
           {faqs.map((faq, i) => (
-            <div key={i}>
+            <div key={i} className="border-b border-gray-200">
               <button
-                onClick={() => setOpenFaq(openFaq === i ? null : i)}
-                className="w-full flex justify-between items-center py-5 text-left text-base font-semibold text-gray-900 hover:text-blue-600 transition-colors"
+                onClick={() => setOpenFaq(openFaq === i ? -1 : i)}
+                className="w-full flex justify-between items-center py-5 text-left text-[15px] font-semibold text-[#0d1526] hover:text-blue-600 transition-colors gap-4"
               >
-                {faq.pregunta}
-                <span
-                  className={`ml-4 text-xl font-light transition-transform duration-200 shrink-0 ${
-                    openFaq === i ? "rotate-45" : ""
-                  }`}
-                >
+                {faq.q}
+                <span className={`text-blue-600 text-xl transition-transform duration-300 flex-shrink-0 ${openFaq === i ? "rotate-45" : ""}`}>
                   +
                 </span>
               </button>
               <div
-                className={`overflow-hidden transition-all duration-300 ${
-                  openFaq === i ? "max-h-40" : "max-h-0"
-                }`}
+                className="overflow-hidden transition-all duration-350 ease-in-out"
+                style={{ maxHeight: openFaq === i ? "300px" : "0px" }}
               >
-                <p className="text-sm text-gray-600 leading-relaxed pb-5">{faq.respuesta}</p>
+                <p className="text-[14px] text-gray-600 leading-relaxed pb-5">{faq.a}</p>
               </div>
             </div>
           ))}
         </div>
       </section>
 
-      {/* ── SUCURSALES ────────────────────────────────────────────────── */}
+      {/* ── SUCURSALES ── */}
       <section id="sucursales" className="bg-gray-100 py-24 px-8 md:px-16">
-        <p className="text-xs font-bold tracking-widest text-gray-400 uppercase mb-2">
-          Dónde encontrarnos
-        </p>
-        <h2 className="font-display text-5xl text-gray-900 mb-2">NUESTRAS SUCURSALES</h2>
-        <p className="text-gray-600 mb-16">Dos puntos estratégicos en Villahermosa, Tabasco.</p>
-
+        <Reveal>
+          <p className="text-[10px] font-bold tracking-[2px] text-gray-400 uppercase mb-2">Puntos de recepción</p>
+          <h2
+            className="text-[clamp(28px,4vw,48px)] text-[#0d1526] mb-3 leading-tight"
+            style={{ fontFamily: "'Bebas Neue', sans-serif" }}
+          >
+            ENCUÉNTRANOS EN VILLAHERMOSA
+          </h2>
+          <p className="text-[14px] text-gray-600 mb-16">
+            Deja tus tenis en cualquiera de nuestros puntos y recógelos limpios al día siguiente.
+          </p>
+        </Reveal>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl mx-auto">
-          {sucursales.map((s) => (
-            <div key={s.nombre} className="bg-white rounded-2xl overflow-hidden border border-gray-200">
-              {/* Map placeholder */}
-              <a
-                href={s.maps}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="h-52 bg-gray-200 flex flex-col items-center justify-center gap-2 cursor-pointer hover:bg-gray-300 transition-colors group block"
-              >
-                <span className="text-4xl opacity-50 group-hover:opacity-70 transition-opacity">📍</span>
-                <span className="text-sm text-gray-500 font-semibold">{s.sub}</span>
-              </a>
-              {/* Body */}
-              <div className="p-7">
-                <span className="bg-blue-100 text-blue-600 text-xs font-black px-3 py-1 rounded-full uppercase tracking-widest">
-                  {s.badge}
-                </span>
-                <p className="text-lg font-black text-gray-900 mt-3 mb-1">{s.nombre}</p>
-                <p className="text-sm text-blue-600 font-semibold mb-4">{s.sub}</p>
-                <div className="space-y-2 text-sm text-gray-600">
-                  <p>📍 {s.direccion}</p>
-                  <p>🕐 {s.horario}</p>
-                </div>
-                <a
-                  href={s.maps}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="block w-full mt-4 text-center bg-blue-600 text-white rounded-xl py-3 text-sm font-bold hover:bg-blue-700 transition-colors"
-                >
-                  Ver en Google Maps
+          {[
+            {
+              badge: "Sucursal 1", name: "Tintorería Max", sub: "Plaza Usumacinta · Villahermosa",
+              mapImg: "mapa-usumacinta.webp", mapPlaceholder: "Plaza KB · Av. Usumacinta",
+              address: "Av. Paseo Usumacinta esq. Av. Los Ríos, Plaza KB, Villahermosa, Tabasco",
+              hours: ["Lun–Vie: 7:00 AM – 8:00 PM", "Sáb: 8:00 AM – 6:00 PM", "Dom: 9:00 AM – 2:00 PM"],
+              mapsUrl: "https://maps.google.com/?q=Av.+Paseo+Usumacinta+esquina+Av.+Los+Rios+Plaza+KB+Villahermosa+Tabasco",
+            },
+            {
+              badge: "Sucursal 2", name: "Mega Plaza Deportiva", sub: "Ciudad Deportiva · Villahermosa",
+              mapImg: "mapa-deportiva.webp", mapPlaceholder: "Velódromo · Ciudad Deportiva",
+              address: "Velódromo Ciudad Deportiva, Plaza Mega Soriana. A un costado de Telcel, entrada al Gym Anytime Fitness",
+              hours: ["Lun–Vie: 8:00 AM – 8:00 PM", "Sáb: 8:00 AM – 4:00 PM", "Dom: Cerrado"],
+              mapsUrl: "https://maps.google.com/?q=Velódromo+Ciudad+Deportiva+Plaza+Mega+Soriana+Villahermosa+Tabasco",
+            },
+          ].map((s) => (
+            <Reveal key={s.badge}>
+              <article className="bg-white rounded-2xl overflow-hidden border border-gray-200">
+                <a href={s.mapsUrl} target="_blank" rel="noopener" aria-label={`Ver ${s.name} en Google Maps`}>
+                  <div
+                    className="h-52 flex flex-col items-center justify-center gap-2 cursor-pointer hover:opacity-90 transition-opacity"
+                    style={{
+                      backgroundImage: `url('/img/${s.mapImg}')`,
+                      backgroundSize: "cover",
+                      backgroundPosition: "center",
+                      backgroundColor: "#d0d8e0",
+                    }}
+                  >
+                    <span className="text-4xl text-blue-600/50">📍</span>
+                    <span className="text-[11px] text-gray-600 font-semibold bg-white/80 px-2 py-0.5 rounded">
+                      {s.mapPlaceholder}
+                    </span>
+                  </div>
                 </a>
-              </div>
-            </div>
+                <div className="p-7">
+                  <span className="inline-block bg-blue-600 text-white text-[10px] font-bold rounded px-2 py-0.5 mb-3">
+                    {s.badge}
+                  </span>
+                  <h3 className="text-[17px] font-black text-[#0d1526] mb-1">{s.name}</h3>
+                  <p className="text-[13px] text-blue-600 font-semibold mb-4">{s.sub}</p>
+                  <div className="flex items-start gap-2 mb-3">
+                    <span className="text-blue-600 mt-0.5 flex-shrink-0">📍</span>
+                    <span className="text-[13px] text-gray-600 leading-relaxed">{s.address}</span>
+                  </div>
+                  <div className="flex items-start gap-2 mb-5">
+                    <span className="text-blue-600 mt-0.5 flex-shrink-0">🕐</span>
+                    <div className="text-[13px] text-gray-600 leading-relaxed">
+                      {s.hours.map((h) => <p key={h}>{h}</p>)}
+                    </div>
+                  </div>
+                  <a
+                    href={s.mapsUrl}
+                    target="_blank" rel="noopener"
+                    className="flex items-center justify-center gap-2 w-full bg-blue-600 hover:bg-blue-700 text-white rounded-lg py-3 text-[12px] font-black uppercase tracking-wide transition-colors"
+                  >
+                    📍 Ver en Google Maps
+                  </a>
+                </div>
+              </article>
+            </Reveal>
           ))}
         </div>
       </section>
 
-      <Footer />
-    </>
+    </main>
   );
 }
