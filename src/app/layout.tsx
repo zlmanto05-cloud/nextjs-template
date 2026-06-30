@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Inter, Raleway } from "next/font/google";
 import Script from "next/script";
+import Navbar from "@/components/Navbar";
 import "./globals.css";
 
 const inter = Inter({
@@ -129,6 +130,7 @@ fbq('track', 'PageView');`}
             style={{ display: "none", visibility: "hidden" }}
           />
         </noscript>
+        <Navbar />
         {children}
       </body>
     </html>
