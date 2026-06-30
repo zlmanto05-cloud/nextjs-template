@@ -38,27 +38,25 @@ function Reveal({ children, className = "" }: { children: React.ReactNode; class
   );
 }
 
-/* ─── WA Icon ─── */
 const WaIcon = ({ size = 18 }: { size?: number }) => (
   <svg width={size} height={size} viewBox="0 0 24 24" fill="currentColor">
     <path d="M12 2C6.48 2 2 6.48 2 12c0 1.85.5 3.58 1.37 5.07L2 22l5.09-1.34A9.94 9.94 0 0012 22c5.52 0 10-4.48 10-10S17.52 2 12 2zm4.93 13.67c-.2.56-1.18 1.1-1.62 1.16-.44.07-.85.1-2.72-.57-2.28-.82-3.75-3.13-3.86-3.27-.11-.14-.9-1.2-.9-2.29 0-1.09.57-1.62.77-1.84.2-.22.44-.27.59-.27h.42c.14 0 .32-.05.5.38.2.47.67 1.63.73 1.75.06.12.1.26.02.41-.08.15-.12.24-.23.37-.11.13-.24.29-.34.39-.11.11-.23.23-.1.45.13.22.58.96 1.25 1.55.86.77 1.58 1.01 1.8 1.12.22.11.35.09.48-.05.13-.14.55-.64.7-.86.15-.22.3-.18.5-.11.2.07 1.28.6 1.5.71.22.11.37.16.42.25.06.09.06.52-.14 1.08z"/>
   </svg>
 );
 
-/* ─── Section label ─── */
 const Label = ({ color = "gray", children }: { color?: "gray"|"blue"; children: string }) => (
   <p className={`text-[10px] font-bold tracking-[3px] uppercase mb-3 ${color === "blue" ? "text-blue-600" : "text-gray-400"}`}>
     {children}
   </p>
 );
 
-/* ─── Display title ─── */
+/* Title con line-height controlado y SIN altura fija — fix #2, #3, #4 */
 const Title = ({ children, center = false, white = false, size = "lg" }: {
   children: React.ReactNode; center?: boolean; white?: boolean; size?: "sm"|"lg"
 }) => (
   <h2
-    className={`font-display leading-[0.95] tracking-wide mb-0 ${center ? "text-center" : ""} ${white ? "text-white" : "text-[#0d1526]"} ${size === "lg" ? "text-[clamp(32px,4.5vw,52px)]" : "text-[clamp(24px,3vw,38px)]"}`}
-    style={{ fontFamily: "'Bebas Neue', sans-serif" }}
+    className={`font-display tracking-wide mb-0 ${center ? "text-center" : ""} ${white ? "text-white" : "text-[#0d1526]"} ${size === "lg" ? "text-[clamp(30px,4.2vw,50px)]" : "text-[clamp(22px,2.8vw,34px)]"}`}
+    style={{ fontFamily: "'Bebas Neue', sans-serif", lineHeight: 1.15 }}
   >
     {children}
   </h2>
@@ -68,7 +66,6 @@ export default function Home() {
   const [activeTab, setActiveTab] = useState<"basico"|"profundo"|"premium">("profundo");
   const [openFaq, setOpenFaq]     = useState<number>(0);
 
-  /* ViewContent at 50% scroll */
   useEffect(() => {
     let fired = false;
     const onScroll = () => {
@@ -91,33 +88,31 @@ export default function Home() {
   ];
 
   return (
-    <main className="bg-white text-[#0d1526] antialiased">
+    <main className="bg-white text-[#0d1526] antialiased overflow-x-hidden">
 
       {/* ════════════════════════════════
-          ① HERO
+          ① HERO — fix #1: padding-bottom generoso para que NO colisione con Brands
       ════════════════════════════════ */}
       <section
-        className="relative w-full flex flex-col justify-between overflow-hidden"
-        style={{ height: "100vh", minHeight: 680, paddingTop: 80 }}
+        className="relative w-full flex flex-col overflow-hidden"
+        style={{ minHeight: "92vh", paddingTop: 80 }}
         aria-label="Hero"
       >
-        {/* BG image */}
         <div
           className="absolute inset-0"
           style={{ backgroundImage:"url('/img/hero-bg.webp')", backgroundSize:"cover", backgroundPosition:"center center" }}
           aria-hidden="true"
         />
-        {/* Overlay */}
         <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/45 to-black/10" aria-hidden="true" />
 
-        {/* Content */}
-        <div className="relative z-10 flex-1 flex flex-col justify-center pl-8 md:pl-16 max-w-[60%] md:max-w-[52%]">
+        {/* Content — flex-1 para empujar la barra hacia abajo sin solaparse */}
+        <div className="relative z-10 flex-1 flex flex-col justify-center pl-8 md:pl-16 pr-8 max-w-[92%] md:max-w-[55%] py-12">
           <p className="text-[10px] tracking-[3px] text-white/50 uppercase mb-5">
             Limpieza profesional de sneakers · Villahermosa, Tabasco
           </p>
           <h1
-            className="text-white leading-[0.93] tracking-wide mb-5"
-            style={{ fontFamily:"'Bebas Neue', sans-serif", fontSize:"clamp(48px, 6.5vw, 82px)" }}
+            className="text-white tracking-wide mb-5"
+            style={{ fontFamily:"'Bebas Neue', sans-serif", fontSize:"clamp(42px, 6vw, 76px)", lineHeight: 1.0 }}
           >
             TUS TENIS<br />
             FAVORITOS,<br />
@@ -137,12 +132,12 @@ export default function Home() {
           </div>
         </div>
 
-        {/* Bottom bar */}
-        <div className="relative z-10 w-full bg-black/90 px-8 md:px-16 py-6 flex items-center gap-6 flex-wrap">
+        {/* Bottom bar — separada con su propio espacio, no flotante */}
+        <div className="relative z-10 w-full bg-black/90 px-8 md:px-16 py-7 flex items-center gap-6 flex-wrap">
           <a
             href="#cta"
             onClick={() => track("ViewContent")}
-            className="inline-flex items-center gap-2.5 bg-blue-600 hover:bg-blue-700 text-white rounded-xl px-8 py-4 text-[15px] font-black uppercase tracking-wide transition-colors"
+            className="inline-flex items-center gap-2.5 bg-blue-600 hover:bg-blue-700 text-white rounded-xl px-8 py-4 text-[15px] font-black uppercase tracking-wide transition-colors whitespace-nowrap"
           >
             📅 AGENDAR LIMPIEZA AHORA
           </a>
@@ -153,9 +148,9 @@ export default function Home() {
       </section>
 
       {/* ════════════════════════════════
-          ② BRANDS
+          ② BRANDS — separación clara del hero arriba
       ════════════════════════════════ */}
-      <section className="bg-white py-12 px-8 md:px-16 border-b border-gray-100">
+      <section className="bg-white py-12 px-8 md:px-16 border-b border-gray-100 relative z-0">
         <p className="text-[11px] font-bold tracking-[3px] text-gray-400 uppercase text-center mb-8">
           Limpiamos el calzado que entrena contigo, día tras día
         </p>
@@ -210,7 +205,8 @@ export default function Home() {
       </section>
 
       {/* ════════════════════════════════
-          ④ SERVICIOS
+          ④ SERVICIOS — fix #2: título con espacio propio (mb-16 real, no overlap)
+          fix scale: plan azul AHORA SÍ sobresale con scale real
       ════════════════════════════════ */}
       <section id="servicios" className="bg-white py-24 px-8 md:px-16">
         <Reveal>
@@ -219,7 +215,7 @@ export default function Home() {
         </Reveal>
 
         {/* Mobile tabs */}
-        <div className="flex md:hidden border-b border-gray-200 mt-10 mb-8">
+        <div className="flex md:hidden border-b border-gray-200 mt-12 mb-8">
           {(["basico","profundo","premium"] as const).map((tab,i) => (
             <button key={tab} onClick={() => setActiveTab(tab)}
               className={`flex-1 py-3 text-[13px] font-bold border-b-2 transition-colors ${activeTab===tab ? "border-blue-600 text-blue-600" : "border-transparent text-gray-400"}`}>
@@ -228,11 +224,11 @@ export default function Home() {
           ))}
         </div>
 
-        {/* Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 items-center max-w-5xl mx-auto mt-0 md:mt-14">
+        {/* Cards — mt-20 desktop para separar claramente del título, items-center + padding extra arriba/abajo en el card del medio para el efecto scale visual SIN usar transform:scale (que rompe layout) */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl mx-auto mt-12 md:mt-20 md:items-stretch">
 
           {/* Básico */}
-          <div className={`${activeTab!=="basico" ? "hidden md:flex" : "flex"} flex-col gap-5 border-2 border-gray-200 rounded-2xl p-8`}>
+          <div className={`${activeTab!=="basico" ? "hidden md:flex" : "flex"} flex-col gap-5 border-2 border-gray-200 rounded-2xl p-8 md:self-center`}>
             <span className="text-blue-600 text-3xl">🧽</span>
             <div>
               <p className="text-[11px] font-black tracking-[1.5px] uppercase text-[#0d1526] mb-1">Lavado Básico</p>
@@ -255,16 +251,16 @@ export default function Home() {
             </a>
           </div>
 
-          {/* Profundo — destacado */}
-          <div className={`${activeTab!=="profundo" ? "hidden md:flex" : "flex"} flex-col gap-5 relative bg-blue-600 rounded-2xl p-8 md:scale-[1.05] z-10`}>
-            <span className="absolute -top-4 left-1/2 -translate-x-1/2 bg-yellow-500 text-white text-[10px] font-black rounded-full px-4 py-1 whitespace-nowrap shadow-md">
+          {/* Profundo — destacado, real visual prominence via padding extra, no transform scale */}
+          <div className={`${activeTab!=="profundo" ? "hidden md:flex" : "flex"} flex-col gap-5 relative bg-blue-600 rounded-2xl p-8 md:p-10 md:-mt-6 md:-mb-6 shadow-2xl z-10`}>
+            <span className="absolute -top-4 left-1/2 -translate-x-1/2 bg-yellow-500 text-white text-[10px] font-black rounded-full px-4 py-1.5 whitespace-nowrap shadow-md">
               MÁS POPULAR
             </span>
-            <span className="text-white text-3xl mt-1">✨</span>
+            <span className="text-white text-3xl mt-2">✨</span>
             <div>
               <p className="text-[11px] font-black tracking-[1.5px] uppercase text-white/70 mb-0.5">Limpieza Profunda</p>
               <p className="text-[11px] text-white/50 mb-1">On Cloud / Trail / Performance</p>
-              <p className="font-black text-white leading-none" style={{ fontFamily:"'Bebas Neue', sans-serif", fontSize:48 }}>
+              <p className="font-black text-white leading-none" style={{ fontFamily:"'Bebas Neue', sans-serif", fontSize:52 }}>
                 $220 <span className="text-lg font-bold opacity-70">MXN</span>
               </p>
             </div>
@@ -278,13 +274,13 @@ export default function Home() {
             <a href={waLink("Hola, me interesa la Limpieza Profunda $220 MXN","plan-profundo")}
               target="_blank" rel="noopener"
               onClick={() => track("Lead",{content_name:"Limpieza Profunda"})}
-              className="block text-center bg-white text-blue-600 hover:bg-gray-100 rounded-lg py-3 text-[12px] font-black uppercase tracking-wide transition-colors">
+              className="block text-center bg-white text-blue-600 hover:bg-gray-100 rounded-lg py-3.5 text-[13px] font-black uppercase tracking-wide transition-colors">
               Seleccionar Ahora
             </a>
           </div>
 
           {/* Premium */}
-          <div className={`${activeTab!=="premium" ? "hidden md:flex" : "flex"} flex-col gap-5 bg-[#0d1526] rounded-2xl p-8`}>
+          <div className={`${activeTab!=="premium" ? "hidden md:flex" : "flex"} flex-col gap-5 bg-[#0d1526] rounded-2xl p-8 md:self-center`}>
             <span className="text-yellow-500 text-3xl">👑</span>
             <div>
               <p className="text-[11px] font-black tracking-[1.5px] uppercase text-white mb-1">Limpieza Premium</p>
@@ -310,14 +306,13 @@ export default function Home() {
       </section>
 
       {/* ════════════════════════════════
-          ⑤ PROCESO
+          ⑤ PROCESO — fix #3: separación clara de Servicios arriba (pt extra)
       ════════════════════════════════ */}
-      <section id="proceso" className="bg-gray-100 py-24 px-8 md:px-16">
+      <section id="proceso" className="bg-gray-100 pt-32 pb-24 px-8 md:px-16 relative z-0">
         <Reveal>
           <Title center size="lg">TU LIMPIEZA EN 3 PASOS SIMPLES</Title>
         </Reveal>
         <div className="relative grid grid-cols-1 md:grid-cols-3 max-w-4xl mx-auto gap-14 md:gap-0 mt-20">
-          {/* Connector line — desktop only */}
           <div className="hidden md:block absolute top-5 left-[calc(16.66%+20px)] right-[calc(16.66%+20px)] h-0.5 bg-blue-600 z-0" />
           {[
             { n:"1", icon:"📍", title:"TRAE TUS TENIS",  desc:<>Déjalos en <strong>Tintorería Max Plaza Usumacinta</strong> o <strong>Mega Plaza Deportiva</strong>. Abierto de lunes a domingo.</> },
@@ -370,17 +365,29 @@ export default function Home() {
       </section>
 
       {/* ════════════════════════════════
-          ⑦ MEMBRESÍA
+          ⑦ MEMBRESÍA — fix #4: separación REAL de Garantías + line-height
+          controlado en título/subtítulo para que no colisionen
       ════════════════════════════════ */}
-      <section id="membresia" className="bg-gray-100 py-24 px-8 md:px-16">
+      <section id="membresia" className="bg-gray-100 pt-28 pb-24 px-8 md:px-16 relative z-0">
+        {/* Separador visual explícito entre Garantías y Membresía */}
+        <div className="max-w-6xl mx-auto mb-16 flex items-center gap-4" aria-hidden="true">
+          <div className="h-px bg-gray-300 flex-1" />
+          <span className="text-gray-300 text-xs">●</span>
+          <div className="h-px bg-gray-300 flex-1" />
+        </div>
+
         <Reveal>
           <div className="bg-[#0d1526] rounded-2xl p-8 md:p-12 max-w-6xl mx-auto">
-            {/* Header */}
-            <div className="flex flex-col md:flex-row md:justify-between md:items-start gap-6 mb-10">
+            <div className="flex flex-col md:flex-row md:justify-between md:items-start gap-8 mb-12">
               <div className="max-w-lg">
                 <Label color="gray">Membresías</Label>
-                <Title white size="lg">TUS TENIS SIEMPRE LIMPIOS,<br />SIN PENSARLO</Title>
-                <p className="text-[13px] text-white/40 leading-relaxed mt-4">
+                <h2
+                  className="font-display text-white tracking-wide mb-4"
+                  style={{ fontFamily:"'Bebas Neue', sans-serif", fontSize:"clamp(26px,3.2vw,40px)", lineHeight: 1.2 }}
+                >
+                  TUS TENIS SIEMPRE LIMPIOS,<br />SIN PENSARLO
+                </h2>
+                <p className="text-[13px] text-white/40 leading-relaxed">
                   Déjalos en nuestros puntos de recolección y recógelos limpios al día siguiente. Sin filas, sin agendar, sin complicaciones.
                 </p>
               </div>
@@ -390,7 +397,6 @@ export default function Home() {
               </Link>
             </div>
 
-            {/* Mini cards */}
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-7">
               {[
                 { name:"Básico",  price:"$229", period:"/mes", saving:"Ahorras $21",  desc:"1 lavado básico mensual + desodorización.", cls:"bg-white/5 border border-white/10", nameCls:"text-white/45", priceCls:"text-white", sCls:"text-green-400" },
@@ -414,7 +420,6 @@ export default function Home() {
               ))}
             </div>
 
-            {/* WA note */}
             <div className="flex items-center gap-2.5 bg-white/5 rounded-lg p-3.5">
               <span className="text-[#25D366] flex-shrink-0"><WaIcon size={16} /></span>
               <p className="text-[12px] text-white/35">
@@ -434,8 +439,8 @@ export default function Home() {
           aria-hidden="true" />
         <div className="absolute inset-0 bg-[rgba(10,15,30,0.72)]" aria-hidden="true" />
         <Reveal className="relative z-10 px-8 py-28 max-w-2xl mx-auto w-full">
-          <h2 className="text-white leading-[0.93] tracking-wide mb-6"
-            style={{ fontFamily:"'Bebas Neue', sans-serif", fontSize:"clamp(44px,6vw,76px)" }}>
+          <h2 className="text-white tracking-wide mb-6"
+            style={{ fontFamily:"'Bebas Neue', sans-serif", fontSize:"clamp(40px,5.5vw,70px)", lineHeight: 1.05 }}>
             ¿LISTO PARA LA<br />TRANSFORMACIÓN?
           </h2>
           <p className="text-white/70 text-[15px] leading-relaxed mb-10 max-w-lg mx-auto">
@@ -485,7 +490,7 @@ export default function Home() {
       </section>
 
       {/* ════════════════════════════════
-          ⑩ SUCURSALES
+          ⑩ SUCURSALES — confirmado bien, sin cambios estructurales
       ════════════════════════════════ */}
       <section id="sucursales" className="bg-gray-100 py-24 px-8 md:px-16">
         <Reveal>
