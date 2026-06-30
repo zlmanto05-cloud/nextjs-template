@@ -98,7 +98,7 @@ export default function Home() {
       ════════════════════════════════ */}
       <section
         className="relative w-full flex flex-col justify-between overflow-hidden"
-        style={{ height: "100vh", minHeight: 640 }}
+        style={{ height: "100vh", minHeight: 680, paddingTop: 80 }}
         aria-label="Hero"
       >
         {/* BG image */}
@@ -111,7 +111,7 @@ export default function Home() {
         <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/45 to-black/10" aria-hidden="true" />
 
         {/* Content */}
-        <div className="relative z-10 flex-1 flex flex-col justify-center pl-8 md:pl-16 pt-20 max-w-[60%] md:max-w-[52%]">
+        <div className="relative z-10 flex-1 flex flex-col justify-center pl-8 md:pl-16 max-w-[60%] md:max-w-[52%]">
           <p className="text-[10px] tracking-[3px] text-white/50 uppercase mb-5">
             Limpieza profesional de sneakers · Villahermosa, Tabasco
           </p>
@@ -138,15 +138,15 @@ export default function Home() {
         </div>
 
         {/* Bottom bar */}
-        <div className="relative z-10 w-full bg-black/85 px-8 md:px-16 py-4 flex items-center gap-5 flex-wrap">
+        <div className="relative z-10 w-full bg-black/90 px-8 md:px-16 py-6 flex items-center gap-6 flex-wrap">
           <a
             href="#cta"
             onClick={() => track("ViewContent")}
-            className="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg px-7 py-3 text-[13px] font-black uppercase tracking-wide transition-colors"
+            className="inline-flex items-center gap-2.5 bg-blue-600 hover:bg-blue-700 text-white rounded-xl px-8 py-4 text-[15px] font-black uppercase tracking-wide transition-colors"
           >
             📅 AGENDAR LIMPIEZA AHORA
           </a>
-          <span className="text-white/60 text-sm">
+          <span className="text-white/70 text-[15px] font-medium">
             <span className="text-[#25D366] font-bold">✓</span> Primera limpieza con 20% de descuento
           </span>
         </div>
@@ -155,13 +155,13 @@ export default function Home() {
       {/* ════════════════════════════════
           ② BRANDS
       ════════════════════════════════ */}
-      <section className="bg-white py-10 px-8 md:px-16 border-b border-gray-100">
-        <p className="text-[9px] font-bold tracking-[3px] text-gray-300 uppercase text-center mb-7">
+      <section className="bg-white py-12 px-8 md:px-16 border-b border-gray-100">
+        <p className="text-[11px] font-bold tracking-[3px] text-gray-400 uppercase text-center mb-8">
           Limpiamos el calzado que entrena contigo, día tras día
         </p>
-        <div className="flex flex-wrap justify-center md:justify-between items-center gap-x-10 gap-y-4 max-w-4xl mx-auto">
+        <div className="flex flex-wrap justify-center md:justify-between items-center gap-x-10 gap-y-5 max-w-4xl mx-auto">
           {["Nike","Adidas","Jordan","On Cloud","New Balance","Hugo Boss"].map(b => (
-            <span key={b} className="text-[16px] font-black text-gray-300 hover:text-gray-400 transition-colors">{b}</span>
+            <span key={b} className="text-[20px] font-black text-gray-400 hover:text-gray-500 transition-colors whitespace-nowrap">{b}</span>
           ))}
         </div>
       </section>
