@@ -28,7 +28,7 @@ function useReveal() {
   return { ref, visible };
 }
 
-function Reveal({ children, className = "" }: { children: React.ReactNode; className?: string }) {
+function Reveal({ children, className = "", style }: { children: React.ReactNode; className?: string; style?: React.CSSProperties }) {
   const { ref, visible } = useReveal();
   return (
     <div
@@ -37,6 +37,7 @@ function Reveal({ children, className = "" }: { children: React.ReactNode; class
         transition: "opacity 0.7s ease, transform 0.7s ease",
         opacity: visible ? 1 : 0,
         transform: visible ? "translateY(0)" : "translateY(24px)",
+        ...style,
       }}
       className={className}
     >
