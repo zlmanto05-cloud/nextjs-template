@@ -74,7 +74,7 @@ export default function Navbar() {
           href={WA_URL}
           target="_blank"
           rel="noopener noreferrer"
-          className="hidden md:inline-flex items-center gap-2 bg-[#25D366] hover:bg-[#1ebe5d] text-white text-[15px] font-bold px-6 py-3 rounded-full transition-colors"
+          className="hidden md:inline-flex items-center gap-2 bg-[#25D366] hover:bg-[#1ebe5d] text-white text-[14px] font-bold px-7 py-3 rounded-full transition-colors"
           aria-label="Contáctanos por WhatsApp"
         >
           <WaIcon />
