@@ -220,9 +220,9 @@ export default function Home() {
             gap: 32,
           }}>
             {[
-              { b:"antes-1.webp", a:"despues-1.webp", text:"Increíble el trabajo con mis Jordan 1. Pensé que ya no tenían salvación después de 2 años de uso intensivo en el gym. Quedaron impecables.", name:"Carlos Méndez", role:"Dueño de 12 pares", ini:"C" },
-              { b:"antes-2.webp", a:"despues-2.webp", text:"Mis On Cloud blancos estaban amarillentos de tanto entrenar. El equipo hizo magia, ahora lucen como si los acabara de comprar.", name:"Ana Rodríguez", role:"Runner · 5K semanal", ini:"A" },
-              { b:"antes-3.webp", a:"despues-3.webp", text:"Tenía miedo de que arruinaran la gamuza de mis New Balance de trail. El resultado superó mis expectativas. Profesionales de verdad.", name:"Miguel Torres", role:"Miembro gym · Sneakerhead", ini:"M" },
+              { b:"antes-1.png", a:"despues-1.png", text:"Increíble el trabajo con mis Jordan 1. Pensé que ya no tenían salvación después de 2 años de uso intensivo en el gym. Quedaron impecables.", name:"Carlos Méndez", role:"Dueño de 12 pares", ini:"C" },
+              { b:"antes-2.png", a:"despues-2.png", text:"Mis On Cloud blancos estaban amarillentos de tanto entrenar. El equipo hizo magia, ahora lucen como si los acabara de comprar.", name:"Ana Rodríguez", role:"Runner · 5K semanal", ini:"A" },
+              { b:"antes-3.png", a:"despues-3.png", text:"Tenía miedo de que arruinaran la gamuza de mis New Balance de trail. El resultado superó mis expectativas. Profesionales de verdad.", name:"Miguel Torres", role:"Miembro gym · Sneakerhead", ini:"M" },
             ].map((t, i) => (
               <Reveal key={i}>
                 <article style={{
