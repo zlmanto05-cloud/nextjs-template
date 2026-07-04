@@ -241,7 +241,7 @@ export default function Home() {
                     </div>
                     <div style={{
                       position: "relative", padding: 8,
-                      display: "flex", justifyContent: "flex-end",
+                      display: "flex", justifyContent: "flex-end", alignItems: "flex-start",
                       backgroundImage: `url('/img/${t.a}')`,
                       backgroundSize: "cover", backgroundPosition: "center",
                       backgroundColor: "#d1d5db",
