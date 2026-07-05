@@ -1,7 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 
-const WA_URL = `https://wa.me/529931000000?text=${encodeURIComponent("Hola, me gustaría cotizar la limpieza de mis tenis")}`;
+const WA_URL = `https://wa.me/529934001413?text=${encodeURIComponent("Hola, me gustaría cotizar la limpieza de mis tenis")}`;
 
 function WhatsAppIcon({ className }: { className?: string }) {
   return (

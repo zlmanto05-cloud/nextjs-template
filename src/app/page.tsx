@@ -3,7 +3,7 @@
 import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 
-const WA_NUMBER = "529931000000";
+const WA_NUMBER = "529934001413";
 function waLink(text: string, utm: string) {
   return `https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(text)}&utm_source=web&utm_medium=${utm}&utm_campaign=lanzamiento`;
 }

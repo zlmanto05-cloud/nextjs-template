@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
 
-const WA_NUMBER = "529931000000";
+const WA_NUMBER = "529934001413";
 const WA_URL = `https://wa.me/${WA_NUMBER}?text=${encodeURIComponent("Hola, quiero agendar una limpieza de tenis")}&utm_source=web&utm_medium=nav&utm_campaign=lanzamiento`;
 
 const links = [

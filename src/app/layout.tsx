@@ -51,7 +51,7 @@ const schemaOrg = {
   name: "Mis Papos",
   description:
     "Servicio profesional de limpieza de tenis en Villahermosa, Tabasco",
-  telephone: "+529931000000",
+  telephone: "+529934001413",
   url: "https://mispapos.mx",
   address: {
     "@type": "PostalAddress",
