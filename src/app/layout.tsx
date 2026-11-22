@@ -145,7 +145,10 @@ s.parentNode.insertBefore(t,s)}(window, document,'script',
 'https://connect.facebook.net/en_US/fbevents.js');
 fbq.disablePushState = true;
 fbq('init', '1022886750323424');
-fbq('track', 'PageView');`}
+(function(){var id;try{id=crypto.randomUUID()}catch(e){id=Date.now()+'-'+Math.random().toString(36).slice(2)}
+fbq('track','PageView',{},{eventID:id});
+try{var b=JSON.stringify({event_name:'PageView',event_id:id,event_source_url:location.href,custom_data:{}});
+if(!(navigator.sendBeacon&&navigator.sendBeacon('/api/meta',new Blob([b],{type:'application/json'}))))fetch('/api/meta',{method:'POST',body:b,keepalive:true,headers:{'Content-Type':'application/json'}})}catch(e){}})();`}
         </Script>
 
         {/* Google Tag Manager noscript fallback */}
