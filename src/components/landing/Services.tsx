@@ -56,7 +56,6 @@ const CATS: Cat[] = [
   },
 ];
 
-const TINTS = ["tint-lime", "tint-mint", "tint-lilac", "tint-sky", "tint-peach", "tint-stone"];
 
 export default function Services() {
   const [active, setActive] = useState(CATS[0].id);
@@ -92,7 +91,7 @@ export default function Services() {
             target="_blank"
             rel="noopener noreferrer"
             onClick={() => track("Lead", { content_name: `${cat.id}-${it.name}` })}
-            className={`card-pop group relative flex flex-col justify-between rounded-3xl p-6 ${TINTS[i % TINTS.length]}`}
+            className="card-pop svc-card group relative flex flex-col justify-between rounded-2xl p-6"
             style={{ animationDelay: `${i * 70}ms` }}
           >
             <span className="absolute right-5 top-5 flex h-10 w-10 items-center justify-center rounded-full bg-black text-white transition-transform duration-300 group-hover:rotate-45">
@@ -100,14 +99,14 @@ export default function Services() {
             </span>
             <div className="pr-12">
               {it.tag && (
-                <span className="mb-3 inline-block rounded-full bg-black px-3 py-1 text-[11px] font-bold uppercase tracking-wider text-[var(--accent)]">{it.tag}</span>
+                <span className="font-tag mb-3 inline-block bg-black px-2 py-1 text-[11px] text-[var(--accent)]">{it.tag}</span>
               )}
-              <h3 className="font-display text-3xl uppercase leading-none">{it.name}</h3>
+              <h3 className="font-display text-4xl leading-[0.9]">{it.name}</h3>
               <p className="mt-3 text-sm leading-relaxed text-black/60">{it.desc}</p>
             </div>
             <div className="mt-6 flex items-end justify-between sm:mt-8">
-              <p className="font-display text-5xl leading-none">${it.price}</p>
-              <span className="text-xs font-semibold text-black/50 transition-colors group-hover:text-black">Cotizar por WhatsApp</span>
+              <p className="font-display text-6xl leading-none">${it.price}</p>
+              <span className="font-tag text-[11px] text-black/50 transition-colors group-hover:text-black">Cotizar →</span>
             </div>
           </a>
         ))}

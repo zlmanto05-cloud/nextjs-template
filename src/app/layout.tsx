@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Inter, Barlow_Condensed } from "next/font/google";
+import { Inter, Archivo, Space_Mono } from "next/font/google";
 import Script from "next/script";
 import Navbar from "@/components/Navbar";
 import "./globals.css";
@@ -11,10 +11,17 @@ const inter = Inter({
   display: "swap",
 });
 
-const barlow = Barlow_Condensed({
+const archivo = Archivo({
   subsets: ["latin"],
-  weight: ["700", "800"],
-  variable: "--font-barlow",
+  axes: ["wdth"],
+  variable: "--font-archivo",
+  display: "swap",
+});
+
+const mono = Space_Mono({
+  subsets: ["latin"],
+  weight: ["400", "700"],
+  variable: "--font-spacemono",
   display: "swap",
 });
 
@@ -90,7 +97,7 @@ export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="es" className={`${inter.variable} ${barlow.variable}`}>
+    <html lang="es" className={`${inter.variable} ${archivo.variable} ${mono.variable}`}>
       <head>
         <script
           type="application/ld+json"

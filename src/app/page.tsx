@@ -52,8 +52,8 @@ const GYMS = [
 
 function Eyebrow({ children, light = false }: { children: React.ReactNode; light?: boolean }) {
   return (
-    <p className={`mb-4 inline-flex items-center gap-2 text-xs font-bold uppercase tracking-[0.22em] ${light ? "text-[var(--accent)]" : "text-black/50"}`}>
-      <span className="h-1.5 w-1.5 rounded-full bg-[var(--accent)]" />
+    <p className={`font-tag mb-4 inline-flex items-center gap-2 text-[11px] ${light ? "text-[var(--accent)]" : "text-black/55"}`}>
+      <span className="h-2 w-2 bg-[var(--accent)]" />
       {children}
     </p>
   );
@@ -63,60 +63,52 @@ export default function Home() {
   return (
     <main className="overflow-x-hidden">
       {/* ① HERO */}
-      <section className="relative bg-[var(--paper)] pb-16 pt-28 md:pb-24 md:pt-36">
-        <div aria-hidden className="pointer-events-none absolute -right-32 -top-32 h-[480px] w-[480px] rounded-full bg-[var(--accent)] opacity-20 blur-3xl" />
-        <div aria-hidden className="pointer-events-none absolute -left-40 top-1/2 h-[380px] w-[380px] rounded-full bg-white opacity-80 blur-3xl" />
-
-        <div className="relative mx-auto max-w-7xl px-5 md:px-10">
-          <div className="mx-auto max-w-4xl text-center">
-            <p className="fade-in mb-5 inline-flex items-center gap-2 rounded-full border border-black/10 bg-white px-4 py-2 text-xs font-semibold text-black/70" style={{ animationDelay: "0ms" }}>
-              <span className="relative flex h-2 w-2"><span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-[var(--accent)] opacity-75" /><span className="relative inline-flex h-2 w-2 rounded-full bg-[var(--accent)]" /></span>
-              Cuidado de sneakers · Villahermosa
+      <section className="relative bg-white pb-14 pt-24 md:pb-20 md:pt-32">
+        <div className="mx-auto grid max-w-7xl items-center gap-10 px-5 md:grid-cols-[1.2fr_1fr] md:gap-14 md:px-10">
+          <div>
+            <p className="fade-in font-tag mb-6 inline-flex items-center gap-2 border border-black px-3 py-1.5 text-[11px]" style={{ animationDelay: "0ms" }}>
+              <span className="h-2 w-2 bg-[var(--accent)]" /> Sneaker care · Villahermosa, Tab.
             </p>
-            <h1 className="font-display text-[3.4rem] uppercase leading-[0.88] sm:text-7xl md:text-8xl lg:text-[7.5rem]">
+            <h1 className="font-display text-[4rem] leading-[0.86] sm:text-7xl lg:text-[7rem] xl:text-[7.6rem]">
               {HERO_WORDS.map((w, i) => (
-                <span key={i} className="word-up mr-[0.22em] last:mr-0">
-                  <span style={{ animationDelay: `${150 + i * 70}ms` }} className={i >= 3 && i <= 4 ? "text-[var(--accent)] [-webkit-text-stroke:1.5px_#0B0B0B] md:[-webkit-text-stroke:2px_#0B0B0B]" : ""}>{w}</span>
+                <span key={i} className="word-up mr-[0.18em] last:mr-0">
+                  <span style={{ animationDelay: `${150 + i * 70}ms` }} className={i >= 3 && i <= 4 ? "mark" : ""}>{w}</span>
                 </span>
               ))}
             </h1>
-            <p className="fade-in mx-auto mt-6 max-w-xl text-base leading-relaxed text-black/60 md:text-lg" style={{ animationDelay: "800ms" }}>
+            <p className="fade-in mt-7 max-w-md text-base leading-relaxed text-black/60 md:text-lg" style={{ animationDelay: "800ms" }}>
               Limpieza por material, no por marca. Tenis, botas, mochilas, gorras y bolsas, listos en 48 horas.
             </p>
-            <div className="fade-in mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row" style={{ animationDelay: "950ms" }}>
+            <div className="fade-in mt-8 flex flex-col gap-3 sm:flex-row" style={{ animationDelay: "950ms" }}>
               <WaButton
                 text="Hola, quiero cotizar la limpieza de mis tenis"
                 medium="hero"
-                className="btn-shine inline-flex w-full items-center justify-center gap-2 rounded-full bg-black px-8 py-4 text-base font-bold text-white transition-transform hover:scale-[1.03] sm:w-auto"
+                className="btn-shine inline-flex items-center justify-center gap-2 rounded-full bg-black px-8 py-4 text-base font-bold text-white transition-transform hover:scale-[1.03]"
               >
                 Cotiza por WhatsApp
               </WaButton>
-              <a href="#servicios" className="inline-flex w-full items-center justify-center gap-2 rounded-full border border-black/15 bg-white px-8 py-4 text-base font-semibold transition-colors hover:border-black sm:w-auto">
+              <a href="#servicios" className="inline-flex items-center justify-center gap-2 rounded-full border border-black/20 px-8 py-4 text-base font-semibold transition-colors hover:border-black hover:bg-[var(--accent)]">
                 Ver precios
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" aria-hidden="true"><path d="M12 5v14M6 13l6 6 6-6" /></svg>
               </a>
             </div>
+            <p className="fade-in font-tag mt-8 text-[11px] text-black/45" style={{ animationDelay: "1050ms" }}>
+              48 h · Foto de estado · 5 puntos de recepción
+            </p>
           </div>
 
-          <div className="fade-in relative mx-auto mt-12 max-w-5xl md:mt-16" style={{ animationDelay: "1100ms" }}>
-            <BeforeAfter
-              before="/img/antes-1.png"
-              after="/img/despues-1-hd.jpg"
-              alt="Tenis Boss de piel"
-              intro
-              priority
-              sizes="(max-width: 1024px) 100vw, 1024px"
-              className="aspect-[4/3] rounded-[28px] shadow-[0_40px_80px_-40px_rgba(0,0,0,0.45)] md:aspect-[16/9] md:rounded-[36px]"
-            />
-            <div className="float absolute -left-3 bottom-8 hidden rounded-2xl bg-white px-4 py-3 shadow-xl md:block">
+          <div className="fade-in relative" style={{ animationDelay: "500ms" }}>
+            <div className="grain relative aspect-[4/5] overflow-hidden rounded-2xl bg-[var(--paper)]">
+              <Image src="/img/fotos/manos-limpiando.jpg" alt="Manos limpiando un tenis blanco con cepillo y espuma" fill priority sizes="(max-width: 768px) 100vw, 45vw" className="object-cover" />
+            </div>
+            <div className="float absolute -left-4 bottom-10 rotate-[-4deg] bg-[var(--accent)] px-4 py-3 shadow-xl md:-left-8">
+              <p className="font-display text-4xl leading-none">Revisado a mano</p>
+              <p className="font-tag mt-1 text-[10px]">Par por par, según su material</p>
+            </div>
+            <div className="float absolute -right-2 top-6 bg-black px-3 py-2 text-white shadow-xl md:-right-5" style={{ animationDelay: "-3s" }}>
+              <p className="font-tag text-[10px] text-[var(--accent)]">Entrega</p>
               <p className="font-display text-3xl leading-none">48 h</p>
-              <p className="text-xs text-black/50">y listos</p>
             </div>
-            <div className="float absolute -right-3 top-10 hidden rounded-2xl bg-black px-4 py-3 text-white shadow-xl md:block" style={{ animationDelay: "-3s" }}>
-              <p className="text-xs text-white/60">Incluido</p>
-              <p className="text-sm font-bold">Foto de estado</p>
-            </div>
-            <p className="mt-4 text-center text-sm text-black/45">Arrastra para ver el cambio</p>
           </div>
         </div>
       </section>
@@ -150,6 +142,31 @@ export default function Home() {
         </div>
       </section>
 
+      {/* ③b FOTOS DE CALLE */}
+      <section className="bg-white pt-16 md:pt-24">
+        <div className="mx-auto max-w-7xl px-5 md:px-10">
+          <div className="-mx-5 flex snap-x snap-mandatory gap-3 overflow-x-auto px-5 no-scrollbar md:mx-0 md:grid md:grid-cols-4 md:gap-4 md:overflow-visible md:px-0">
+            {[
+              { src: "/img/fotos/calle-amarrando.jpg", cap: "Listos para la calle", ratio: "aspect-[3/4]" },
+              { src: "/img/fotos/rack-secado.jpg", cap: "Secado a la sombra", ratio: "aspect-[3/4]" },
+              { src: "/img/fotos/mostrador.jpg", cap: "Recibimos y revisamos", ratio: "aspect-[3/4]" },
+              { src: "/img/fotos/calle-pies.jpg", cap: "Como recién salidos", ratio: "aspect-[3/4]" },
+            ].map((f, i) => (
+              <Reveal key={f.src} delay={i * 90} className="w-[70%] shrink-0 snap-center md:w-auto">
+                <figure className="group">
+                  <div className={`grain relative overflow-hidden rounded-xl bg-[var(--paper)] ${f.ratio}`}>
+                    <Image src={f.src} alt={f.cap} fill sizes="(max-width: 768px) 70vw, 25vw" className="object-cover grayscale-[35%] transition-all duration-700 group-hover:scale-105 group-hover:grayscale-0" />
+                  </div>
+                  <figcaption className="font-tag mt-3 flex items-center gap-2 text-[11px] text-black/60">
+                    <span className="text-black">0{i + 1}</span> {f.cap}
+                  </figcaption>
+                </figure>
+              </Reveal>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* ④ SERVICIOS */}
       <section id="servicios" className="bg-white py-20 md:py-28">
         <div className="mx-auto max-w-7xl px-5 md:px-10">
@@ -162,7 +179,7 @@ export default function Home() {
           </Reveal>
           <Reveal delay={100}><Services /></Reveal>
 
-          <Reveal delay={150} className="mt-10 rounded-3xl bg-[var(--paper)] p-6 md:p-8">
+          <Reveal delay={150} className="mt-10 rounded-2xl bg-[var(--paper)] p-6 md:p-8">
             <p className="mb-4 text-sm font-bold uppercase tracking-[0.18em] text-black/50">Agrégale</p>
             <div className="flex flex-wrap gap-2">
               {[["Impermeabilizar", 90], ["Desodorizar", 60], ["Crema protectora", 70], ["Agujetas nuevas", 50]].map(([n, p]) => (
@@ -189,7 +206,7 @@ export default function Home() {
               { b: "/img/antes-3.png", a: "/img/despues-3-hd.jpg", name: "New Balance · gamuza", svc: "Premium lujo" },
             ].map((r, i) => (
               <Reveal key={r.b} delay={i * 120} className="w-[85%] shrink-0 snap-center md:w-auto">
-                <BeforeAfter before={r.b} after={r.a} alt={r.name} className="aspect-[5/4] rounded-3xl" />
+                <BeforeAfter before={r.b} after={r.a} alt={r.name} className="aspect-[5/4] rounded-2xl" />
                 <div className="mt-4 flex items-center justify-between px-1">
                   <p className="font-semibold">{r.name}</p>
                   <span className="rounded-full bg-white px-3 py-1 text-xs font-semibold text-black/60">{r.svc}</span>
@@ -226,7 +243,7 @@ export default function Home() {
 
       {/* ⑦ GYM (bloque oscuro) */}
       <section className="px-3 md:px-6">
-        <Reveal className="relative mx-auto max-w-7xl overflow-hidden rounded-[32px] bg-black px-6 py-16 text-white md:rounded-[44px] md:px-16 md:py-24">
+        <Reveal className="relative mx-auto max-w-7xl overflow-hidden rounded-2xl bg-black px-6 py-16 text-white md:rounded-3xl md:px-16 md:py-24">
           <div aria-hidden className="pointer-events-none absolute -bottom-40 -right-40 h-[420px] w-[420px] rounded-full bg-[var(--accent)] opacity-25 blur-3xl" />
           <div className="relative grid items-center gap-10 md:grid-cols-[1.3fr_1fr]">
             <div>
@@ -245,13 +262,9 @@ export default function Home() {
                 Quiero usarlo
               </WaButton>
             </div>
-            <div className="grid grid-cols-2 gap-3">
-              {[["1", "Llegas al gym"], ["2", "Cubículo QR"], ["3", "WhatsApp"], ["4", "Listos en 48 h"]].map(([n, t], i) => (
-                <div key={n} className="float rounded-2xl border border-white/10 bg-white/5 p-5 backdrop-blur" style={{ animationDelay: `${-i * 1.4}s` }}>
-                  <p className="font-display text-4xl text-[var(--accent)]">{n}</p>
-                  <p className="mt-1 text-sm font-semibold">{t}</p>
-                </div>
-              ))}
+            <div className="relative aspect-[4/3] overflow-hidden rounded-2xl">
+              <Image src="/img/fotos/gym-cubiculo.jpg" alt="Socio dejando sus tenis en el cubículo con candado del gym" fill sizes="(max-width: 768px) 100vw, 40vw" className="object-cover" />
+              <span className="font-tag absolute bottom-3 left-3 bg-[var(--accent)] px-2 py-1 text-[11px] text-black">Cubículo QR · Anytime</span>
             </div>
           </div>
         </Reveal>
@@ -266,7 +279,7 @@ export default function Home() {
           </Reveal>
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
             {WHY.map((w, i) => (
-              <Reveal key={w.title} delay={i * 100} className="group rounded-3xl border border-black/5 bg-[var(--paper)] p-7 transition-colors duration-300 hover:bg-[var(--accent-soft)]">
+              <Reveal key={w.title} delay={i * 100} className="group rounded-2xl border border-black/5 bg-[var(--paper)] p-7 transition-colors duration-300 hover:bg-[var(--accent-soft)]">
                 <span className="mb-6 flex h-12 w-12 items-center justify-center rounded-2xl bg-black text-[var(--accent)] transition-transform duration-300 group-hover:-rotate-6 group-hover:scale-110">
                   <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d={w.icon} /></svg>
                 </span>
@@ -299,7 +312,7 @@ export default function Home() {
           </Reveal>
           <div className="grid gap-5 md:grid-cols-2">
             {MAIN_BRANCHES.map((b, i) => (
-              <Reveal key={b.name} delay={i * 120} as="article" className="group overflow-hidden rounded-3xl border border-black/10">
+              <Reveal key={b.name} delay={i * 120} as="article" className="group overflow-hidden rounded-2xl border border-black/10">
                 <a href={b.url} target="_blank" rel="noopener noreferrer" className="relative block h-44 overflow-hidden bg-[var(--paper)]">
                   <Image src={b.img} alt={`Mapa ${b.name}`} fill sizes="(max-width: 768px) 100vw, 50vw" className="object-cover transition-transform duration-700 group-hover:scale-105" />
                 </a>
