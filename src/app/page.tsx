@@ -233,7 +233,7 @@ export default function Home() {
               </WaButton>
             </div>
             <div className="relative aspect-[4/3] overflow-hidden rounded-2xl">
-              <Image src="/img/fotos/mostrador-mis-papos.jpg" alt="Cliente entregando sus tenis en el mostrador" fill sizes="(max-width: 768px) 100vw, 40vw" className="object-cover" />
+              <Image src="/img/fotos/recepcion-mis-papos.jpg" alt="Recepcionista de Mis Papos recibiendo los tenis de una clienta" fill sizes="(max-width: 768px) 100vw, 40vw" className="object-cover" />
               <span className="font-tag absolute bottom-3 left-3 bg-[var(--accent)] px-2 py-1 text-[11px] text-black">Presenta tu llave · 20%</span>
             </div>
           </div>
