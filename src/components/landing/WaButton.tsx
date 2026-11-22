@@ -1,6 +1,6 @@
 "use client";
 
-import { track, waLink } from "./lib";
+import { trackWhatsApp, waLink } from "./lib";
 
 export function WaIcon({ size = 18 }: { size?: number }) {
   return (
@@ -29,7 +29,7 @@ export default function WaButton({
       href={waLink(text, medium)}
       target="_blank"
       rel="noopener noreferrer"
-      onClick={() => track("Lead", { content_name: medium })}
+      onClick={() => trackWhatsApp(medium)}
       className={className}
     >
       {icon && <WaIcon />}

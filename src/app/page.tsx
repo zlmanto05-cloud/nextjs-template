@@ -5,6 +5,7 @@ import Faq from "@/components/landing/Faq";
 import CountUp from "@/components/landing/CountUp";
 import MobileBar from "@/components/landing/MobileBar";
 import WaButton from "@/components/landing/WaButton";
+import VerPrecios from "@/components/landing/VerPrecios";
 import Footer from "@/components/Footer";
 
 const HERO_WORDS = ["Tus", "tenis,", "como", "recién", "salidos", "de", "la", "caja"];
@@ -83,10 +84,10 @@ export default function Home() {
               >
                 Cotiza por WhatsApp
               </WaButton>
-              <a href="#servicios" className="inline-flex items-center justify-center gap-2 rounded-full border border-black/20 px-8 py-4 text-base font-semibold transition-colors hover:border-black hover:bg-[var(--accent)]">
+              <VerPrecios className="inline-flex items-center justify-center gap-2 rounded-full border border-black/20 px-8 py-4 text-base font-semibold transition-colors hover:border-black hover:bg-[var(--accent)]">
                 Ver precios
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" aria-hidden="true"><path d="M12 5v14M6 13l6 6 6-6" /></svg>
-              </a>
+              </VerPrecios>
             </div>
             <p className="fade-in font-tag mt-8 text-[11px] text-black/45" style={{ animationDelay: "1050ms" }}>
               48 h · Foto de estado · 2 sucursales

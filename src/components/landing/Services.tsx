@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { track, waLink } from "./lib";
+import { trackVerServicios, trackWhatsApp, waLink } from "./lib";
 
 type Item = { name: string; desc: string; price: number; tag?: string };
 type Cat = { id: string; label: string; items: Item[] };
@@ -72,7 +72,7 @@ export default function Services() {
               key={c.id}
               role="tab"
               aria-selected={on}
-              onClick={() => { setActive(c.id); track("ver_servicios", { categoria: c.id }); }}
+              onClick={() => { setActive(c.id); trackVerServicios("chips", c.id); }}
               className={`shrink-0 rounded-full border px-5 py-2.5 text-sm font-semibold transition-all duration-300 ${
                 on ? "border-black bg-black text-white" : "border-black/10 bg-white text-black/70 hover:border-black/40"
               }`}
@@ -90,7 +90,7 @@ export default function Services() {
             href={waLink(`Hola, quiero cotizar: ${cat.label} — ${it.name} ($${it.price})`, `servicio-${cat.id}`)}
             target="_blank"
             rel="noopener noreferrer"
-            onClick={() => track("Lead", { content_name: `${cat.id}-${it.name}` })}
+            onClick={() => trackWhatsApp(`servicio-${cat.id}`, `${cat.label} - ${it.name}`)}
             className="card-pop svc-card group relative flex flex-col justify-between rounded-2xl p-6"
             style={{ animationDelay: `${i * 70}ms` }}
           >

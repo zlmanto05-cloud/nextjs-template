@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import WaButton from "./WaButton";
-import { track } from "./lib";
+import { trackViewContent } from "./lib";
 
 /** Barra flotante tipo app, solo en celular. Aparece después del hero. */
 export default function MobileBar() {
@@ -15,7 +15,7 @@ export default function MobileBar() {
       const max = document.body.scrollHeight - window.innerHeight;
       if (!fired && max > 0 && window.scrollY / max >= 0.5) {
         fired = true;
-        track("ViewContent");
+        trackViewContent();
       }
     };
     onScroll();
