@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Inter, Raleway } from "next/font/google";
+import { Inter, Barlow_Condensed } from "next/font/google";
 import Script from "next/script";
 import Navbar from "@/components/Navbar";
 import "./globals.css";
@@ -7,21 +7,21 @@ import "./globals.css";
 const inter = Inter({
   subsets: ["latin"],
   weight: ["400", "500", "600", "700"],
-  variable: "--font-sans",
+  variable: "--font-inter",
   display: "swap",
 });
 
-const raleway = Raleway({
+const barlow = Barlow_Condensed({
   subsets: ["latin"],
-  weight: ["400", "600", "700", "800"],
-  variable: "--font-serif",
+  weight: ["700", "800"],
+  variable: "--font-barlow",
   display: "swap",
 });
 
 export const metadata: Metadata = {
   title: "Mis Papos | Lavado de Tenis en Villahermosa",
   description:
-    "Limpieza profesional de tenis en Villahermosa, Tabasco. Resultados en 48 horas. Desde $190. Club Mis Papos, membresías exclusivas.",
+    "Limpieza profesional de tenis en Villahermosa, Tabasco. Tenis, botas, mochilas, gorras y bolsas. Limpieza por material, lista en 48 horas. 5 puntos de recepción.",
   keywords: [
     "limpieza tenis Villahermosa",
     "lavado tenis Tabasco",
@@ -33,7 +33,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Mis Papos | Tus tenis, limpios en 48 horas",
     description:
-      "Limpieza profesional de tenis en Villahermosa. Desde $190. Resultados garantizados en 48 horas.",
+      "Limpieza profesional de tenis en Villahermosa. Limpieza por material, lista en 48 horas.",
     siteName: "Mis Papos",
     locale: "es_MX",
     type: "website",
@@ -41,7 +41,7 @@ export const metadata: Metadata = {
   twitter: {
     card: "summary_large_image",
     title: "Mis Papos | Tus tenis, limpios en 48 horas",
-    description: "Limpieza profesional de tenis en Villahermosa. Desde $190.",
+    description: "Limpieza profesional de tenis en Villahermosa. Lista en 48 horas.",
   },
 };
 
@@ -52,7 +52,7 @@ const schemaOrg = {
   description:
     "Servicio profesional de limpieza de tenis en Villahermosa, Tabasco",
   telephone: "+529934001413",
-  url: "https://mispapos.mx",
+  url: "https://mispapos.com",
   address: {
     "@type": "PostalAddress",
     addressLocality: "Villahermosa",
@@ -90,14 +90,14 @@ export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="es" className={`${inter.variable} ${raleway.variable}`}>
+    <html lang="es" className={`${inter.variable} ${barlow.variable}`}>
       <head>
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(schemaOrg) }}
         />
       </head>
-      <body className="font-sans antialiased bg-[#0a0a0a] text-white">
+      <body className="font-sans antialiased bg-white text-[#0B0B0B]">
         {/* Google Tag Manager — must load before page renders */}
         <Script id="gtm-script" strategy="beforeInteractive">
           {`(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':

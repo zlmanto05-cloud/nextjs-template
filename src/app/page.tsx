@@ -1,520 +1,198 @@
-"use client";
+import Image from "next/image";
+import Reveal from "@/components/landing/Reveal";
+import BeforeAfter from "@/components/landing/BeforeAfter";
+import Services from "@/components/landing/Services";
+import Faq from "@/components/landing/Faq";
+import CountUp from "@/components/landing/CountUp";
+import MobileBar from "@/components/landing/MobileBar";
+import WaButton from "@/components/landing/WaButton";
+import Footer from "@/components/Footer";
 
-import { useState, useEffect, useRef } from "react";
-import Link from "next/link";
+const HERO_WORDS = ["Tus", "tenis,", "como", "recién", "salidos", "de", "la", "caja"];
 
-const WA_NUMBER = "529934001413";
-function waLink(text: string, utm: string) {
-  return `https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(text)}&utm_source=web&utm_medium=${utm}&utm_campaign=lanzamiento`;
-}
-declare global { interface Window { fbq: (...a: unknown[]) => void } }
-function track(event: string, params?: Record<string, string>) {
-  if (typeof window !== "undefined" && window.fbq) window.fbq("track", event, params);
-}
+const MARQUEE = ["Nike", "Jordan", "On Cloud", "New Balance", "Adidas", "Botas de piel", "Mochilas", "Gorras", "Bolsas de lujo", "Gamuza", "Nubuck", "Mesh"];
 
-function useReveal() {
-  const ref = useRef<HTMLDivElement>(null);
-  const [visible, setVisible] = useState(false);
-  useEffect(() => {
-    const el = ref.current;
-    if (!el) return;
-    const obs = new IntersectionObserver(
-      ([e]) => { if (e.isIntersecting) { setVisible(true); obs.unobserve(el); } },
-      { threshold: 0.1 }
-    );
-    obs.observe(el);
-    return () => obs.disconnect();
-  }, []);
-  return { ref, visible };
-}
+const STEPS = [
+  { n: "01", title: "Déjalos", desc: "En sucursal o en el cubículo QR de tu Anytime Fitness." },
+  { n: "02", title: "Los limpiamos", desc: "Según su material. En piezas premium te mandamos foto de cómo llegaron." },
+  { n: "03", title: "Recógelos", desc: "En 48 horas, impecables. Te avisamos por WhatsApp." },
+];
 
-function Reveal({ children, className = "", style }: { children: React.ReactNode; className?: string; style?: React.CSSProperties }) {
-  const { ref, visible } = useReveal();
+const WHY = [
+  { title: "Por material, no por marca", desc: "Piel, gamuza, mesh o nubuck: cada uno con su producto y su técnica.", icon: "M12 3l8 4.5v9L12 21l-8-4.5v-9L12 3zM12 12l8-4.5M12 12v9M12 12L4 7.5" },
+  { title: "Foto de estado", desc: "Registramos cómo llega tu pieza. Obligatoria en premium, mochilas de lujo y bolsas de piel.", icon: "M4 8h3l2-3h6l2 3h3v11H4zM12 17a4 4 0 100-8 4 4 0 000 8z" },
+  { title: "Listos en 48 h", desc: "Sin agendar, sin filas. Te avisamos cuando estén.", icon: "M12 7v5l3 2M12 21a9 9 0 110-18 9 9 0 010 18z" },
+  { title: "5 puntos en Villahermosa", desc: "Matriz Usumacinta, Deportiva y tres Anytime Fitness.", icon: "M12 21s-7-6.2-7-11.5A7 7 0 0119 9.5C19 14.8 12 21 12 21zM12 12a2.5 2.5 0 100-5 2.5 2.5 0 000 5z" },
+];
+
+const MAIN_BRANCHES = [
+  {
+    tag: "Matriz",
+    name: "Usumacinta",
+    address: "Av. Paseo Usumacinta esq. Av. Los Ríos, Plaza KB",
+    hours: "Lun–Vie 7–20 h · Sáb 8–18 h · Dom 9–14 h",
+    img: "/img/mapa-usumacinta.webp",
+    url: "https://maps.google.com/?q=Av.+Paseo+Usumacinta+esquina+Av.+Los+Rios+Plaza+KB+Villahermosa+Tabasco",
+  },
+  {
+    tag: "Sucursal",
+    name: "Ciudad Deportiva",
+    address: "Plaza Mega Soriana, junto a Telcel, entrada a Anytime Fitness",
+    hours: "Lun–Vie 8–20 h · Sáb 8–16 h",
+    img: "/img/mapa-deportiva.webp",
+    url: "https://maps.google.com/?q=Velódromo+Ciudad+Deportiva+Plaza+Mega+Soriana+Villahermosa+Tabasco",
+  },
+];
+
+const GYMS = [
+  { name: "Anytime Fitness Deportiva", url: "https://maps.google.com/?q=Anytime+Fitness+Ciudad+Deportiva+Villahermosa" },
+  { name: "Anytime Fitness Loma Linda", url: "https://maps.google.com/?q=Anytime+Fitness+Loma+Linda+Villahermosa" },
+  { name: "Anytime Fitness Mallorca", url: "https://maps.google.com/?q=Anytime+Fitness+Mallorca+Villahermosa" },
+];
+
+function Eyebrow({ children, light = false }: { children: React.ReactNode; light?: boolean }) {
   return (
-    <div
-      ref={ref}
-      style={{
-        transition: "opacity 0.7s ease, transform 0.7s ease",
-        opacity: visible ? 1 : 0,
-        transform: visible ? "translateY(0)" : "translateY(24px)",
-        ...style,
-      }}
-      className={className}
-    >
+    <p className={`mb-4 inline-flex items-center gap-2 text-xs font-bold uppercase tracking-[0.22em] ${light ? "text-[var(--yellow)]" : "text-black/50"}`}>
+      <span className="h-1.5 w-1.5 rounded-full bg-[var(--yellow)]" />
       {children}
-    </div>
+    </p>
   );
 }
 
-const WaIcon = ({ size = 18 }: { size?: number }) => (
-  <svg width={size} height={size} viewBox="0 0 24 24" fill="currentColor">
-    <path d="M12 2C6.48 2 2 6.48 2 12c0 1.85.5 3.58 1.37 5.07L2 22l5.09-1.34A9.94 9.94 0 0012 22c5.52 0 10-4.48 10-10S17.52 2 12 2zm4.93 13.67c-.2.56-1.18 1.1-1.62 1.16-.44.07-.85.1-2.72-.57-2.28-.82-3.75-3.13-3.86-3.27-.11-.14-.9-1.2-.9-2.29 0-1.09.57-1.62.77-1.84.2-.22.44-.27.59-.27h.42c.14 0 .32-.05.5.38.2.47.67 1.63.73 1.75.06.12.1.26.02.41-.08.15-.12.24-.23.37-.11.13-.24.29-.34.39-.11.11-.23.23-.1.45.13.22.58.96 1.25 1.55.86.77 1.58 1.01 1.8 1.12.22.11.35.09.48-.05.13-.14.55-.64.7-.86.15-.22.3-.18.5-.11.2.07 1.28.6 1.5.71.22.11.37.16.42.25.06.09.06.52-.14 1.08z"/>
-  </svg>
-);
-
-/* ─── Estilos base como objetos JS — sin depender de Tailwind para layout crítico ─── */
-const S = {
-  container: {
-    maxWidth: 1280,
-    margin: "0 auto",
-    padding: "0 40px",
-  } as React.CSSProperties,
-
-  sectionPad: {
-    paddingTop: 96,
-    paddingBottom: 96,
-  } as React.CSSProperties,
-
-  displayTitle: (size: number, color = "#0d1526", center = false): React.CSSProperties => ({
-    fontFamily: "'Bebas Neue', sans-serif",
-    fontSize: size,
-    lineHeight: 1.15,
-    color,
-    textAlign: center ? "center" : "left",
-    letterSpacing: "0.02em",
-    margin: 0,
-  }),
-
-  label: (color = "#9ca3af"): React.CSSProperties => ({
-    fontSize: 10,
-    fontWeight: 700,
-    letterSpacing: "0.2em",
-    textTransform: "uppercase" as const,
-    color,
-    marginBottom: 8,
-  }),
-};
-
 export default function Home() {
-  const [activeTab, setActiveTab] = useState<"basico"|"profundo"|"premium">("profundo");
-  const [openFaq, setOpenFaq] = useState<number>(0);
-  const [isMobile, setIsMobile] = useState(false);
-
-  useEffect(() => {
-    const check = () => setIsMobile(window.innerWidth < 768);
-    check();
-    window.addEventListener("resize", check);
-    return () => window.removeEventListener("resize", check);
-  }, []);
-
-  useEffect(() => {
-    let fired = false;
-    const onScroll = () => {
-      if (!fired) {
-        const pct = (window.scrollY / (document.body.scrollHeight - window.innerHeight)) * 100;
-        if (pct >= 50) { track("ViewContent"); fired = true; }
-      }
-    };
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
-  }, []);
-
-  const faqs = [
-    { q: "¿Cuánto tiempo tarda el servicio?", a: "Nuestro servicio estándar tiene entrega en 48 horas hábiles. Si necesitas tus tenis con urgencia, ofrecemos servicio express de 24 horas con un cargo adicional de $100 MXN." },
-    { q: "¿Limpian todo tipo de materiales?", a: "Sí, somos especialistas en todos los materiales: piel lisa, piel sintética, gamuza, nobuck, mesh, flyknit, primeknit y materiales técnicos. Cada material requiere productos y técnicas específicas que dominamos." },
-    { q: "¿Qué pasa si mis tenis se dañan?", a: "Documentamos el estado de cada par con fotografías al momento de la recepción. No nos hacemos responsables por daños preexistentes, materiales desgastados o calzado de imitación, ya que estos pueden reaccionar de forma impredecible a los productos de limpieza. Te recomendamos informarnos sobre el material y la antigüedad del calzado al momento de entregarlo." },
-    { q: "¿Dónde están ubicados?", a: "Contamos con dos puntos de recepción en Villahermosa: Tintorería Max Plaza Usumacinta (Av. Paseo Usumacinta esq. Av. Los Ríos, Plaza KB) y Mega Plaza Deportiva (Velódromo Ciudad Deportiva, junto a Telcel, entrada Anytime Fitness). Abiertos de lunes a domingo." },
-    { q: "¿Pueden quitar manchas difíciles?", a: "Nuestro servicio de Limpieza Profunda incluye tratamiento especializado anti-manchas. Hemos removido exitosamente manchas de lodo, aceite, pintura y bebidas. Evaluamos cada caso individualmente." },
-    { q: "¿Ofrecen servicio para empresas o tiendas?", a: "Sí, tenemos planes corporativos para tiendas de sneakers, coleccionistas y empresas. Contáctanos para cotización personalizada con descuentos por volumen." },
-  ];
-
   return (
-    <main style={{ background: "#fff", color: "#0d1526", overflowX: "hidden" }}>
-
+    <main className="overflow-x-hidden">
       {/* ① HERO */}
-      <section style={{
-        position: "relative",
-        width: "100%",
-        minHeight: "65vh",
-        paddingTop: 80,
-        display: "flex",
-        flexDirection: "column",
-        justifyContent: "flex-end",
-        overflow: "hidden",
-      }}>
-        <div style={{
-          position: "absolute", inset: 0,
-          backgroundImage: "url('/img/hero-bg.webp')",
-          backgroundSize: "cover",
-          backgroundPosition: "center",
-        }} />
-        <div style={{
-          position: "absolute", inset: 0,
-          background: "linear-gradient(to right, rgba(0,0,0,0.72) 50%, rgba(0,0,0,0.15) 100%)",
-        }} />
-        <div style={{ position: "relative", zIndex: 2, ...S.container, paddingBottom: 56, paddingTop: 48 }}>
-          <div style={{ maxWidth: 580 }}>
-            <p style={{ fontSize: 10, letterSpacing: "0.25em", color: "rgba(255,255,255,0.5)", textTransform: "uppercase", marginBottom: 16 }}>
-              Limpieza profesional de sneakers · Villahermosa, Tabasco
+      <section className="relative bg-[var(--paper)] pb-16 pt-28 md:pb-24 md:pt-36">
+        <div aria-hidden className="pointer-events-none absolute -right-32 -top-32 h-[480px] w-[480px] rounded-full bg-[var(--yellow)] opacity-20 blur-3xl" />
+        <div aria-hidden className="pointer-events-none absolute -left-40 top-1/2 h-[380px] w-[380px] rounded-full bg-white opacity-80 blur-3xl" />
+
+        <div className="relative mx-auto max-w-7xl px-5 md:px-10">
+          <div className="mx-auto max-w-4xl text-center">
+            <p className="fade-in mb-5 inline-flex items-center gap-2 rounded-full border border-black/10 bg-white px-4 py-2 text-xs font-semibold text-black/70" style={{ animationDelay: "0ms" }}>
+              <span className="relative flex h-2 w-2"><span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-[var(--yellow)] opacity-75" /><span className="relative inline-flex h-2 w-2 rounded-full bg-[var(--yellow)]" /></span>
+              Cuidado de sneakers · Villahermosa
             </p>
-            <h1 style={{
-              fontFamily: "'Bebas Neue', sans-serif",
-              fontSize: "clamp(36px, 4.5vw, 58px)",
-              lineHeight: 1.05,
-              color: "#fff",
-              letterSpacing: "0.02em",
-              marginBottom: 16,
-            }}>
-              TUS TENIS FAVORITOS,<br />
-              COMO RECIÉN SALIDOS<br />
-              DE LA CAJA
+            <h1 className="font-display text-[3.4rem] uppercase leading-[0.88] sm:text-7xl md:text-8xl lg:text-[7.5rem]">
+              {HERO_WORDS.map((w, i) => (
+                <span key={i} className="word-up mr-[0.22em] last:mr-0">
+                  <span style={{ animationDelay: `${150 + i * 70}ms` }} className={i >= 3 && i <= 4 ? "text-[var(--yellow)] [-webkit-text-stroke:1.5px_#0B0B0B] md:[-webkit-text-stroke:2px_#0B0B0B]" : ""}>{w}</span>
+                </span>
+              ))}
             </h1>
-            <div style={{ width: 48, height: 3, background: "rgba(255,255,255,0.4)", borderRadius: 2, marginBottom: 16 }} />
-            <p style={{ fontSize: 15, lineHeight: 1.7, color: "rgba(255,255,255,0.85)", marginBottom: 28, maxWidth: 460 }}>
-              Limpieza profesional especializada para todo tipo de sneakers.
-              Trae tus tenis y recógelos impecables en 48 horas.
+            <p className="fade-in mx-auto mt-6 max-w-xl text-base leading-relaxed text-black/60 md:text-lg" style={{ animationDelay: "800ms" }}>
+              Limpieza por material, no por marca. Tenis, botas, mochilas, gorras y bolsas, listos en 48 horas.
             </p>
-            <div style={{ display: "flex", alignItems: "center", gap: 20, flexWrap: "wrap" }}>
-              <a
-                href="#cta"
-                onClick={() => track("ViewContent")}
-                style={{
-                  display: "inline-flex", alignItems: "center", gap: 8,
-                  background: "#3b55f5", color: "#fff",
-                  borderRadius: 10, padding: "14px 28px",
-                  fontSize: 14, fontWeight: 900, textTransform: "uppercase",
-                  letterSpacing: "0.05em", textDecoration: "none",
-                  boxShadow: "0 4px 20px rgba(59,85,245,0.4)",
-                  whiteSpace: "nowrap",
-                }}
+            <div className="fade-in mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row" style={{ animationDelay: "950ms" }}>
+              <WaButton
+                text="Hola, quiero cotizar la limpieza de mis tenis"
+                medium="hero"
+                className="btn-shine inline-flex w-full items-center justify-center gap-2 rounded-full bg-black px-8 py-4 text-base font-bold text-white transition-transform hover:scale-[1.03] sm:w-auto"
               >
-                📅 AGENDAR LIMPIEZA AHORA
+                Cotiza por WhatsApp
+              </WaButton>
+              <a href="#servicios" className="inline-flex w-full items-center justify-center gap-2 rounded-full border border-black/15 bg-white px-8 py-4 text-base font-semibold transition-colors hover:border-black sm:w-auto">
+                Ver precios
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" aria-hidden="true"><path d="M12 5v14M6 13l6 6 6-6" /></svg>
               </a>
-              <span style={{ fontSize: 13, color: "rgba(255,255,255,0.7)" }}>
-                <span style={{ color: "#25D366", fontWeight: 700 }}>✓</span> Primera limpieza con 20% de descuento
-              </span>
             </div>
           </div>
-        </div>
-      </section>
 
-      {/* ② BRANDS */}
-      <section style={{ background: "#fff", borderBottom: "1px solid #f0f0f0" }}>
-        <div style={{ ...S.container, paddingTop: 48, paddingBottom: 48 }}>
-          <p style={{ ...S.label(), textAlign: "center", marginBottom: 28 }}>
-            Limpiamos el calzado que entrena contigo, día tras día
-          </p>
-          <div style={{
-            display: "flex", justifyContent: "space-between",
-            alignItems: "center", flexWrap: "wrap", gap: 16,
-          }}>
-            {["Nike","Adidas","Jordan","On Cloud","New Balance","Hugo Boss"].map(b => (
-              <span key={b} style={{ fontSize: 20, fontWeight: 900, color: "#c0c0c0", whiteSpace: "nowrap" }}>{b}</span>
-            ))}
+          <div className="fade-in relative mx-auto mt-12 max-w-5xl md:mt-16" style={{ animationDelay: "1100ms" }}>
+            <BeforeAfter
+              before="/img/antes-1.png"
+              after="/img/despues-1.jpg"
+              alt="Tenis Boss de piel"
+              intro
+              priority
+              sizes="(max-width: 1024px) 100vw, 1024px"
+              className="aspect-[4/3] rounded-[28px] shadow-[0_40px_80px_-40px_rgba(0,0,0,0.45)] md:aspect-[16/9] md:rounded-[36px]"
+            />
+            <div className="float absolute -left-3 bottom-8 hidden rounded-2xl bg-white px-4 py-3 shadow-xl md:block">
+              <p className="font-display text-3xl leading-none">48 h</p>
+              <p className="text-xs text-black/50">y listos</p>
+            </div>
+            <div className="float absolute -right-3 top-10 hidden rounded-2xl bg-black px-4 py-3 text-white shadow-xl md:block" style={{ animationDelay: "-3s" }}>
+              <p className="text-xs text-white/60">Incluido</p>
+              <p className="text-sm font-bold">Foto de estado</p>
+            </div>
+            <p className="mt-4 text-center text-sm text-black/45">Arrastra para ver el cambio</p>
           </div>
         </div>
       </section>
 
-      {/* ③ TESTIMONIOS */}
-      <section style={{ background: "#f3f4f6", ...S.sectionPad }}>
-        <div style={S.container}>
-          <Reveal>
-            <p style={{ ...S.label("#3b55f5"), textAlign: "center" }}>Resultados reales</p>
-            <h2 style={{ ...S.displayTitle(isMobile ? 32 : 46, "#0d1526", true), marginBottom: 56 }}>
-              TRANSFORMACIONES QUE HABLAN POR SÍ SOLAS
-            </h2>
-          </Reveal>
-          <div style={{
-            display: "grid",
-            gridTemplateColumns: isMobile ? "1fr" : "repeat(3, 1fr)",
-            gap: 32,
-          }}>
-            {[
-              { b:"antes-1.png", a:"despues-1.jpg", text:"Increíble el trabajo con mis Jordan 1. Pensé que ya no tenían salvación después de 2 años de uso intensivo en el gym. Quedaron impecables.", name:"Carlos Méndez", role:"Dueño de 12 pares", ini:"C" },
-              { b:"antes-2.png", a:"despues-2.jpg", text:"Mis On Cloud blancos estaban amarillentos de tanto entrenar. El equipo hizo magia, ahora lucen como si los acabara de comprar.", name:"Ana Rodríguez", role:"Runner · 5K semanal", ini:"A" },
-              { b:"antes-3.png", a:"despues-3.jpg", text:"Tenía miedo de que arruinaran la gamuza de mis New Balance de trail. El resultado superó mis expectativas. Profesionales de verdad.", name:"Miguel Torres", role:"Miembro gym · Sneakerhead", ini:"M" },
-            ].map((t, i) => (
-              <Reveal key={i}>
-                <article style={{
-                  background: "#fff", borderRadius: 16,
-                  overflow: "hidden", border: "1px solid #e5e7eb",
-                  display: "flex", flexDirection: "column",
-                }}>
-                  <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", height: 180 }}>
-                    <div style={{
-                      position: "relative", padding: 8,
-                      backgroundImage: `url('/img/${t.b}')`,
-                      backgroundSize: "cover", backgroundPosition: "center",
-                      backgroundColor: "#e5e7eb",
-                    }}>
-                      <span style={{ background: "#ef4444", color: "#fff", fontSize: 9, fontWeight: 800, borderRadius: 20, padding: "2px 8px" }}>ANTES</span>
-                    </div>
-                    <div style={{
-                      position: "relative", padding: 8,
-                      display: "flex", justifyContent: "flex-end", alignItems: "flex-start",
-                      backgroundImage: `url('/img/${t.a}')`,
-                      backgroundSize: "cover", backgroundPosition: "center",
-                      backgroundColor: "#d1d5db",
-                    }}>
-                      <span style={{ background: "#16a34a", color: "#fff", fontSize: 9, fontWeight: 800, borderRadius: 20, padding: "2px 8px" }}>DESPUÉS</span>
-                    </div>
-                  </div>
-                  <div style={{ padding: 24, display: "flex", flexDirection: "column", flex: 1 }}>
-                    <div style={{ color: "#eab308", fontSize: 14, marginBottom: 10 }}>★★★★★</div>
-                    <p style={{ fontSize: 13, color: "#374151", lineHeight: 1.6, marginBottom: 16, flex: 1 }}>&ldquo;{t.text}&rdquo;</p>
-                    <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-                      <div style={{
-                        width: 32, height: 32, borderRadius: "50%",
-                        background: "#3b55f5", color: "#fff",
-                        display: "flex", alignItems: "center", justifyContent: "center",
-                        fontSize: 12, fontWeight: 700, flexShrink: 0,
-                      }}>{t.ini}</div>
-                      <div>
-                        <p style={{ fontSize: 13, fontWeight: 800, color: "#0d1526", margin: 0 }}>{t.name}</p>
-                        <p style={{ fontSize: 11, color: "#9ca3af", margin: 0 }}>{t.role}</p>
-                      </div>
-                    </div>
-                  </div>
-                </article>
-              </Reveal>
-            ))}
-          </div>
+      {/* ② NÚMEROS */}
+      <section className="border-b border-black/5 bg-white">
+        <div className="mx-auto grid max-w-7xl grid-cols-2 gap-y-8 px-5 py-10 md:grid-cols-4 md:px-10 md:py-14">
+          {[
+            { v: <CountUp to={5} />, l: "puntos de recepción" },
+            { v: <CountUp to={48} suffix=" h" />, l: "tiempo de entrega" },
+            { v: <CountUp to={7} />, l: "días a la semana" },
+            { v: <><CountUp to={5} /> tipos</>, l: "tenis, botas, mochilas, gorras y bolsas" },
+          ].map((s, i) => (
+            <Reveal key={i} delay={i * 90} className="text-center md:border-l md:border-black/10 md:first:border-l-0">
+              <p className="font-display text-5xl leading-none md:text-6xl">{s.v}</p>
+              <p className="mx-auto mt-2 max-w-[11rem] text-sm text-black/50">{s.l}</p>
+            </Reveal>
+          ))}
+        </div>
+      </section>
+
+      {/* ③ MARQUEE */}
+      <section aria-hidden className="overflow-hidden bg-black py-5">
+        <div className="marquee">
+          {[...MARQUEE, ...MARQUEE].map((m, i) => (
+            <span key={i} className="flex items-center font-display text-3xl uppercase text-white md:text-4xl">
+              <span className="px-6">{m}</span>
+              <span className="text-[var(--yellow)]">✦</span>
+            </span>
+          ))}
         </div>
       </section>
 
       {/* ④ SERVICIOS */}
-      <section id="servicios" style={{ background: "#fff", ...S.sectionPad }}>
-        <div style={S.container}>
-          <Reveal>
-            <p style={S.label()}>Nuestros servicios</p>
-            <h2 style={{ ...S.displayTitle(isMobile ? 30 : 46), marginBottom: 64 }}>
-              ELIGE EL NIVEL DE CUIDADO<br />QUE TUS TENIS MERECEN
-            </h2>
+      <section id="servicios" className="bg-white py-20 md:py-28">
+        <div className="mx-auto max-w-7xl px-5 md:px-10">
+          <Reveal className="mb-10 flex flex-col justify-between gap-6 md:mb-14 md:flex-row md:items-end">
+            <div>
+              <Eyebrow>Servicios y precios</Eyebrow>
+              <h2 className="font-display text-5xl uppercase leading-[0.9] md:text-7xl">¿Qué nos<br />vas a traer?</h2>
+            </div>
+            <p className="max-w-sm text-black/55">Elige la categoría y toca la tarjeta: te abrimos WhatsApp con el mensaje listo para cotizar.</p>
           </Reveal>
+          <Reveal delay={100}><Services /></Reveal>
 
-          {/* Mobile tabs */}
-          {isMobile && (
-            <div style={{ display: "flex", borderBottom: "2px solid #e5e7eb", marginBottom: 24 }}>
-              {(["basico","profundo","premium"] as const).map((tab, i) => (
-                <button key={tab} onClick={() => setActiveTab(tab)} style={{
-                  flex: 1, padding: "12px 0", fontSize: 13, fontWeight: 700,
-                  background: "none", border: "none",
-                  borderBottom: activeTab === tab ? "2px solid #3b55f5" : "2px solid transparent",
-                  color: activeTab === tab ? "#3b55f5" : "#9ca3af",
-                  cursor: "pointer", fontFamily: "inherit",
-                  marginBottom: -2,
-                }}>
-                  {["Básico","Profundo","Premium"][i]}
-                </button>
+          <Reveal delay={150} className="mt-10 rounded-3xl bg-[var(--paper)] p-6 md:p-8">
+            <p className="mb-4 text-sm font-bold uppercase tracking-[0.18em] text-black/50">Agrégale</p>
+            <div className="flex flex-wrap gap-2">
+              {[["Impermeabilizar", 90], ["Desodorizar", 60], ["Crema protectora", 70], ["Agujetas nuevas", 50]].map(([n, p]) => (
+                <span key={n} className="rounded-full border border-black/10 bg-white px-4 py-2 text-sm font-medium">
+                  {n} <span className="font-bold">+${p}</span>
+                </span>
               ))}
             </div>
-          )}
-
-          {/* Cards — sin márgenes negativos, sin scale, usando padding extra para destacar el plan azul */}
-          <div style={{
-            display: "grid",
-            gridTemplateColumns: isMobile ? "1fr" : "1fr 1fr 1fr",
-            gap: 24,
-            alignItems: "start",
-          }}>
-
-            {/* BÁSICO */}
-            <div style={{
-              display: isMobile && activeTab !== "basico" ? "none" : "flex",
-              flexDirection: "column", gap: 20,
-              border: "2px solid #e5e7eb", borderRadius: 16, padding: 32,
-            }}>
-              <span style={{ fontSize: 28 }}>🧽</span>
-              <div>
-                <p style={{ fontSize: 11, fontWeight: 900, letterSpacing: "0.1em", textTransform: "uppercase", color: "#0d1526", marginBottom: 4 }}>Lavado Básico</p>
-                <p style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: 48, lineHeight: 1, color: "#3b55f5", margin: 0 }}>
-                  $190 <span style={{ fontSize: 18, fontWeight: 700 }}>MXN</span>
-                </p>
-              </div>
-              <ul style={{ listStyle: "none", padding: 0, margin: 0, display: "flex", flexDirection: "column", gap: 10, flex: 1 }}>
-                {["Cepillado en seco para remover polvo y suciedad superficial","Limpieza profunda del exterior con shampoo especializado","Limpieza de suela con cepillo de cerdas medianas","Blanqueamiento básico de bordes de suela","Limpieza de agujetas incluida"].map(f => (
-                  <li key={f} style={{ display: "flex", alignItems: "flex-start", gap: 8, fontSize: 13, color: "#374151", lineHeight: 1.5 }}>
-                    <span style={{ color: "#3b55f5", flexShrink: 0, marginTop: 2 }}>✓</span>{f}
-                  </li>
-                ))}
-              </ul>
-              <a href={waLink("Hola, me interesa el Lavado Básico $190 MXN","plan-basico")}
-                target="_blank" rel="noopener"
-                onClick={() => track("Lead",{content_name:"Lavado Basico"})}
-                style={{
-                  display: "block", textAlign: "center",
-                  border: "2px solid #3b55f5", color: "#3b55f5",
-                  background: "transparent", borderRadius: 10,
-                  padding: "12px 0", fontSize: 12, fontWeight: 900,
-                  textTransform: "uppercase", letterSpacing: "0.05em",
-                  textDecoration: "none", cursor: "pointer",
-                }}>
-                Seleccionar
-              </a>
-            </div>
-
-            {/* PROFUNDO — destacado con más padding, no con márgenes negativos */}
-            <div style={{
-              display: isMobile && activeTab !== "profundo" ? "none" : "flex",
-              flexDirection: "column", gap: 20,
-              background: "#3b55f5", borderRadius: 16,
-              padding: 36, /* más padding que los otros */
-              position: "relative",
-              boxShadow: "0 20px 60px rgba(59,85,245,0.35)",
-            }}>
-              <span style={{
-                position: "absolute", top: -14, left: "50%", transform: "translateX(-50%)",
-                background: "#f5a623", color: "#fff",
-                fontSize: 10, fontWeight: 900, borderRadius: 20,
-                padding: "4px 14px", whiteSpace: "nowrap",
-              }}>MÁS POPULAR</span>
-              <span style={{ fontSize: 28, marginTop: 8 }}>✨</span>
-              <div>
-                <p style={{ fontSize: 11, fontWeight: 900, letterSpacing: "0.1em", textTransform: "uppercase", color: "rgba(255,255,255,0.7)", marginBottom: 2 }}>Limpieza Profunda</p>
-                <p style={{ fontSize: 11, color: "rgba(255,255,255,0.5)", marginBottom: 4 }}>On Cloud / Trail / Performance</p>
-                <p style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: 52, lineHeight: 1, color: "#fff", margin: 0 }}>
-                  $220 <span style={{ fontSize: 18, fontWeight: 700, opacity: 0.7 }}>MXN</span>
-                </p>
-              </div>
-              <ul style={{ listStyle: "none", padding: 0, margin: 0, display: "flex", flexDirection: "column", gap: 10, flex: 1 }}>
-                {["Cepillado suave con cerdas específicas para mesh técnico y foam","Productos libres de solventes (compatibles con EVA, CloudTec y materiales reactivos)","Limpieza de canales y celdas de foam sin comprometer la estructura","Limpieza de suela de alto agarre (trail y performance)","Limpieza de agujetas incluida"].map(f => (
-                  <li key={f} style={{ display: "flex", alignItems: "flex-start", gap: 8, fontSize: 13, color: "rgba(255,255,255,0.85)", lineHeight: 1.5 }}>
-                    <span style={{ color: "#fff", flexShrink: 0, marginTop: 2 }}>✓</span>{f}
-                  </li>
-                ))}
-              </ul>
-              {/* Botón unificado con los otros dos — caja blanca, texto azul */}
-              <a href={waLink("Hola, me interesa la Limpieza Profunda $220 MXN","plan-profundo")}
-                target="_blank" rel="noopener"
-                onClick={() => track("Lead",{content_name:"Limpieza Profunda"})}
-                style={{
-                  display: "block", textAlign: "center",
-                  background: "#fff", color: "#3b55f5",
-                  border: "2px solid #fff", borderRadius: 10,
-                  padding: "12px 0", fontSize: 12, fontWeight: 900,
-                  textTransform: "uppercase", letterSpacing: "0.05em",
-                  textDecoration: "none", cursor: "pointer",
-                }}>
-                Seleccionar Ahora
-              </a>
-            </div>
-
-            {/* PREMIUM */}
-            <div style={{
-              display: isMobile && activeTab !== "premium" ? "none" : "flex",
-              flexDirection: "column", gap: 20,
-              background: "#0d1526", borderRadius: 16, padding: 32,
-            }}>
-              <span style={{ fontSize: 28 }}>👑</span>
-              <div>
-                <p style={{ fontSize: 11, fontWeight: 900, letterSpacing: "0.1em", textTransform: "uppercase", color: "#fff", marginBottom: 4 }}>Limpieza Premium</p>
-                <p style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: 48, lineHeight: 1, color: "#f5a623", margin: 0 }}>
-                  $399 <span style={{ fontSize: 18, fontWeight: 700, opacity: 0.7 }}>MXN</span>
-                </p>
-              </div>
-              <ul style={{ listStyle: "none", padding: 0, margin: 0, display: "flex", flexDirection: "column", gap: 10, flex: 1 }}>
-                {["Limpiador específico por material: cuero, gamuza o materiales mixtos","Cepillado con herramientas de cerdas suaves para superficies delicadas","Aplicación de acondicionador para cuero y piel","Limpieza de suelas y cantos"].map(f => (
-                  <li key={f} style={{ display: "flex", alignItems: "flex-start", gap: 8, fontSize: 13, color: "rgba(255,255,255,0.75)", lineHeight: 1.5 }}>
-                    <span style={{ color: "#f5a623", flexShrink: 0, marginTop: 2 }}>✓</span>{f}
-                  </li>
-                ))}
-              </ul>
-              <a href={waLink("Hola, me interesa la Limpieza Premium $399 MXN","plan-premium")}
-                target="_blank" rel="noopener"
-                onClick={() => track("Lead",{content_name:"Limpieza Premium"})}
-                style={{
-                  display: "block", textAlign: "center",
-                  border: "2px solid #f5a623", color: "#f5a623",
-                  background: "transparent", borderRadius: 10,
-                  padding: "12px 0", fontSize: 12, fontWeight: 900,
-                  textTransform: "uppercase", letterSpacing: "0.05em",
-                  textDecoration: "none", cursor: "pointer",
-                }}>
-                Seleccionar
-              </a>
-            </div>
-          </div>
+          </Reveal>
         </div>
       </section>
 
-      {/* ⑤ PROCESO */}
-      <section id="proceso" style={{ background: "#f3f4f6", paddingTop: 112, paddingBottom: 96 }}>
-        <div style={S.container}>
-          <Reveal>
-            <h2 style={{ ...S.displayTitle(isMobile ? 30 : 46, "#0d1526", true), marginBottom: 80 }}>
-              TU LIMPIEZA EN 3 PASOS SIMPLES
-            </h2>
+      {/* ⑤ RESULTADOS */}
+      <section id="resultados" className="bg-[var(--paper)] py-20 md:py-28">
+        <div className="mx-auto max-w-7xl px-5 md:px-10">
+          <Reveal className="mb-10 text-center md:mb-14">
+            <Eyebrow>Resultados reales</Eyebrow>
+            <h2 className="font-display text-5xl uppercase leading-[0.9] md:text-7xl">Antes y después</h2>
           </Reveal>
-          <div style={{
-            display: "grid",
-            gridTemplateColumns: isMobile ? "1fr" : "repeat(3, 1fr)",
-            gap: isMobile ? 48 : 0,
-            position: "relative",
-            maxWidth: 800, margin: "0 auto",
-          }}>
-            {!isMobile && (
-              <div style={{
-                position: "absolute", top: 20,
-                left: "calc(16.66% + 20px)", right: "calc(16.66% + 20px)",
-                height: 2, background: "#3b55f5", zIndex: 0,
-              }} />
-            )}
+          <div className="-mx-5 flex snap-x snap-mandatory gap-4 overflow-x-auto px-5 pb-2 no-scrollbar md:mx-0 md:grid md:grid-cols-3 md:gap-6 md:overflow-visible md:px-0">
             {[
-              { n:"1", icon:"📍", title:"TRAE TUS TENIS", desc:<>Déjalos en <strong>Tintorería Max Plaza Usumacinta</strong> o <strong>Mega Plaza Deportiva</strong>. Abierto de lunes a domingo.</> },
-              { n:"2", icon:"🧴", title:"LIMPIAMOS", desc:"Nuestros especialistas trabajan cada par con productos premium y técnicas específicas para cada material." },
-              { n:"3", icon:"🎁", title:"RECOGE", desc:"Recoge tus tenis impecables en 48 horas, empacados como nuevos y listos para lucir." },
-            ].map(s => (
-              <Reveal key={s.n}>
-                <div style={{
-                  display: "flex", flexDirection: "column",
-                  alignItems: "center", textAlign: "center",
-                  gap: 16, padding: "0 24px", position: "relative", zIndex: 1,
-                }}>
-                  <div style={{
-                    width: 40, height: 40, borderRadius: "50%",
-                    background: "#3b55f5", color: "#fff",
-                    display: "flex", alignItems: "center", justifyContent: "center",
-                    fontFamily: "'Bebas Neue', sans-serif", fontSize: 22,
-                    flexShrink: 0,
-                  }}>{s.n}</div>
-                  <span style={{ fontSize: 36 }}>{s.icon}</span>
-                  <p style={{ fontSize: 11, fontWeight: 900, letterSpacing: "0.15em", textTransform: "uppercase", color: "#0d1526", margin: 0 }}>{s.title}</p>
-                  <p style={{ fontSize: 13, color: "#6b7280", lineHeight: 1.6, margin: 0 }}>{s.desc}</p>
-                </div>
-              </Reveal>
-            ))}
-          </div>
-          <div style={{ textAlign: "center", marginTop: 56 }}>
-            <span style={{
-              display: "inline-block",
-              background: "#eff6ff", color: "#3b55f5",
-              borderRadius: 24, padding: "10px 24px",
-              fontSize: 13, fontWeight: 700,
-            }}>
-              ⚡ Servicio express disponible en 24 horas — cargo adicional de $100 MXN
-            </span>
-          </div>
-        </div>
-      </section>
-
-      {/* ⑥ GARANTÍAS */}
-      <section style={{ background: "#fff", ...S.sectionPad }}>
-        <div style={S.container}>
-          <Reveal>
-            <p style={S.label()}>Por qué elegirnos</p>
-            <h2 style={{ ...S.displayTitle(isMobile ? 30 : 46), marginBottom: 56 }}>
-              CALIDAD PROFESIONAL<br />GARANTIZADA
-            </h2>
-          </Reveal>
-          <div style={{
-            display: "grid",
-            gridTemplateColumns: isMobile ? "1fr" : "repeat(3, 1fr)",
-            gap: 24, maxWidth: 960, margin: "0 auto",
-          }}>
-            {[
-              { icon:"🧪", title:"PRODUCTOS PREMIUM", desc:"Utilizamos únicamente productos especializados de grado profesional, seguros para todo tipo de materiales: piel, gamuza, mesh, nobuck y sintéticos." },
-              { icon:"🎓", title:"ESPECIALISTAS CERTIFICADOS", desc:"Cada miembro de nuestro equipo está capacitado en técnicas avanzadas de limpieza y restauración de calzado deportivo de lujo." },
-              { icon:"🛡️", title:"GARANTÍA DE SATISFACCIÓN", desc:"Si no quedas 100% satisfecho con el resultado, repetimos el servicio sin costo adicional. Tu confianza es nuestra prioridad." },
-            ].map(g => (
-              <Reveal key={g.title}>
-                <div style={{
-                  background: "#f3f4f6", borderRadius: 16, padding: 32,
-                  textAlign: "center", display: "flex", flexDirection: "column",
-                  alignItems: "center", gap: 16,
-                }}>
-                  <span style={{ fontSize: 40 }}>{g.icon}</span>
-                  <p style={{ fontSize: 11, fontWeight: 900, letterSpacing: "0.1em", textTransform: "uppercase", color: "#0d1526", margin: 0 }}>{g.title}</p>
-                  <p style={{ fontSize: 13, color: "#6b7280", lineHeight: 1.6, margin: 0 }}>{g.desc}</p>
+              { b: "/img/antes-1.png", a: "/img/despues-1.jpg", name: "Boss · piel", svc: "Premium lujo" },
+              { b: "/img/antes-2.png", a: "/img/despues-2.jpg", name: "On Cloud · mesh", svc: "On Cloud / Trail" },
+              { b: "/img/antes-3.png", a: "/img/despues-3.jpg", name: "New Balance · gamuza", svc: "Premium lujo" },
+            ].map((r, i) => (
+              <Reveal key={r.b} delay={i * 120} className="w-[85%] shrink-0 snap-center md:w-auto">
+                <BeforeAfter before={r.b} after={r.a} alt={r.name} className="aspect-[5/4] rounded-3xl" />
+                <div className="mt-4 flex items-center justify-between px-1">
+                  <p className="font-semibold">{r.name}</p>
+                  <span className="rounded-full bg-white px-3 py-1 text-xs font-semibold text-black/60">{r.svc}</span>
                 </div>
               </Reveal>
             ))}
@@ -522,275 +200,163 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ⑦ MEMBRESÍA */}
-      <section id="membresia" style={{ background: "#f3f4f6", paddingTop: 96, paddingBottom: 96 }}>
-        <div style={S.container}>
-          <Reveal>
-            <div style={{
-              background: "#0d1526", borderRadius: 20,
-              padding: isMobile ? 32 : 48,
-            }}>
-              <div style={{
-                display: "flex",
-                flexDirection: isMobile ? "column" : "row",
-                justifyContent: "space-between",
-                alignItems: isMobile ? "flex-start" : "flex-start",
-                gap: 24, marginBottom: 40,
-              }}>
-                <div style={{ maxWidth: 480 }}>
-                  <p style={{ ...S.label("rgba(255,255,255,0.3)") }}>Membresías</p>
-                  {/* fix line-height en título membresía */}
-                  <h2 style={{
-                    fontFamily: "'Bebas Neue', sans-serif",
-                    fontSize: isMobile ? 28 : 38,
-                    lineHeight: 1.25,
-                    color: "#fff",
-                    letterSpacing: "0.02em",
-                    marginBottom: 12,
-                  }}>
-                    TUS TENIS SIEMPRE LIMPIOS,<br />SIN PENSARLO
-                  </h2>
-                  <p style={{ fontSize: 13, color: "rgba(255,255,255,0.4)", lineHeight: 1.6, margin: 0 }}>
-                    Déjalos en nuestros puntos de recolección y recógelos limpios al día siguiente. Sin filas, sin agendar, sin complicaciones.
-                  </p>
-                </div>
-                <Link href="/membresia" style={{
-                  display: "inline-flex", alignItems: "center", gap: 6,
-                  background: "#3b55f5", color: "#fff",
-                  borderRadius: 10, padding: "12px 20px",
-                  fontSize: 13, fontWeight: 700, textDecoration: "none",
-                  whiteSpace: "nowrap", flexShrink: 0,
-                }}>
-                  Ver todos los planes →
-                </Link>
-              </div>
-
-              <div style={{
-                display: "grid",
-                gridTemplateColumns: isMobile ? "1fr 1fr" : "repeat(4, 1fr)",
-                gap: 16, marginBottom: 24,
-              }}>
-                {[
-                  { name:"Básico", price:"$229", period:"/mes", saving:"Ahorras $21", desc:"1 lavado básico mensual + desodorización.", bg:"rgba(255,255,255,0.05)", border:"1px solid rgba(255,255,255,0.1)", nameCl:"rgba(255,255,255,0.4)", priceCl:"#fff", sCl:"#4ade80" },
-                  { name:"Active", price:"$369", period:"/mes", saving:"Ahorras $101", desc:"2 lavados + impermeabilización incluida.", bg:"#3b55f5", border:"none", nameCl:"rgba(255,255,255,0.7)", priceCl:"#fff", sCl:"#86efac", popular:true },
-                  { name:"White", price:"$449", period:"/mes", saving:"Ahorras $61", desc:"Ultra white + 1 lavado básico adicional.", bg:"rgba(255,255,255,0.05)", border:"1px solid rgba(255,255,255,0.1)", nameCl:"rgba(255,255,255,0.4)", priceCl:"#fff", sCl:"#4ade80" },
-                  { name:"VIP", price:"$680", period:"/mes", saving:"Ahorras $129", desc:"Premium lujo + gorra + entrega prioritaria.", bg:"rgba(255,255,255,0.05)", border:"1px solid rgba(245,166,35,0.3)", nameCl:"#f5a623", priceCl:"#f5a623", sCl:"#4ade80" },
-                ].map(p => (
-                  <div key={p.name} style={{
-                    background: p.bg, border: p.border,
-                    borderRadius: 14, padding: 20,
-                    position: "relative",
-                  }}>
-                    {p.popular && (
-                      <span style={{
-                        position: "absolute", top: -10, left: "50%", transform: "translateX(-50%)",
-                        background: "#f5a623", color: "#fff",
-                        fontSize: 9, fontWeight: 900, borderRadius: 20,
-                        padding: "3px 10px", whiteSpace: "nowrap",
-                      }}>MÁS VENDIDO</span>
-                    )}
-                    <p style={{ fontSize: 9, fontWeight: 700, letterSpacing: "0.15em", textTransform: "uppercase", color: p.nameCl, marginBottom: 6 }}>{p.name}</p>
-                    <p style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: 26, lineHeight: 1, color: p.priceCl, marginBottom: 4 }}>
-                      {p.price}<span style={{ fontSize: 12, opacity: 0.5 }}>{p.period}</span>
-                    </p>
-                    <p style={{ fontSize: 10, fontWeight: 700, color: p.sCl, marginBottom: 8 }}>{p.saving}</p>
-                    <p style={{ fontSize: 11, color: "rgba(255,255,255,0.4)", lineHeight: 1.5 }}>{p.desc}</p>
+      {/* ⑥ PROCESO */}
+      <section id="proceso" className="bg-white py-20 md:py-28">
+        <div className="mx-auto max-w-7xl px-5 md:px-10">
+          <Reveal className="mb-12 md:mb-16">
+            <Eyebrow>Cómo funciona</Eyebrow>
+            <h2 className="font-display text-5xl uppercase leading-[0.9] md:text-7xl">Tres pasos.<br />Cero filas.</h2>
+          </Reveal>
+          <Reveal className="relative">
+            <div aria-hidden className="draw-line absolute left-0 right-0 top-7 hidden h-[3px] bg-[var(--yellow)] md:block" />
+            <ol className="relative grid gap-10 md:grid-cols-3 md:gap-8">
+              {STEPS.map((s) => (
+                <li key={s.n} className="flex gap-5 md:block">
+                  <span className="flex h-14 w-14 shrink-0 items-center justify-center rounded-full bg-black font-display text-2xl text-[var(--yellow)] ring-8 ring-white">{s.n}</span>
+                  <div className="md:mt-6">
+                    <h3 className="font-display text-3xl uppercase">{s.title}</h3>
+                    <p className="mt-2 max-w-xs text-black/55">{s.desc}</p>
                   </div>
-                ))}
-              </div>
-
-              <div style={{
-                display: "flex", alignItems: "center", gap: 10,
-                background: "rgba(255,255,255,0.05)", borderRadius: 10, padding: "12px 16px",
-              }}>
-                <span style={{ color: "#25D366", flexShrink: 0 }}><WaIcon size={16} /></span>
-                <p style={{ fontSize: 12, color: "rgba(255,255,255,0.35)", margin: 0 }}>
-                  Escríbenos por WhatsApp, elige tu plan y paga con tarjeta. A partir de ahí todo es automático.
-                </p>
-              </div>
-            </div>
+                </li>
+              ))}
+            </ol>
           </Reveal>
         </div>
       </section>
 
-      {/* ⑧ CTA BANNER */}
-      <section id="cta" style={{
-        position: "relative",
-        minHeight: 480,
-        display: "flex", alignItems: "center", justifyContent: "center",
-        textAlign: "center", overflow: "hidden",
-      }}>
-        <div style={{
-          position: "absolute", inset: 0,
-          backgroundImage: "url('/img/cta-banner.webp')",
-          backgroundSize: "cover", backgroundPosition: "center",
-        }} />
-        <div style={{ position: "absolute", inset: 0, background: "rgba(10,15,30,0.72)" }} />
-        <Reveal className="relative z-10" style={{ position: "relative", zIndex: 1, padding: "96px 40px", maxWidth: 640, margin: "0 auto", width: "100%" }}>
-          <h2 style={{
-            fontFamily: "'Bebas Neue', sans-serif",
-            fontSize: isMobile ? 40 : 64,
-            lineHeight: 1.05, color: "#fff",
-            letterSpacing: "0.02em", marginBottom: 16,
-          }}>
-            ¿LISTO PARA LA<br />TRANSFORMACIÓN?
-          </h2>
-          <p style={{ fontSize: 15, color: "rgba(255,255,255,0.7)", lineHeight: 1.7, marginBottom: 36, maxWidth: 480, margin: "0 auto 36px" }}>
-            Únete a más de 500 clientes satisfechos que confían en Mis Papos para mantener sus sneakers impecables en Villahermosa.
-          </p>
-          <a href={waLink("Hola, quiero agendar mi limpieza de tenis","cta-banner")}
-            target="_blank" rel="noopener"
-            onClick={() => track("Lead",{content_name:"CTA Banner"})}
-            style={{
-              display: "inline-flex", alignItems: "center", gap: 10,
-              background: "#25D366", color: "#fff",
-              borderRadius: 14, padding: "18px 40px",
-              fontSize: 15, fontWeight: 900, letterSpacing: "0.05em",
-              textDecoration: "none", marginBottom: 28,
-            }}>
-            <WaIcon size={20} /> AGENDAR MI LIMPIEZA
-          </a>
-          <div style={{ display: "flex", justifyContent: "center", gap: 32, flexWrap: "wrap" }}>
-            {["Servicio en local","Listo en 48 horas","Garantía total"].map(c => (
-              <span key={c} style={{ fontSize: 13, color: "rgba(255,255,255,0.6)", display: "flex", alignItems: "center", gap: 6 }}>
-                <span style={{ color: "#25D366" }}>✓</span>{c}
-              </span>
-            ))}
+      {/* ⑦ GYM (bloque oscuro) */}
+      <section className="px-3 md:px-6">
+        <Reveal className="relative mx-auto max-w-7xl overflow-hidden rounded-[32px] bg-black px-6 py-16 text-white md:rounded-[44px] md:px-16 md:py-24">
+          <div aria-hidden className="pointer-events-none absolute -bottom-40 -right-40 h-[420px] w-[420px] rounded-full bg-[var(--yellow)] opacity-25 blur-3xl" />
+          <div className="relative grid items-center gap-10 md:grid-cols-[1.3fr_1fr]">
+            <div>
+              <Eyebrow light>Exclusivo socios Anytime Fitness</Eyebrow>
+              <h2 className="font-display text-5xl uppercase leading-[0.9] md:text-7xl">
+                Entrenas tú.<br /><span className="text-[var(--yellow)]">Los limpiamos nosotros.</span>
+              </h2>
+              <p className="mt-6 max-w-md text-white/60">
+                Al llegar a tu Anytime de Deportiva, Loma Linda o Mallorca, deja tus tenis en el cubículo con candado QR. Mándanos WhatsApp y nos encargamos del resto.
+              </p>
+              <WaButton
+                text="Hola, soy socio de Anytime Fitness y quiero dejar mis tenis en el cubículo QR"
+                medium="bloque-gym"
+                className="btn-shine mt-8 inline-flex items-center gap-2 rounded-full bg-[var(--yellow)] px-8 py-4 font-bold text-black transition-transform hover:scale-[1.03]"
+              >
+                Quiero usarlo
+              </WaButton>
+            </div>
+            <div className="grid grid-cols-2 gap-3">
+              {[["1", "Llegas al gym"], ["2", "Cubículo QR"], ["3", "WhatsApp"], ["4", "Listos en 48 h"]].map(([n, t], i) => (
+                <div key={n} className="float rounded-2xl border border-white/10 bg-white/5 p-5 backdrop-blur" style={{ animationDelay: `${-i * 1.4}s` }}>
+                  <p className="font-display text-4xl text-[var(--yellow)]">{n}</p>
+                  <p className="mt-1 text-sm font-semibold">{t}</p>
+                </div>
+              ))}
+            </div>
           </div>
         </Reveal>
       </section>
 
-      {/* ⑨ FAQ */}
-      <section style={{ background: "#fff", ...S.sectionPad }}>
-        <div style={S.container}>
-          <Reveal>
-            <p style={{ ...S.label("#3b55f5"), textAlign: "center" }}>Preguntas frecuentes</p>
-            <h2 style={{ ...S.displayTitle(isMobile ? 30 : 46, "#0d1526", true), marginBottom: 56 }}>
-              TODO LO QUE NECESITAS SABER
-            </h2>
+      {/* ⑧ POR QUÉ */}
+      <section className="bg-white py-20 md:py-28">
+        <div className="mx-auto max-w-7xl px-5 md:px-10">
+          <Reveal className="mb-12 text-center">
+            <Eyebrow>Por qué Mis Papos</Eyebrow>
+            <h2 className="font-display text-5xl uppercase leading-[0.9] md:text-7xl">Cuidado de verdad</h2>
           </Reveal>
-          <div style={{ maxWidth: 720, margin: "0 auto" }}>
-            {faqs.map((faq, i) => (
-              <div key={i} style={{ borderBottom: "1px solid #e5e7eb" }}>
-                <button
-                  onClick={() => setOpenFaq(openFaq === i ? -1 : i)}
-                  style={{
-                    width: "100%", display: "flex", justifyContent: "space-between",
-                    alignItems: "center", padding: "20px 0",
-                    textAlign: "left", fontSize: 15, fontWeight: 600,
-                    color: "#0d1526", background: "none", border: "none",
-                    cursor: "pointer", fontFamily: "inherit", gap: 16,
-                  }}
-                >
-                  {faq.q}
-                  <span style={{
-                    color: "#3b55f5", fontSize: 24, flexShrink: 0,
-                    transition: "transform 0.3s",
-                    transform: openFaq === i ? "rotate(45deg)" : "rotate(0deg)",
-                    display: "inline-block",
-                  }}>+</span>
-                </button>
-                <div style={{
-                  overflow: "hidden",
-                  maxHeight: openFaq === i ? 300 : 0,
-                  transition: "max-height 0.3s ease",
-                }}>
-                  <p style={{ fontSize: 14, color: "#6b7280", lineHeight: 1.7, paddingBottom: 20, margin: 0 }}>{faq.a}</p>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ⑩ SUCURSALES */}
-      <section id="sucursales" style={{ background: "#f3f4f6", ...S.sectionPad }}>
-        <div style={S.container}>
-          <Reveal>
-            <p style={S.label()}>Puntos de recepción</p>
-            <h2 style={{ ...S.displayTitle(isMobile ? 30 : 46), marginBottom: 8 }}>
-              ENCUÉNTRANOS EN VILLAHERMOSA
-            </h2>
-            <p style={{ fontSize: 14, color: "#6b7280", marginBottom: 48 }}>
-              Deja tus tenis en cualquiera de nuestros puntos y recógelos limpios al día siguiente.
-            </p>
-          </Reveal>
-          <div style={{
-            display: "grid",
-            gridTemplateColumns: isMobile ? "1fr" : "1fr 1fr",
-            gap: 32, maxWidth: 960, margin: "0 auto",
-          }}>
-            {[
-              {
-                badge:"Sucursal 1", name:"Tintorería Max", sub:"Plaza Usumacinta · Villahermosa",
-                mapImg:"mapa-usumacinta.webp", placeholder:"Plaza KB · Av. Usumacinta",
-                address:"Av. Paseo Usumacinta esq. Av. Los Ríos, Plaza KB, Villahermosa, Tabasco",
-                hours:["Lun–Vie: 7:00 AM – 8:00 PM","Sáb: 8:00 AM – 6:00 PM","Dom: 9:00 AM – 2:00 PM"],
-                url:"https://maps.google.com/?q=Av.+Paseo+Usumacinta+esquina+Av.+Los+Rios+Plaza+KB+Villahermosa+Tabasco",
-              },
-              {
-                badge:"Sucursal 2", name:"Mega Plaza Deportiva", sub:"Ciudad Deportiva · Villahermosa",
-                mapImg:"mapa-deportiva.webp", placeholder:"Velódromo · Ciudad Deportiva",
-                address:"Velódromo Ciudad Deportiva, Plaza Mega Soriana. A un costado de Telcel, entrada al Gym Anytime Fitness",
-                hours:["Lun–Vie: 8:00 AM – 8:00 PM","Sáb: 8:00 AM – 4:00 PM","Dom: Cerrado"],
-                url:"https://maps.google.com/?q=Velódromo+Ciudad+Deportiva+Plaza+Mega+Soriana+Villahermosa+Tabasco",
-              },
-            ].map(s => (
-              <Reveal key={s.badge}>
-                <article style={{
-                  background: "#fff", borderRadius: 16,
-                  overflow: "hidden", border: "1px solid #e5e7eb",
-                }}>
-                  <a href={s.url} target="_blank" rel="noopener">
-                    <div style={{
-                      height: 200,
-                      backgroundImage: `url('/img/${s.mapImg}')`,
-                      backgroundSize: "cover", backgroundPosition: "center",
-                      backgroundColor: "#d1d5db",
-                      display: "flex", alignItems: "center", justifyContent: "center",
-                      cursor: "pointer",
-                    }}>
-                      <span style={{
-                        background: "rgba(255,255,255,0.85)", borderRadius: 8,
-                        padding: "4px 10px", fontSize: 11, fontWeight: 600, color: "#374151",
-                      }}>{s.placeholder}</span>
-                    </div>
-                  </a>
-                  <div style={{ padding: 28 }}>
-                    <span style={{
-                      display: "inline-block", background: "#3b55f5", color: "#fff",
-                      fontSize: 10, fontWeight: 700, borderRadius: 4,
-                      padding: "2px 8px", marginBottom: 10,
-                    }}>{s.badge}</span>
-                    <h3 style={{ fontSize: 17, fontWeight: 900, color: "#0d1526", marginBottom: 4 }}>{s.name}</h3>
-                    <p style={{ fontSize: 13, color: "#3b55f5", fontWeight: 600, marginBottom: 16 }}>{s.sub}</p>
-                    <div style={{ display: "flex", alignItems: "flex-start", gap: 8, marginBottom: 12 }}>
-                      <span style={{ color: "#3b55f5", flexShrink: 0, marginTop: 2 }}>📍</span>
-                      <span style={{ fontSize: 13, color: "#6b7280", lineHeight: 1.5 }}>{s.address}</span>
-                    </div>
-                    <div style={{ display: "flex", alignItems: "flex-start", gap: 8, marginBottom: 20 }}>
-                      <span style={{ color: "#3b55f5", flexShrink: 0, marginTop: 2 }}>🕐</span>
-                      <div style={{ fontSize: 13, color: "#6b7280", lineHeight: 1.7 }}>
-                        {s.hours.map(h => <p key={h} style={{ margin: 0 }}>{h}</p>)}
-                      </div>
-                    </div>
-                    <a href={s.url} target="_blank" rel="noopener" style={{
-                      display: "flex", alignItems: "center", justifyContent: "center",
-                      gap: 8, width: "100%", background: "#3b55f5", color: "#fff",
-                      borderRadius: 10, padding: "12px 0", fontSize: 12,
-                      fontWeight: 900, textTransform: "uppercase", letterSpacing: "0.05em",
-                      textDecoration: "none",
-                    }}>
-                      📍 Ver en Google Maps
-                    </a>
-                  </div>
-                </article>
+          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+            {WHY.map((w, i) => (
+              <Reveal key={w.title} delay={i * 100} className="group rounded-3xl border border-black/5 bg-[var(--paper)] p-7 transition-colors duration-300 hover:bg-[var(--yellow-soft)]">
+                <span className="mb-6 flex h-12 w-12 items-center justify-center rounded-2xl bg-black text-[var(--yellow)] transition-transform duration-300 group-hover:-rotate-6 group-hover:scale-110">
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d={w.icon} /></svg>
+                </span>
+                <h3 className="text-lg font-bold">{w.title}</h3>
+                <p className="mt-2 text-sm leading-relaxed text-black/55">{w.desc}</p>
               </Reveal>
             ))}
           </div>
         </div>
       </section>
 
+      {/* ⑨ FAQ */}
+      <section id="faq" className="bg-[var(--paper)] py-20 md:py-28">
+        <div className="mx-auto grid max-w-7xl gap-10 px-5 md:grid-cols-[1fr_1.6fr] md:px-10">
+          <Reveal>
+            <Eyebrow>Preguntas frecuentes</Eyebrow>
+            <h2 className="font-display text-5xl uppercase leading-[0.9] md:text-6xl">Lo que nos<br />preguntan</h2>
+            <p className="mt-5 max-w-xs text-black/55">¿Tienes otra duda? Escríbenos y te contestamos en minutos.</p>
+          </Reveal>
+          <Reveal delay={100}><Faq /></Reveal>
+        </div>
+      </section>
+
+      {/* ⑩ SUCURSALES */}
+      <section id="sucursales" className="bg-white py-20 md:py-28">
+        <div className="mx-auto max-w-7xl px-5 md:px-10">
+          <Reveal className="mb-12">
+            <Eyebrow>Puntos de recepción</Eyebrow>
+            <h2 className="font-display text-5xl uppercase leading-[0.9] md:text-7xl">5 puntos en<br />Villahermosa</h2>
+          </Reveal>
+          <div className="grid gap-5 md:grid-cols-2">
+            {MAIN_BRANCHES.map((b, i) => (
+              <Reveal key={b.name} delay={i * 120} as="article" className="group overflow-hidden rounded-3xl border border-black/10">
+                <a href={b.url} target="_blank" rel="noopener noreferrer" className="relative block h-44 overflow-hidden bg-[var(--paper)]">
+                  <Image src={b.img} alt={`Mapa ${b.name}`} fill sizes="(max-width: 768px) 100vw, 50vw" className="object-cover transition-transform duration-700 group-hover:scale-105" />
+                </a>
+                <div className="p-6 md:p-7">
+                  <span className="rounded-full bg-[var(--yellow)] px-3 py-1 text-[11px] font-bold uppercase tracking-wider">{b.tag}</span>
+                  <h3 className="mt-3 font-display text-4xl uppercase">{b.name}</h3>
+                  <p className="mt-2 text-sm text-black/60">{b.address}</p>
+                  <p className="mt-1 text-sm text-black/45">{b.hours}</p>
+                  <a href={b.url} target="_blank" rel="noopener noreferrer" className="mt-5 inline-flex items-center gap-2 rounded-full bg-black px-5 py-3 text-sm font-bold text-white transition-transform hover:scale-[1.03]">
+                    Cómo llegar
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" aria-hidden="true"><path d="M7 17L17 7M8 7h9v9" /></svg>
+                  </a>
+                </div>
+              </Reveal>
+            ))}
+          </div>
+          <div className="mt-5 grid gap-3 md:grid-cols-3">
+            {GYMS.map((g, i) => (
+              <Reveal key={g.name} delay={i * 90}>
+                <a href={g.url} target="_blank" rel="noopener noreferrer" className="flex items-center justify-between rounded-2xl bg-[var(--paper)] px-5 py-4 transition-colors hover:bg-[var(--yellow-soft)]">
+                  <div>
+                    <p className="font-semibold">{g.name}</p>
+                    <p className="text-xs text-black/50">Cubículo con candado QR · socios</p>
+                  </div>
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" aria-hidden="true"><path d="M7 17L17 7M8 7h9v9" /></svg>
+                </a>
+              </Reveal>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ⑪ CTA FINAL */}
+      <section className="relative overflow-hidden bg-[var(--yellow)] py-24 md:py-32">
+        <div aria-hidden className="pointer-events-none absolute inset-0">
+          {[
+            [8, 40, 0, 9], [18, 22, 3, 11], [30, 60, 1.5, 13], [45, 18, 5, 10], [58, 34, 2.5, 12],
+            [70, 52, 0.8, 14], [82, 26, 4, 9], [92, 44, 6, 12],
+          ].map(([l, s, d, t], i) => (
+            <span key={i} className="bubble" style={{ left: `${l}%`, width: s, height: s, animationDelay: `${d}s`, animationDuration: `${t}s` }} />
+          ))}
+        </div>
+        <Reveal className="relative mx-auto max-w-4xl px-5 text-center">
+          <h2 className="font-display text-6xl uppercase leading-[0.88] md:text-8xl">Tus tenis merecen<br />otra vida</h2>
+          <p className="mx-auto mt-6 max-w-md text-black/70">Mándanos una foto por WhatsApp y te decimos el precio exacto.</p>
+          <WaButton
+            text="Hola, te mando foto de mis tenis para cotizar"
+            medium="cta-final"
+            className="btn-shine mt-9 inline-flex items-center gap-2 rounded-full bg-black px-10 py-5 text-lg font-bold text-white transition-transform hover:scale-[1.04]"
+          >
+            Cotizar ahora
+          </WaButton>
+        </Reveal>
+      </section>
+
+      <Footer />
+      <MobileBar />
     </main>
   );
 }

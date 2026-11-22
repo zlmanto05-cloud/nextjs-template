@@ -1,73 +1,122 @@
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap');
 @import "tailwindcss";
 
-@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600;700;800;900&display=swap');
-
 :root {
-  --blue: #3b55f5;
-  --gold: #f5a623;
+  --yellow: #D4B800;
+  --yellow-soft: #F6EDB0;
+  --ink: #0B0B0B;
+  --paper: #F5F5F2;
   --green-wa: #25D366;
-  --dark: #0d1526;
 }
 
-*, *::before, *::after {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
+@theme inline {
+  --font-sans: var(--font-inter), system-ui, sans-serif;
+  --font-display: var(--font-barlow), "Arial Narrow", sans-serif;
 }
 
-html {
-  scroll-behavior: smooth;
-}
+html { scroll-behavior: smooth; scroll-padding-top: 80px; }
 
 body {
-  font-family: 'Inter', sans-serif;
+  font-family: var(--font-inter), system-ui, sans-serif;
   background: #fff;
-  color: #0d1526;
+  color: var(--ink);
   -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
   overflow-x: hidden;
 }
 
-/* Bebas Neue como clase utilitaria */
 .font-display {
-  font-family: 'Bebas Neue', sans-serif;
+  font-family: var(--font-barlow), "Arial Narrow", sans-serif;
+  font-weight: 800;
+  letter-spacing: -0.01em;
 }
 
-/* Scroll reveal */
+.no-scrollbar { scrollbar-width: none; }
+.no-scrollbar::-webkit-scrollbar { display: none; }
+
+/* ── Aparecer al hacer scroll ── */
 .reveal {
   opacity: 0;
-  transform: translateY(28px);
-  transition: opacity 0.6s ease, transform 0.6s ease;
+  transform: translateY(32px);
+  transition: opacity .8s cubic-bezier(.2,.7,.2,1), transform .8s cubic-bezier(.2,.7,.2,1);
 }
-.reveal.visible {
-  opacity: 1;
-  transform: translateY(0);
+.reveal.is-visible { opacity: 1; transform: none; }
+
+/* ── Título del hero: palabras que suben ── */
+.word-up { display: inline-block; overflow: hidden; vertical-align: bottom; padding-bottom: .06em; }
+.word-up > span {
+  display: inline-block;
+  transform: translateY(110%);
+  animation: wordUp .9s cubic-bezier(.2,.8,.2,1) forwards;
+}
+@keyframes wordUp { to { transform: none; } }
+
+.fade-in { opacity: 0; animation: fadeIn .9s ease forwards; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
+
+/* ── Marquee ── */
+.marquee { display: flex; width: max-content; animation: marquee 32s linear infinite; }
+.marquee:hover { animation-play-state: paused; }
+@keyframes marquee { to { transform: translateX(-50%); } }
+
+/* ── Tarjetas de servicio ── */
+.card-pop {
+  opacity: 0;
+  animation: cardPop .55s cubic-bezier(.2,.8,.2,1) forwards;
+  transition: transform .35s cubic-bezier(.2,.8,.2,1), box-shadow .35s;
+  min-height: 200px;
+}
+@media (min-width: 640px) { .card-pop { min-height: 250px; } }
+.card-pop:hover { transform: translateY(-6px); box-shadow: 0 24px 40px -24px rgba(0,0,0,.35); }
+@keyframes cardPop { from { opacity: 0; transform: translateY(18px) scale(.97); } to { opacity: 1; transform: none; } }
+
+.tint-yellow { background: #F6EDB0; }
+.tint-mint   { background: #DDF1E6; }
+.tint-lilac  { background: #E7E4FA; }
+.tint-sky    { background: #DCEBF7; }
+.tint-peach  { background: #F9E3D6; }
+.tint-stone  { background: #ECEAE4; }
+
+/* ── Brillo en botón principal ── */
+.btn-shine { position: relative; overflow: hidden; isolation: isolate; }
+.btn-shine::after {
+  content: ""; position: absolute; inset: 0; z-index: -1;
+  background: linear-gradient(110deg, transparent 30%, rgba(255,255,255,.55) 50%, transparent 70%);
+  transform: translateX(-120%);
+  animation: shine 3.6s ease-in-out infinite;
+}
+@keyframes shine { 0%, 55% { transform: translateX(-120%); } 85%, 100% { transform: translateX(120%); } }
+
+/* ── Slider antes/después ── */
+.ba-handle { animation: nudge 2.4s ease-in-out infinite; }
+@keyframes nudge { 0%,100% { box-shadow: 0 0 0 0 rgba(212,184,0,.6); } 50% { box-shadow: 0 0 0 12px rgba(212,184,0,0); } }
+.ba-range { -webkit-appearance: none; appearance: none; background: transparent; }
+.ba-range::-webkit-slider-thumb { -webkit-appearance: none; width: 48px; height: 100%; }
+.ba-range::-moz-range-thumb { width: 48px; height: 100%; border: 0; background: transparent; }
+.ba-range:focus-visible + * , .ba:has(.ba-range:focus-visible) { outline: 3px solid var(--yellow); outline-offset: 3px; }
+
+/* ── Línea de pasos que se dibuja ── */
+.draw-line { transform: scaleX(0); transform-origin: left; transition: transform 1.4s cubic-bezier(.65,0,.35,1) .3s; }
+.is-visible .draw-line { transform: scaleX(1); }
+
+/* ── Flotar suave ── */
+.float { animation: float 6s ease-in-out infinite; }
+@keyframes float { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+
+/* ── Burbujas de espuma (CTA final) ── */
+.bubble {
+  position: absolute; bottom: -80px; border-radius: 9999px;
+  background: rgba(255,255,255,.35); border: 1px solid rgba(255,255,255,.6);
+  animation: rise linear infinite;
+}
+@keyframes rise {
+  0% { transform: translateY(0) scale(.8); opacity: 0; }
+  10% { opacity: 1; }
+  100% { transform: translateY(-620px) scale(1.15); opacity: 0; }
 }
 
-/* Fade up animation */
-@keyframes fadeUp {
-  from { opacity: 0; transform: translateY(24px); }
-  to   { opacity: 1; transform: translateY(0); }
-}
-.animate-fade-up {
-  animation: fadeUp 0.6s ease forwards;
-}
-
-/* Hero — asegura que cubra pantalla completa */
-.hero-section {
-  position: relative;
-  width: 100%;
-  height: 100vh;
-  min-height: 640px;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  overflow: hidden;
-}
-
-/* Bebas Neue forzado en títulos display */
-h1.display, h2.display, .display-title {
-  font-family: 'Bebas Neue', sans-serif;
-  letter-spacing: 0.02em;
-  line-height: 0.95;
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: .001ms !important; animation-iteration-count: 1 !important; transition-duration: .001ms !important; }
+  .reveal, .card-pop, .fade-in { opacity: 1; transform: none; }
+  .word-up > span { transform: none; }
+  .marquee { animation: none; }
 }
