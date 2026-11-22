@@ -1,6 +1,5 @@
 import Image from "next/image";
 import Reveal from "@/components/landing/Reveal";
-import BeforeAfter from "@/components/landing/BeforeAfter";
 import Services from "@/components/landing/Services";
 import Faq from "@/components/landing/Faq";
 import CountUp from "@/components/landing/CountUp";
@@ -13,7 +12,7 @@ const HERO_WORDS = ["Tus", "tenis,", "como", "recién", "salidos", "de", "la", "
 const MARQUEE = ["Nike", "Jordan", "On Cloud", "New Balance", "Adidas", "Botas de piel", "Mochilas", "Gorras", "Bolsas de lujo", "Gamuza", "Nubuck", "Mesh"];
 
 const STEPS = [
-  { n: "01", title: "Déjalos", desc: "En sucursal o en el cubículo QR de tu Anytime Fitness." },
+  { n: "01", title: "Déjalos", desc: "En Paseo Usumacinta o en Deportiva, debajo de Anytime Fitness." },
   { n: "02", title: "Los limpiamos", desc: "Según su material. En piezas premium te mandamos foto de cómo llegaron." },
   { n: "03", title: "Recógelos", desc: "En 48 horas, impecables. Te avisamos por WhatsApp." },
 ];
@@ -22,13 +21,13 @@ const WHY = [
   { title: "Por material, no por marca", desc: "Piel, gamuza, mesh o nubuck: cada uno con su producto y su técnica.", icon: "M12 3l8 4.5v9L12 21l-8-4.5v-9L12 3zM12 12l8-4.5M12 12v9M12 12L4 7.5" },
   { title: "Foto de estado", desc: "Registramos cómo llega tu pieza. Obligatoria en premium, mochilas de lujo y bolsas de piel.", icon: "M4 8h3l2-3h6l2 3h3v11H4zM12 17a4 4 0 100-8 4 4 0 000 8z" },
   { title: "Listos en 48 h", desc: "Sin agendar, sin filas. Te avisamos cuando estén.", icon: "M12 7v5l3 2M12 21a9 9 0 110-18 9 9 0 010 18z" },
-  { title: "5 puntos en Villahermosa", desc: "Matriz Usumacinta, Deportiva y tres Anytime Fitness.", icon: "M12 21s-7-6.2-7-11.5A7 7 0 0119 9.5C19 14.8 12 21 12 21zM12 12a2.5 2.5 0 100-5 2.5 2.5 0 000 5z" },
+  { title: "2 sucursales en Villahermosa", desc: "Paseo Usumacinta y Ciudad Deportiva, debajo de Anytime Fitness.", icon: "M12 21s-7-6.2-7-11.5A7 7 0 0119 9.5C19 14.8 12 21 12 21zM12 12a2.5 2.5 0 100-5 2.5 2.5 0 000 5z" },
 ];
 
 const MAIN_BRANCHES = [
   {
     tag: "Matriz",
-    name: "Usumacinta",
+    name: "Paseo Usumacinta",
     address: "Av. Paseo Usumacinta esq. Av. Los Ríos, Plaza KB",
     hours: "Lun–Vie 7–20 h · Sáb 8–18 h · Dom 9–14 h",
     img: "/img/mapa-usumacinta.webp",
@@ -36,18 +35,12 @@ const MAIN_BRANCHES = [
   },
   {
     tag: "Sucursal",
-    name: "Ciudad Deportiva",
-    address: "Plaza Mega Soriana, junto a Telcel, entrada a Anytime Fitness",
+    name: "Deportiva",
+    address: "Plaza Mega Soriana, Ciudad Deportiva. Debajo de Anytime Fitness, junto a Telcel",
     hours: "Lun–Vie 8–20 h · Sáb 8–16 h",
     img: "/img/mapa-deportiva.webp",
     url: "https://maps.google.com/?q=Velódromo+Ciudad+Deportiva+Plaza+Mega+Soriana+Villahermosa+Tabasco",
   },
-];
-
-const GYMS = [
-  { name: "Anytime Fitness Deportiva", url: "https://maps.google.com/?q=Anytime+Fitness+Ciudad+Deportiva+Villahermosa" },
-  { name: "Anytime Fitness Loma Linda", url: "https://maps.google.com/?q=Anytime+Fitness+Loma+Linda+Villahermosa" },
-  { name: "Anytime Fitness Mallorca", url: "https://maps.google.com/?q=Anytime+Fitness+Mallorca+Villahermosa" },
 ];
 
 function Eyebrow({ children, light = false }: { children: React.ReactNode; light?: boolean }) {
@@ -93,7 +86,7 @@ export default function Home() {
               </a>
             </div>
             <p className="fade-in font-tag mt-8 text-[11px] text-black/45" style={{ animationDelay: "1050ms" }}>
-              48 h · Foto de estado · 5 puntos de recepción
+              48 h · Foto de estado · 2 sucursales
             </p>
           </div>
 
@@ -117,7 +110,7 @@ export default function Home() {
       <section className="border-b border-black/5 bg-white">
         <div className="mx-auto grid max-w-7xl grid-cols-2 gap-y-8 px-5 py-10 md:grid-cols-4 md:px-10 md:py-14">
           {[
-            { v: <CountUp to={5} />, l: "puntos de recepción" },
+            { v: <CountUp to={2} />, l: "sucursales en Villahermosa" },
             { v: <CountUp to={48} suffix=" h" />, l: "tiempo de entrega" },
             { v: <CountUp to={7} />, l: "días a la semana" },
             { v: <><CountUp to={5} /> tipos</>, l: "tenis, botas, mochilas, gorras y bolsas" },
@@ -145,17 +138,16 @@ export default function Home() {
       {/* ③b FOTOS DE CALLE */}
       <section className="bg-white pt-16 md:pt-24">
         <div className="mx-auto max-w-7xl px-5 md:px-10">
-          <div className="-mx-5 flex snap-x snap-mandatory gap-3 overflow-x-auto px-5 no-scrollbar md:mx-0 md:grid md:grid-cols-4 md:gap-4 md:overflow-visible md:px-0">
+          <div className="-mx-5 flex snap-x snap-mandatory gap-3 overflow-x-auto px-5 no-scrollbar md:mx-0 md:grid md:grid-cols-3 md:gap-4 md:overflow-visible md:px-0">
             {[
               { src: "/img/fotos/calle-amarrando.jpg", cap: "Listos para la calle", ratio: "aspect-[3/4]" },
               { src: "/img/fotos/rack-secado.jpg", cap: "Secado a la sombra", ratio: "aspect-[3/4]" },
-              { src: "/img/fotos/mostrador.jpg", cap: "Recibimos y revisamos", ratio: "aspect-[3/4]" },
               { src: "/img/fotos/calle-pies.jpg", cap: "Como recién salidos", ratio: "aspect-[3/4]" },
             ].map((f, i) => (
               <Reveal key={f.src} delay={i * 90} className="w-[70%] shrink-0 snap-center md:w-auto">
                 <figure className="group">
                   <div className={`grain relative overflow-hidden rounded-xl bg-[var(--paper)] ${f.ratio}`}>
-                    <Image src={f.src} alt={f.cap} fill sizes="(max-width: 768px) 70vw, 25vw" className="object-cover grayscale-[35%] transition-all duration-700 group-hover:scale-105 group-hover:grayscale-0" />
+                    <Image src={f.src} alt={f.cap} fill sizes="(max-width: 768px) 70vw, 33vw" className="object-cover grayscale-[35%] transition-all duration-700 group-hover:scale-105 group-hover:grayscale-0" />
                   </div>
                   <figcaption className="font-tag mt-3 flex items-center gap-2 text-[11px] text-black/60">
                     <span className="text-black">0{i + 1}</span> {f.cap}
@@ -192,31 +184,6 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ⑤ RESULTADOS */}
-      <section id="resultados" className="bg-[var(--paper)] py-20 md:py-28">
-        <div className="mx-auto max-w-7xl px-5 md:px-10">
-          <Reveal className="mb-10 text-center md:mb-14">
-            <Eyebrow>Resultados reales</Eyebrow>
-            <h2 className="font-display text-5xl uppercase leading-[0.9] md:text-7xl">Antes y después</h2>
-          </Reveal>
-          <div className="-mx-5 flex snap-x snap-mandatory gap-4 overflow-x-auto px-5 pb-2 no-scrollbar md:mx-0 md:grid md:grid-cols-3 md:gap-6 md:overflow-visible md:px-0">
-            {[
-              { b: "/img/antes-1.png", a: "/img/despues-1-hd.jpg", name: "Boss · piel", svc: "Premium lujo" },
-              { b: "/img/antes-2.png", a: "/img/despues-2-hd.jpg", name: "On Cloud · mesh", svc: "On Cloud / Trail" },
-              { b: "/img/antes-3.png", a: "/img/despues-3-hd.jpg", name: "New Balance · gamuza", svc: "Premium lujo" },
-            ].map((r, i) => (
-              <Reveal key={r.b} delay={i * 120} className="w-[85%] shrink-0 snap-center md:w-auto">
-                <BeforeAfter before={r.b} after={r.a} alt={r.name} className="aspect-[5/4] rounded-2xl" />
-                <div className="mt-4 flex items-center justify-between px-1">
-                  <p className="font-semibold">{r.name}</p>
-                  <span className="rounded-full bg-white px-3 py-1 text-xs font-semibold text-black/60">{r.svc}</span>
-                </div>
-              </Reveal>
-            ))}
-          </div>
-        </div>
-      </section>
-
       {/* ⑥ PROCESO */}
       <section id="proceso" className="bg-white py-20 md:py-28">
         <div className="mx-auto max-w-7xl px-5 md:px-10">
@@ -247,24 +214,24 @@ export default function Home() {
           <div aria-hidden className="pointer-events-none absolute -bottom-40 -right-40 h-[420px] w-[420px] rounded-full bg-[var(--accent)] opacity-25 blur-3xl" />
           <div className="relative grid items-center gap-10 md:grid-cols-[1.3fr_1fr]">
             <div>
-              <Eyebrow light>Exclusivo socios Anytime Fitness</Eyebrow>
+              <Eyebrow light>Sucursal Deportiva</Eyebrow>
               <h2 className="font-display text-5xl uppercase leading-[0.9] md:text-7xl">
-                Entrenas tú.<br /><span className="text-[var(--accent)]">Los limpiamos nosotros.</span>
+                ¿Vas al Anytime?<br /><span className="text-[var(--accent)]">Estamos abajo.</span>
               </h2>
               <p className="mt-6 max-w-md text-white/60">
-                Al llegar a tu Anytime de Deportiva, Loma Linda o Mallorca, deja tus tenis en el cubículo con candado QR. Mándanos WhatsApp y nos encargamos del resto.
+                Nuestra sucursal de Ciudad Deportiva está justo debajo de Anytime Fitness. Deja tus tenis antes de subir a entrenar y recógelos limpios en 48 horas.
               </p>
               <WaButton
-                text="Hola, soy socio de Anytime Fitness y quiero dejar mis tenis en el cubículo QR"
-                medium="bloque-gym"
+                text="Hola, quiero dejar mis tenis en la sucursal de Deportiva"
+                medium="bloque-deportiva"
                 className="btn-shine mt-8 inline-flex items-center gap-2 rounded-full bg-[var(--accent)] px-8 py-4 font-bold text-black transition-transform hover:scale-[1.03]"
               >
-                Quiero usarlo
+                Cotizar en Deportiva
               </WaButton>
             </div>
             <div className="relative aspect-[4/3] overflow-hidden rounded-2xl">
-              <Image src="/img/fotos/gym-cubiculo.jpg" alt="Socio dejando sus tenis en el cubículo con candado del gym" fill sizes="(max-width: 768px) 100vw, 40vw" className="object-cover" />
-              <span className="font-tag absolute bottom-3 left-3 bg-[var(--accent)] px-2 py-1 text-[11px] text-black">Cubículo QR · Anytime</span>
+              <Image src="/img/fotos/mostrador.jpg" alt="Cliente entregando sus tenis en el mostrador" fill sizes="(max-width: 768px) 100vw, 40vw" className="object-cover" />
+              <span className="font-tag absolute bottom-3 left-3 bg-[var(--accent)] px-2 py-1 text-[11px] text-black">Plaza Mega Soriana · Deportiva</span>
             </div>
           </div>
         </Reveal>
@@ -307,8 +274,8 @@ export default function Home() {
       <section id="sucursales" className="bg-white py-20 md:py-28">
         <div className="mx-auto max-w-7xl px-5 md:px-10">
           <Reveal className="mb-12">
-            <Eyebrow>Puntos de recepción</Eyebrow>
-            <h2 className="font-display text-5xl uppercase leading-[0.9] md:text-7xl">5 puntos en<br />Villahermosa</h2>
+            <Eyebrow>Sucursales</Eyebrow>
+            <h2 className="font-display text-5xl uppercase leading-[0.9] md:text-7xl">2 sucursales en<br />Villahermosa</h2>
           </Reveal>
           <div className="grid gap-5 md:grid-cols-2">
             {MAIN_BRANCHES.map((b, i) => (
@@ -326,19 +293,6 @@ export default function Home() {
                     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" aria-hidden="true"><path d="M7 17L17 7M8 7h9v9" /></svg>
                   </a>
                 </div>
-              </Reveal>
-            ))}
-          </div>
-          <div className="mt-5 grid gap-3 md:grid-cols-3">
-            {GYMS.map((g, i) => (
-              <Reveal key={g.name} delay={i * 90}>
-                <a href={g.url} target="_blank" rel="noopener noreferrer" className="flex items-center justify-between rounded-2xl bg-[var(--paper)] px-5 py-4 transition-colors hover:bg-[var(--accent-soft)]">
-                  <div>
-                    <p className="font-semibold">{g.name}</p>
-                    <p className="text-xs text-black/50">Cubículo con candado QR · socios</p>
-                  </div>
-                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" aria-hidden="true"><path d="M7 17L17 7M8 7h9v9" /></svg>
-                </a>
               </Reveal>
             ))}
           </div>

@@ -26,72 +26,87 @@ const mono = Space_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Mis Papos | Lavado de Tenis en Villahermosa",
+  metadataBase: new URL("https://www.mispapos.com"),
+  title: "Limpieza de Tenis en Villahermosa | Mis Papos",
   description:
-    "Limpieza profesional de tenis en Villahermosa, Tabasco. Tenis, botas, mochilas, gorras y bolsas. Limpieza por material, lista en 48 horas. 5 puntos de recepción.",
+    "Lavado y limpieza profesional de tenis en Villahermosa, Tabasco. También botas, mochilas, gorras y bolsas. Por material, listos en 48 horas. Sucursales en Paseo Usumacinta y Ciudad Deportiva.",
   keywords: [
-    "limpieza tenis Villahermosa",
-    "lavado tenis Tabasco",
+    "limpieza de tenis Villahermosa",
+    "lavado de tenis Villahermosa",
+    "limpiar tenis Villahermosa",
+    "lavado de tenis Tabasco",
+    "limpieza de sneakers Villahermosa",
+    "limpieza de botas Villahermosa",
+    "lavado de mochilas Villahermosa",
     "Mis Papos",
-    "limpieza zapatillas Villahermosa",
-    "sneaker cleaning Villahermosa",
-    "tenis limpios Villahermosa",
   ],
+  alternates: { canonical: "/" },
   openGraph: {
-    title: "Mis Papos | Tus tenis, limpios en 48 horas",
+    title: "Limpieza de Tenis en Villahermosa | Mis Papos",
     description:
-      "Limpieza profesional de tenis en Villahermosa. Limpieza por material, lista en 48 horas.",
+      "Tus tenis como recién salidos de la caja. Limpieza por material, lista en 48 horas. Paseo Usumacinta y Ciudad Deportiva.",
+    url: "/",
     siteName: "Mis Papos",
     locale: "es_MX",
     type: "website",
+    images: [{ url: "/img/fotos/manos-limpiando.jpg", width: 1200, height: 1600, alt: "Limpieza de tenis en Mis Papos" }],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Mis Papos | Tus tenis, limpios en 48 horas",
-    description: "Limpieza profesional de tenis en Villahermosa. Lista en 48 horas.",
+    title: "Limpieza de Tenis en Villahermosa | Mis Papos",
+    description: "Limpieza por material, lista en 48 horas. Paseo Usumacinta y Ciudad Deportiva.",
   },
 };
 
-const schemaOrg = {
-  "@context": "https://schema.org",
-  "@type": "LocalBusiness",
-  name: "Mis Papos",
-  description:
-    "Servicio profesional de limpieza de tenis en Villahermosa, Tabasco",
-  telephone: "+529934001413",
-  url: "https://mispapos.com",
-  address: {
-    "@type": "PostalAddress",
-    addressLocality: "Villahermosa",
-    addressRegion: "Tabasco",
-    addressCountry: "MX",
+const HOURS = [
+  { "@type": "OpeningHoursSpecification", dayOfWeek: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"], opens: "07:00", closes: "20:00" },
+  { "@type": "OpeningHoursSpecification", dayOfWeek: "Saturday", opens: "08:00", closes: "18:00" },
+  { "@type": "OpeningHoursSpecification", dayOfWeek: "Sunday", opens: "09:00", closes: "14:00" },
+];
+
+// Una ficha por sucursal: ayuda a aparecer en "limpieza de tenis cerca de mí"
+const schemaOrg = [
+  {
+    "@context": "https://schema.org",
+    "@type": "DryCleaningOrLaundry",
+    "@id": "https://www.mispapos.com/#usumacinta",
+    name: "Mis Papos · Paseo Usumacinta",
+    description: "Limpieza y lavado profesional de tenis, botas, mochilas, gorras y bolsas en Villahermosa, Tabasco.",
+    telephone: "+529934001413",
+    url: "https://www.mispapos.com",
+    image: "https://www.mispapos.com/img/fotos/manos-limpiando.jpg",
+    address: {
+      "@type": "PostalAddress",
+      streetAddress: "Av. Paseo Usumacinta esq. Av. Los Ríos, Plaza KB",
+      addressLocality: "Villahermosa",
+      addressRegion: "Tabasco",
+      addressCountry: "MX",
+    },
+    openingHoursSpecification: HOURS,
+    priceRange: "$130 - $600",
+    areaServed: "Villahermosa",
+    sameAs: ["https://instagram.com/mispapos"],
   },
-  openingHoursSpecification: [
-    {
-      "@type": "OpeningHoursSpecification",
-      dayOfWeek: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"],
-      opens: "07:00",
-      closes: "20:00",
+  {
+    "@context": "https://schema.org",
+    "@type": "DryCleaningOrLaundry",
+    "@id": "https://www.mispapos.com/#deportiva",
+    name: "Mis Papos · Ciudad Deportiva",
+    description: "Limpieza de tenis en Ciudad Deportiva, Villahermosa. Debajo de Anytime Fitness.",
+    telephone: "+529934001413",
+    url: "https://www.mispapos.com",
+    image: "https://www.mispapos.com/img/fotos/manos-limpiando.jpg",
+    address: {
+      "@type": "PostalAddress",
+      streetAddress: "Plaza Mega Soriana, Ciudad Deportiva (debajo de Anytime Fitness)",
+      addressLocality: "Villahermosa",
+      addressRegion: "Tabasco",
+      addressCountry: "MX",
     },
-    {
-      "@type": "OpeningHoursSpecification",
-      dayOfWeek: "Saturday",
-      opens: "08:00",
-      closes: "18:00",
-    },
-    {
-      "@type": "OpeningHoursSpecification",
-      dayOfWeek: "Sunday",
-      opens: "09:00",
-      closes: "14:00",
-    },
-  ],
-  priceRange: "$$",
-  sameAs: [
-    "https://instagram.com/mispapos",
-    "https://tiktok.com/@mispapos",
-  ],
-};
+    priceRange: "$130 - $600",
+    areaServed: "Villahermosa",
+  },
+];
 
 export default function RootLayout({
   children,

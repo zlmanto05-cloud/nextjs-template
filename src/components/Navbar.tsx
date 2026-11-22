@@ -7,9 +7,9 @@ import WaButton from "./landing/WaButton";
 
 const links = [
   { label: "Servicios", href: "/#servicios" },
-  { label: "Antes y después", href: "/#resultados" },
   { label: "Cómo funciona", href: "/#proceso" },
   { label: "Sucursales", href: "/#sucursales" },
+  { label: "Preguntas", href: "/#faq" },
 ];
 
 export default function Navbar() {
