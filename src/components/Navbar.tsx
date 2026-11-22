@@ -34,10 +34,10 @@ export default function Navbar() {
       <div className={`mx-auto flex max-w-7xl items-center justify-between px-5 transition-all duration-500 md:px-10 ${scrolled ? "h-16" : "h-20"}`}>
         <Link href="/" className="flex shrink-0 items-center" aria-label="Mis Papos, inicio">
           <Image
-            src="/img/logo-mis-papos.png"
+            src="/img/logo-mis-papos-transparente.png"
             alt="Mis Papos"
-            width={170}
-            height={96}
+            width={160}
+            height={89}
             className={`w-auto object-contain transition-all duration-500 ${scrolled ? "h-9" : "h-11 md:h-12"}`}
             priority
           />

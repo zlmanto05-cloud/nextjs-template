@@ -6,7 +6,7 @@ export default function Footer() {
       <div className="mx-auto max-w-7xl px-5 md:px-10">
         <div className="grid gap-10 md:grid-cols-4">
           <div className="md:col-span-2">
-            <Image src="/img/logo-mis-papos.png" alt="Mis Papos" width={170} height={96} className="mb-5 h-12 w-auto brightness-0 invert" />
+            <Image src="/img/logo-mis-papos-blanco.png" alt="Mis Papos" width={160} height={89} className="mb-5 h-14 w-auto" />
             <p className="max-w-sm text-sm leading-relaxed text-white/50">
               Limpieza y cuidado de tenis, botas, mochilas, gorras y bolsas en Villahermosa, Tabasco.
             </p>

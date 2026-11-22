@@ -101,7 +101,7 @@ export default function Home() {
           <div className="fade-in relative mx-auto mt-12 max-w-5xl md:mt-16" style={{ animationDelay: "1100ms" }}>
             <BeforeAfter
               before="/img/antes-1.png"
-              after="/img/despues-1.jpg"
+              after="/img/despues-1-hd.jpg"
               alt="Tenis Boss de piel"
               intro
               priority
@@ -184,9 +184,9 @@ export default function Home() {
           </Reveal>
           <div className="-mx-5 flex snap-x snap-mandatory gap-4 overflow-x-auto px-5 pb-2 no-scrollbar md:mx-0 md:grid md:grid-cols-3 md:gap-6 md:overflow-visible md:px-0">
             {[
-              { b: "/img/antes-1.png", a: "/img/despues-1.jpg", name: "Boss · piel", svc: "Premium lujo" },
-              { b: "/img/antes-2.png", a: "/img/despues-2.jpg", name: "On Cloud · mesh", svc: "On Cloud / Trail" },
-              { b: "/img/antes-3.png", a: "/img/despues-3.jpg", name: "New Balance · gamuza", svc: "Premium lujo" },
+              { b: "/img/antes-1.png", a: "/img/despues-1-hd.jpg", name: "Boss · piel", svc: "Premium lujo" },
+              { b: "/img/antes-2.png", a: "/img/despues-2-hd.jpg", name: "On Cloud · mesh", svc: "On Cloud / Trail" },
+              { b: "/img/antes-3.png", a: "/img/despues-3-hd.jpg", name: "New Balance · gamuza", svc: "Premium lujo" },
             ].map((r, i) => (
               <Reveal key={r.b} delay={i * 120} className="w-[85%] shrink-0 snap-center md:w-auto">
                 <BeforeAfter before={r.b} after={r.a} alt={r.name} className="aspect-[5/4] rounded-3xl" />
