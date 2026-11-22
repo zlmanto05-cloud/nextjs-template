@@ -7,6 +7,7 @@ const FAQS = [
   { q: "¿Cómo saben qué servicio necesito?", a: "El precio lo define el material, no la marca. Al recibir revisamos tu par y te confirmamos el nivel antes de empezar. Si tienes duda, mándanos una foto por WhatsApp." },
   { q: "¿Limpian todo tipo de materiales?", a: "Sí: piel, gamuza, nubuck, mesh, flyknit, canvas y materiales técnicos. Cada uno lleva productos y técnica distintos." },
   { q: "¿Qué pasa si mi par ya tiene daños?", a: "Documentamos el estado de cada pieza con fotos al recibirla; en premium, mochilas de lujo y bolsas de piel la foto es obligatoria. Así los dos sabemos cómo llegó. No respondemos por daños previos, materiales muy desgastados o réplicas." },
+  { q: "¿Tienen descuento para socios de Anytime Fitness?", a: "Sí. Presenta tu llave de Anytime Fitness al dejar tus tenis y te damos 20% de descuento." },
   { q: "¿Dónde están?", a: "Tenemos 2 sucursales en Villahermosa: Paseo Usumacinta y Ciudad Deportiva (Plaza Mega Soriana, debajo de Anytime Fitness). Deja tus tenis en cualquiera de las dos." },
   { q: "¿También limpian mochilas, bolsas y gorras?", a: "Sí. Mochilas desde $130, bolsas desde $180 y gorras a $130. En bolsas el precio depende de la marca y el material." },
 ];

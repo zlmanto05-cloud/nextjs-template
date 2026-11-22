@@ -62,6 +62,9 @@ export default function Home() {
             <p className="fade-in font-tag mb-6 inline-flex items-center gap-2 border border-black px-3 py-1.5 text-[11px]" style={{ animationDelay: "0ms" }}>
               <span className="h-2 w-2 bg-[var(--accent)]" /> Sneaker care · Villahermosa, Tab.
             </p>
+            <a href="#promo-anytime" className="fade-in font-tag mb-6 ml-2 inline-flex items-center gap-2 bg-[var(--accent)] px-3 py-1.5 text-[11px] text-black transition-transform hover:-translate-y-0.5" style={{ animationDelay: "100ms" }}>
+              20% socios Anytime Fitness →
+            </a>
             <h1 className="font-display text-[4rem] leading-[0.86] sm:text-7xl lg:text-[7rem] xl:text-[7.6rem]">
               {HERO_WORDS.map((w, i) => (
                 <span key={i} className="word-up mr-[0.18em] last:mr-0">
@@ -209,29 +212,29 @@ export default function Home() {
       </section>
 
       {/* ⑦ GYM (bloque oscuro) */}
-      <section className="px-3 md:px-6">
+      <section id="promo-anytime" className="px-3 md:px-6">
         <Reveal className="relative mx-auto max-w-7xl overflow-hidden rounded-2xl bg-black px-6 py-16 text-white md:rounded-3xl md:px-16 md:py-24">
           <div aria-hidden className="pointer-events-none absolute -bottom-40 -right-40 h-[420px] w-[420px] rounded-full bg-[var(--accent)] opacity-25 blur-3xl" />
           <div className="relative grid items-center gap-10 md:grid-cols-[1.3fr_1fr]">
             <div>
-              <Eyebrow light>Sucursal Deportiva</Eyebrow>
+              <Eyebrow light>Promo socios Anytime Fitness</Eyebrow>
               <h2 className="font-display text-5xl uppercase leading-[0.9] md:text-7xl">
-                ¿Vas al Anytime?<br /><span className="text-[var(--accent)]">Estamos abajo.</span>
+                ¿Eres socio de Anytime?<br /><span className="text-[var(--accent)]">20% de descuento.</span>
               </h2>
               <p className="mt-6 max-w-md text-white/60">
-                Nuestra sucursal de Ciudad Deportiva está justo debajo de Anytime Fitness. Deja tus tenis antes de subir a entrenar y recógelos limpios en 48 horas.
+                Presenta tu llave de Anytime Fitness al dejar tus tenis y llévate 20% de descuento. En Ciudad Deportiva estamos justo debajo del gym: déjalos antes de subir a entrenar.
               </p>
               <WaButton
-                text="Hola, quiero dejar mis tenis en la sucursal de Deportiva"
-                medium="bloque-deportiva"
+                text="Hola, soy socio de Anytime Fitness y quiero usar mi 20% de descuento"
+                medium="promo-anytime"
                 className="btn-shine mt-8 inline-flex items-center gap-2 rounded-full bg-[var(--accent)] px-8 py-4 font-bold text-black transition-transform hover:scale-[1.03]"
               >
-                Cotizar en Deportiva
+                Quiero mi 20%
               </WaButton>
             </div>
             <div className="relative aspect-[4/3] overflow-hidden rounded-2xl">
               <Image src="/img/fotos/mostrador.jpg" alt="Cliente entregando sus tenis en el mostrador" fill sizes="(max-width: 768px) 100vw, 40vw" className="object-cover" />
-              <span className="font-tag absolute bottom-3 left-3 bg-[var(--accent)] px-2 py-1 text-[11px] text-black">Plaza Mega Soriana · Deportiva</span>
+              <span className="font-tag absolute bottom-3 left-3 bg-[var(--accent)] px-2 py-1 text-[11px] text-black">Presenta tu llave · 20%</span>
             </div>
           </div>
         </Reveal>
