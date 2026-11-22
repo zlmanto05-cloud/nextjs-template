@@ -103,6 +103,10 @@ const schemaOrg = [
       addressRegion: "Tabasco",
       addressCountry: "MX",
     },
+    openingHoursSpecification: [
+      { "@type": "OpeningHoursSpecification", dayOfWeek: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"], opens: "08:00", closes: "20:00" },
+      { "@type": "OpeningHoursSpecification", dayOfWeek: "Saturday", opens: "08:00", closes: "16:00" },
+    ],
     priceRange: "$130 - $600",
     areaServed: "Villahermosa",
   },

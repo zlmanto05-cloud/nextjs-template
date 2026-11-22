@@ -38,7 +38,7 @@ const MAIN_BRANCHES = [
     tag: "Sucursal",
     name: "Deportiva",
     address: "Plaza Mega Soriana, Ciudad Deportiva. Debajo de Anytime Fitness, junto a Telcel",
-    hours: "Lun–Vie 8–20 h · Sáb 8–16 h",
+    hours: "Lun–Vie 8–20 h · Sáb 8–16 h · Dom cerrado",
     img: "/img/mapa-deportiva.webp",
     url: "https://maps.google.com/?q=Velódromo+Ciudad+Deportiva+Plaza+Mega+Soriana+Villahermosa+Tabasco",
   },
