@@ -55,7 +55,7 @@ export default function Navbar() {
           <WaButton
             text="Hola, quiero cotizar la limpieza de mis tenis"
             medium="nav"
-            className="btn-shine inline-flex items-center gap-2 rounded-full bg-[var(--yellow)] px-4 py-2.5 text-[13px] font-bold text-black transition-transform hover:scale-[1.03] md:px-6 md:py-3 md:text-sm"
+            className="btn-shine inline-flex items-center gap-2 rounded-full bg-[var(--accent)] px-4 py-2.5 text-[13px] font-bold text-black transition-transform hover:scale-[1.03] md:px-6 md:py-3 md:text-sm"
           >
             <span className="md:hidden">Cotizar</span>
             <span className="hidden md:inline">Cotiza por WhatsApp</span>

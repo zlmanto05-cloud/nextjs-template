@@ -44,7 +44,7 @@ export default function MobileBar() {
         <WaButton
           text="Hola, quiero cotizar la limpieza de mis tenis"
           medium="barra-movil"
-          className="flex items-center gap-2 rounded-full bg-[var(--yellow)] px-5 py-3 text-sm font-bold text-black"
+          className="flex items-center gap-2 rounded-full bg-[var(--accent)] px-5 py-3 text-sm font-bold text-black"
         >
           Cotizar
         </WaButton>

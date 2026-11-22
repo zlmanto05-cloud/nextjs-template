@@ -52,8 +52,8 @@ const GYMS = [
 
 function Eyebrow({ children, light = false }: { children: React.ReactNode; light?: boolean }) {
   return (
-    <p className={`mb-4 inline-flex items-center gap-2 text-xs font-bold uppercase tracking-[0.22em] ${light ? "text-[var(--yellow)]" : "text-black/50"}`}>
-      <span className="h-1.5 w-1.5 rounded-full bg-[var(--yellow)]" />
+    <p className={`mb-4 inline-flex items-center gap-2 text-xs font-bold uppercase tracking-[0.22em] ${light ? "text-[var(--accent)]" : "text-black/50"}`}>
+      <span className="h-1.5 w-1.5 rounded-full bg-[var(--accent)]" />
       {children}
     </p>
   );
@@ -64,19 +64,19 @@ export default function Home() {
     <main className="overflow-x-hidden">
       {/* ① HERO */}
       <section className="relative bg-[var(--paper)] pb-16 pt-28 md:pb-24 md:pt-36">
-        <div aria-hidden className="pointer-events-none absolute -right-32 -top-32 h-[480px] w-[480px] rounded-full bg-[var(--yellow)] opacity-20 blur-3xl" />
+        <div aria-hidden className="pointer-events-none absolute -right-32 -top-32 h-[480px] w-[480px] rounded-full bg-[var(--accent)] opacity-20 blur-3xl" />
         <div aria-hidden className="pointer-events-none absolute -left-40 top-1/2 h-[380px] w-[380px] rounded-full bg-white opacity-80 blur-3xl" />
 
         <div className="relative mx-auto max-w-7xl px-5 md:px-10">
           <div className="mx-auto max-w-4xl text-center">
             <p className="fade-in mb-5 inline-flex items-center gap-2 rounded-full border border-black/10 bg-white px-4 py-2 text-xs font-semibold text-black/70" style={{ animationDelay: "0ms" }}>
-              <span className="relative flex h-2 w-2"><span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-[var(--yellow)] opacity-75" /><span className="relative inline-flex h-2 w-2 rounded-full bg-[var(--yellow)]" /></span>
+              <span className="relative flex h-2 w-2"><span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-[var(--accent)] opacity-75" /><span className="relative inline-flex h-2 w-2 rounded-full bg-[var(--accent)]" /></span>
               Cuidado de sneakers · Villahermosa
             </p>
             <h1 className="font-display text-[3.4rem] uppercase leading-[0.88] sm:text-7xl md:text-8xl lg:text-[7.5rem]">
               {HERO_WORDS.map((w, i) => (
                 <span key={i} className="word-up mr-[0.22em] last:mr-0">
-                  <span style={{ animationDelay: `${150 + i * 70}ms` }} className={i >= 3 && i <= 4 ? "text-[var(--yellow)] [-webkit-text-stroke:1.5px_#0B0B0B] md:[-webkit-text-stroke:2px_#0B0B0B]" : ""}>{w}</span>
+                  <span style={{ animationDelay: `${150 + i * 70}ms` }} className={i >= 3 && i <= 4 ? "text-[var(--accent)] [-webkit-text-stroke:1.5px_#0B0B0B] md:[-webkit-text-stroke:2px_#0B0B0B]" : ""}>{w}</span>
                 </span>
               ))}
             </h1>
@@ -144,7 +144,7 @@ export default function Home() {
           {[...MARQUEE, ...MARQUEE].map((m, i) => (
             <span key={i} className="flex items-center font-display text-3xl uppercase text-white md:text-4xl">
               <span className="px-6">{m}</span>
-              <span className="text-[var(--yellow)]">✦</span>
+              <span className="text-[var(--accent)]">✦</span>
             </span>
           ))}
         </div>
@@ -208,11 +208,11 @@ export default function Home() {
             <h2 className="font-display text-5xl uppercase leading-[0.9] md:text-7xl">Tres pasos.<br />Cero filas.</h2>
           </Reveal>
           <Reveal className="relative">
-            <div aria-hidden className="draw-line absolute left-0 right-0 top-7 hidden h-[3px] bg-[var(--yellow)] md:block" />
+            <div aria-hidden className="draw-line absolute left-0 right-0 top-7 hidden h-[3px] bg-[var(--accent)] md:block" />
             <ol className="relative grid gap-10 md:grid-cols-3 md:gap-8">
               {STEPS.map((s) => (
                 <li key={s.n} className="flex gap-5 md:block">
-                  <span className="flex h-14 w-14 shrink-0 items-center justify-center rounded-full bg-black font-display text-2xl text-[var(--yellow)] ring-8 ring-white">{s.n}</span>
+                  <span className="flex h-14 w-14 shrink-0 items-center justify-center rounded-full bg-black font-display text-2xl text-[var(--accent)] ring-8 ring-white">{s.n}</span>
                   <div className="md:mt-6">
                     <h3 className="font-display text-3xl uppercase">{s.title}</h3>
                     <p className="mt-2 max-w-xs text-black/55">{s.desc}</p>
@@ -227,12 +227,12 @@ export default function Home() {
       {/* ⑦ GYM (bloque oscuro) */}
       <section className="px-3 md:px-6">
         <Reveal className="relative mx-auto max-w-7xl overflow-hidden rounded-[32px] bg-black px-6 py-16 text-white md:rounded-[44px] md:px-16 md:py-24">
-          <div aria-hidden className="pointer-events-none absolute -bottom-40 -right-40 h-[420px] w-[420px] rounded-full bg-[var(--yellow)] opacity-25 blur-3xl" />
+          <div aria-hidden className="pointer-events-none absolute -bottom-40 -right-40 h-[420px] w-[420px] rounded-full bg-[var(--accent)] opacity-25 blur-3xl" />
           <div className="relative grid items-center gap-10 md:grid-cols-[1.3fr_1fr]">
             <div>
               <Eyebrow light>Exclusivo socios Anytime Fitness</Eyebrow>
               <h2 className="font-display text-5xl uppercase leading-[0.9] md:text-7xl">
-                Entrenas tú.<br /><span className="text-[var(--yellow)]">Los limpiamos nosotros.</span>
+                Entrenas tú.<br /><span className="text-[var(--accent)]">Los limpiamos nosotros.</span>
               </h2>
               <p className="mt-6 max-w-md text-white/60">
                 Al llegar a tu Anytime de Deportiva, Loma Linda o Mallorca, deja tus tenis en el cubículo con candado QR. Mándanos WhatsApp y nos encargamos del resto.
@@ -240,7 +240,7 @@ export default function Home() {
               <WaButton
                 text="Hola, soy socio de Anytime Fitness y quiero dejar mis tenis en el cubículo QR"
                 medium="bloque-gym"
-                className="btn-shine mt-8 inline-flex items-center gap-2 rounded-full bg-[var(--yellow)] px-8 py-4 font-bold text-black transition-transform hover:scale-[1.03]"
+                className="btn-shine mt-8 inline-flex items-center gap-2 rounded-full bg-[var(--accent)] px-8 py-4 font-bold text-black transition-transform hover:scale-[1.03]"
               >
                 Quiero usarlo
               </WaButton>
@@ -248,7 +248,7 @@ export default function Home() {
             <div className="grid grid-cols-2 gap-3">
               {[["1", "Llegas al gym"], ["2", "Cubículo QR"], ["3", "WhatsApp"], ["4", "Listos en 48 h"]].map(([n, t], i) => (
                 <div key={n} className="float rounded-2xl border border-white/10 bg-white/5 p-5 backdrop-blur" style={{ animationDelay: `${-i * 1.4}s` }}>
-                  <p className="font-display text-4xl text-[var(--yellow)]">{n}</p>
+                  <p className="font-display text-4xl text-[var(--accent)]">{n}</p>
                   <p className="mt-1 text-sm font-semibold">{t}</p>
                 </div>
               ))}
@@ -266,8 +266,8 @@ export default function Home() {
           </Reveal>
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
             {WHY.map((w, i) => (
-              <Reveal key={w.title} delay={i * 100} className="group rounded-3xl border border-black/5 bg-[var(--paper)] p-7 transition-colors duration-300 hover:bg-[var(--yellow-soft)]">
-                <span className="mb-6 flex h-12 w-12 items-center justify-center rounded-2xl bg-black text-[var(--yellow)] transition-transform duration-300 group-hover:-rotate-6 group-hover:scale-110">
+              <Reveal key={w.title} delay={i * 100} className="group rounded-3xl border border-black/5 bg-[var(--paper)] p-7 transition-colors duration-300 hover:bg-[var(--accent-soft)]">
+                <span className="mb-6 flex h-12 w-12 items-center justify-center rounded-2xl bg-black text-[var(--accent)] transition-transform duration-300 group-hover:-rotate-6 group-hover:scale-110">
                   <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d={w.icon} /></svg>
                 </span>
                 <h3 className="text-lg font-bold">{w.title}</h3>
@@ -304,7 +304,7 @@ export default function Home() {
                   <Image src={b.img} alt={`Mapa ${b.name}`} fill sizes="(max-width: 768px) 100vw, 50vw" className="object-cover transition-transform duration-700 group-hover:scale-105" />
                 </a>
                 <div className="p-6 md:p-7">
-                  <span className="rounded-full bg-[var(--yellow)] px-3 py-1 text-[11px] font-bold uppercase tracking-wider">{b.tag}</span>
+                  <span className="rounded-full bg-[var(--accent)] px-3 py-1 text-[11px] font-bold uppercase tracking-wider">{b.tag}</span>
                   <h3 className="mt-3 font-display text-4xl uppercase">{b.name}</h3>
                   <p className="mt-2 text-sm text-black/60">{b.address}</p>
                   <p className="mt-1 text-sm text-black/45">{b.hours}</p>
@@ -319,7 +319,7 @@ export default function Home() {
           <div className="mt-5 grid gap-3 md:grid-cols-3">
             {GYMS.map((g, i) => (
               <Reveal key={g.name} delay={i * 90}>
-                <a href={g.url} target="_blank" rel="noopener noreferrer" className="flex items-center justify-between rounded-2xl bg-[var(--paper)] px-5 py-4 transition-colors hover:bg-[var(--yellow-soft)]">
+                <a href={g.url} target="_blank" rel="noopener noreferrer" className="flex items-center justify-between rounded-2xl bg-[var(--paper)] px-5 py-4 transition-colors hover:bg-[var(--accent-soft)]">
                   <div>
                     <p className="font-semibold">{g.name}</p>
                     <p className="text-xs text-black/50">Cubículo con candado QR · socios</p>
@@ -333,7 +333,7 @@ export default function Home() {
       </section>
 
       {/* ⑪ CTA FINAL */}
-      <section className="relative overflow-hidden bg-[var(--yellow)] py-24 md:py-32">
+      <section className="relative overflow-hidden bg-[var(--accent)] py-24 md:py-32">
         <div aria-hidden className="pointer-events-none absolute inset-0">
           {[
             [8, 40, 0, 9], [18, 22, 3, 11], [30, 60, 1.5, 13], [45, 18, 5, 10], [58, 34, 2.5, 12],

@@ -56,7 +56,7 @@ const CATS: Cat[] = [
   },
 ];
 
-const TINTS = ["tint-yellow", "tint-mint", "tint-lilac", "tint-sky", "tint-peach", "tint-stone"];
+const TINTS = ["tint-lime", "tint-mint", "tint-lilac", "tint-sky", "tint-peach", "tint-stone"];
 
 export default function Services() {
   const [active, setActive] = useState(CATS[0].id);
@@ -78,7 +78,7 @@ export default function Services() {
                 on ? "border-black bg-black text-white" : "border-black/10 bg-white text-black/70 hover:border-black/40"
               }`}
             >
-              {c.label} <span className={on ? "text-[var(--yellow)]" : "text-black/40"}>· desde ${from}</span>
+              {c.label} <span className={on ? "text-[var(--accent)]" : "text-black/40"}>· desde ${from}</span>
             </button>
           );
         })}
@@ -100,7 +100,7 @@ export default function Services() {
             </span>
             <div className="pr-12">
               {it.tag && (
-                <span className="mb-3 inline-block rounded-full bg-black px-3 py-1 text-[11px] font-bold uppercase tracking-wider text-[var(--yellow)]">{it.tag}</span>
+                <span className="mb-3 inline-block rounded-full bg-black px-3 py-1 text-[11px] font-bold uppercase tracking-wider text-[var(--accent)]">{it.tag}</span>
               )}
               <h3 className="font-display text-3xl uppercase leading-none">{it.name}</h3>
               <p className="mt-3 text-sm leading-relaxed text-black/60">{it.desc}</p>

@@ -12,11 +12,11 @@ export default function Footer() {
             </p>
           </div>
           <div>
-            <h4 className="mb-4 text-xs font-bold uppercase tracking-[0.2em] text-[var(--yellow)]">Horario</h4>
+            <h4 className="mb-4 text-xs font-bold uppercase tracking-[0.2em] text-[var(--accent)]">Horario</h4>
             <p className="text-sm leading-7 text-white/60">Lun–Vie 7:00–20:00<br />Sáb 8:00–18:00<br />Dom 9:00–14:00</p>
           </div>
           <div>
-            <h4 className="mb-4 text-xs font-bold uppercase tracking-[0.2em] text-[var(--yellow)]">Contacto</h4>
+            <h4 className="mb-4 text-xs font-bold uppercase tracking-[0.2em] text-[var(--accent)]">Contacto</h4>
             <p className="text-sm leading-7 text-white/60">
               WhatsApp 993 400 1413<br />
               <a href="https://instagram.com/mispapos" target="_blank" rel="noopener noreferrer" className="hover:text-white">@mispapos</a>

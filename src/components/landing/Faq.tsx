@@ -25,7 +25,7 @@ export default function Faq() {
               className="flex w-full items-center justify-between gap-6 py-6 text-left text-base font-semibold md:text-lg"
             >
               {f.q}
-              <span className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-full transition-all duration-300 ${on ? "rotate-45 bg-[var(--yellow)]" : "bg-black/5"}`}>
+              <span className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-full transition-all duration-300 ${on ? "rotate-45 bg-[var(--accent)]" : "bg-black/5"}`}>
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14" /></svg>
               </span>
             </button>

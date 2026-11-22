@@ -70,7 +70,7 @@ export default function BeforeAfter({
       </div>
 
       <span className="absolute left-3 top-3 rounded-full bg-black/70 px-3 py-1 text-[11px] font-semibold uppercase tracking-wider text-white">Antes</span>
-      <span className="absolute right-3 top-3 rounded-full bg-[var(--yellow)] px-3 py-1 text-[11px] font-semibold uppercase tracking-wider text-black">Después</span>
+      <span className="absolute right-3 top-3 rounded-full bg-[var(--accent)] px-3 py-1 text-[11px] font-semibold uppercase tracking-wider text-black">Después</span>
 
       <div
         className="pointer-events-none absolute inset-y-0 w-[2px] bg-white shadow-[0_0_0_1px_rgba(0,0,0,0.08)]"
@@ -79,7 +79,7 @@ export default function BeforeAfter({
           transition: animating ? "left 0.85s cubic-bezier(.65,0,.35,1)" : "none",
         }}
       >
-        <span className="ba-handle absolute left-1/2 top-1/2 flex h-11 w-11 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full bg-[var(--yellow)] text-black shadow-lg">
+        <span className="ba-handle absolute left-1/2 top-1/2 flex h-11 w-11 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full bg-[var(--accent)] text-black shadow-lg">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M9 6l-6 6 6 6M15 6l6 6-6 6" /></svg>
         </span>
       </div>
