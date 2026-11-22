@@ -15,7 +15,7 @@ const CATS: Cat[] = [
       { name: "Ultra white", desc: "Para blancos que ya se ven amarillos o grises.", price: 260, tag: "Más pedido" },
       { name: "On Cloud / Trail", desc: "Mesh técnico y espumas que piden más cuidado.", price: 220 },
       { name: "Premium lujo", desc: "Piel, gamuza y pares de colección. Foto de estado incluida.", price: 399 },
-      { name: "Restauración de suelas", desc: "Devolvemos el blanco a suelas amarillentas.", price: 180 },
+      { name: "Blanqueado de suelas", desc: "Quitamos el tono amarillo de suelas blancas. Revisamos tu par antes: no todas las suelas se pueden blanquear.", price: 180 },
       { name: "Fútbol / tacos", desc: "Lodo, pasto y cancha fuera.", price: 150 },
       { name: "Niño", desc: "Sintético, canvas o lona hasta talla 22.", price: 150 },
     ],

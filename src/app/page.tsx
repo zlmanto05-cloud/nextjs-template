@@ -143,9 +143,9 @@ export default function Home() {
         <div className="mx-auto max-w-7xl px-5 md:px-10">
           <div className="-mx-5 flex snap-x snap-mandatory gap-3 overflow-x-auto px-5 no-scrollbar md:mx-0 md:grid md:grid-cols-3 md:gap-4 md:overflow-visible md:px-0">
             {[
-              { src: "/img/fotos/calle-amarrando.jpg", cap: "Listos para la calle", ratio: "aspect-[3/4]" },
-              { src: "/img/fotos/rack-secado.jpg", cap: "Secado a la sombra", ratio: "aspect-[3/4]" },
-              { src: "/img/fotos/calle-pies.jpg", cap: "Como recién salidos", ratio: "aspect-[3/4]" },
+              { src: "/img/fotos/running-calle.jpg", cap: "Para tus kilómetros", ratio: "aspect-[3/4]" },
+              { src: "/img/fotos/gym-piso.jpg", cap: "Para tu día de pierna", ratio: "aspect-[3/4]" },
+              { src: "/img/fotos/running-agujetas.jpg", cap: "Listos para entrenar", ratio: "aspect-[3/4]" },
             ].map((f, i) => (
               <Reveal key={f.src} delay={i * 90} className="w-[70%] shrink-0 snap-center md:w-auto">
                 <figure className="group">
@@ -222,7 +222,7 @@ export default function Home() {
                 ¿Eres socio de Anytime?<br /><span className="text-[var(--accent)]">20% de descuento.</span>
               </h2>
               <p className="mt-6 max-w-md text-white/60">
-                Presenta tu llave de Anytime Fitness al dejar tus tenis y llévate 20% de descuento. En Ciudad Deportiva estamos justo debajo del gym: déjalos antes de subir a entrenar.
+                Presenta tu llave de Anytime Fitness y llévate 20% de descuento en todos los servicios, en cualquiera de nuestras 2 sucursales. En Ciudad Deportiva estamos justo debajo del gym: déjalos antes de subir a entrenar.
               </p>
               <WaButton
                 text="Hola, soy socio de Anytime Fitness y quiero usar mi 20% de descuento"
@@ -233,7 +233,7 @@ export default function Home() {
               </WaButton>
             </div>
             <div className="relative aspect-[4/3] overflow-hidden rounded-2xl">
-              <Image src="/img/fotos/mostrador.jpg" alt="Cliente entregando sus tenis en el mostrador" fill sizes="(max-width: 768px) 100vw, 40vw" className="object-cover" />
+              <Image src="/img/fotos/mostrador-mis-papos.jpg" alt="Cliente entregando sus tenis en el mostrador" fill sizes="(max-width: 768px) 100vw, 40vw" className="object-cover" />
               <span className="font-tag absolute bottom-3 left-3 bg-[var(--accent)] px-2 py-1 text-[11px] text-black">Presenta tu llave · 20%</span>
             </div>
           </div>
