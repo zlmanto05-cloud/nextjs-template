@@ -162,7 +162,7 @@ export default function AvisoDePrivacidad() {
           </p>
           <ul className="list-disc space-y-1 pl-5">
             <li>
-              Por WhatsApp al{" "}
+              Por teléfono o WhatsApp al número de Mis Papos{" "}
               <a href={WHATSAPP} target="_blank" rel="noopener noreferrer" className={enlace}>
                 {TELEFONO}
               </a>
@@ -178,7 +178,7 @@ export default function AvisoDePrivacidad() {
               caso, el documento que acredite las facultades del representante.
             </li>
             <li>Describir con claridad los datos y el derecho que desea ejercer.</li>
-            <li>Indicar el medio por el que desea recibir la respuesta: WhatsApp o en sucursal.</li>
+            <li>Indicar el medio por el que desea recibir la respuesta: teléfono, WhatsApp o en sucursal.</li>
           </ol>
           <p>
             {ABREVIATURA} responderá en un máximo de 20 días hábiles, o le notificará la ampliación de este plazo
@@ -196,9 +196,10 @@ export default function AvisoDePrivacidad() {
             actualización: {ACTUALIZADO}.
           </p>
           <p>
-            Si tiene alguna duda sobre este aviso de privacidad, escríbanos por{" "}
+            Si tiene alguna duda sobre este aviso de privacidad, llámenos o escríbanos por WhatsApp al número de
+            Mis Papos{" "}
             <a href={WHATSAPP} target="_blank" rel="noopener noreferrer" className={enlace}>
-              WhatsApp al {TELEFONO}
+              {TELEFONO}
             </a>
             .
           </p>
