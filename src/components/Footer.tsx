@@ -1,4 +1,5 @@
 import Image from "next/image";
+import Link from "next/link";
 
 export default function Footer() {
   return (
@@ -23,8 +24,9 @@ export default function Footer() {
             </p>
           </div>
         </div>
-        <div className="mt-14 border-t border-white/10 pt-6 text-center text-xs text-white/35 sm:text-left">
+        <div className="mt-14 flex flex-col items-center justify-between gap-3 border-t border-white/10 pt-6 text-xs text-white/35 sm:flex-row">
           <p>© {new Date().getFullYear()} Mis Papos · Villahermosa, Tabasco</p>
+          <Link href="/aviso-de-privacidad" className="hover:text-white/70">Aviso de privacidad</Link>
         </div>
       </div>
     </footer>
